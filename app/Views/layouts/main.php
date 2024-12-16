@@ -36,8 +36,8 @@
     <div id="app">
         <div class="main-wrapper main-wrapper-1">
 
-            <?= $this->include("assets/navbar") ?>
-            <?= $this->include("assets/sidebar") ?>
+            <?= $this->include("layouts/navbar") ?>
+            <?= $this->include("layouts/sidebar") ?>
 
             <!-- Main Content -->
             <!-- <div class="main-content">
@@ -54,7 +54,7 @@
             <?= $this->renderSection("content") ?>
 
 
-            <?= $this->include("assets/footer") ?>
+            <?= $this->include("layouts/footer") ?>
 
         </div>
     </div>
