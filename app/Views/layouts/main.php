@@ -40,18 +40,11 @@
             <?= $this->include("layouts/sidebar") ?>
 
             <!-- Main Content -->
-            <!-- <div class="main-content">
-        <section class="section">
-          <div class="section-header">
-            <h1>Blank Page</h1>
-          </div>
+            <div class="main-content">
+                <?= $this->renderSection("content") ?>
+                
+            </div>
 
-          <div class="section-body">
-          </div>
-        </section>
-      </div> -->
-
-            <?= $this->renderSection("content") ?>
 
 
             <?= $this->include("layouts/footer") ?>
