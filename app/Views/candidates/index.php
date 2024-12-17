@@ -46,7 +46,7 @@
                                 <?php $i = 1; ?>
                                 <?php foreach ($candidates as $candidate) : ?>
                                 <tr>
-                                    <td class="p-0 text-center">
+                                    <td>
                                         <?= $i++ ?>
                                     </td>
                                     <td>

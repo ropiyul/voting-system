@@ -100,6 +100,11 @@ class Candidate extends BaseController{
     }
 
     public function delete($id){
+
+        $candidate = $this->candidateModel->find($id);
+        if ($candidate['sampul'] != 'default.png') {
+            unlink('img/' . $candidate['image']);
+        }
         $this->candidateModel->delete($id);
         return redirect()->to('/candidate');
     }

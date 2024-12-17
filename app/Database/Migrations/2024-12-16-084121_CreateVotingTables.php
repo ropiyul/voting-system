@@ -9,6 +9,38 @@ class CreateVotingTables extends Migration
 {
     public function up()
     {
+        // Table: admin
+        $this->forge->addField([
+            'id'          => [
+                'type'           => 'INT',
+                'constraint'     => 11,
+                'unsigned'       => true,
+                'auto_increment' => true,
+            ],
+            'user_id'      => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
+            ],
+            'fullname'        => [
+                'type'       => 'VARCHAR',
+                'constraint' => 50,
+            ],
+            'created_at'  => [
+                'type' => 'TIMESTAMP',
+                'default' => new RawSql('CURRENT_TIMESTAMP')
+            ],
+            'updated_at'  => [
+                'type' => 'TIMESTAMP',
+                'default' => new RawSql('CURRENT_TIMESTAMP')
+            ],
+        ]);
+        $this->forge->addKey('id', true);
+        $this->forge->addKey('user_id');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->createTable('admins', true);
+
+
         // Table: candidates
         $this->forge->addField([
             'id'          => [
@@ -17,7 +49,12 @@ class CreateVotingTables extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'name'        => [
+            'user_id'      => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
+            ],
+            'fullname'        => [
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
             ],
@@ -36,18 +73,18 @@ class CreateVotingTables extends Migration
             'created_at'  => [
                 'type' => 'TIMESTAMP',
                 'default' => new RawSql('CURRENT_TIMESTAMP')
-
             ],
             'updated_at'  => [
                 'type' => 'TIMESTAMP',
                 'default' => new RawSql('CURRENT_TIMESTAMP')
-
             ],
         ]);
         $this->forge->addKey('id', true);
+        $this->forge->addKey('user_id');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('candidates', true);
 
-        // Table: users
+        // Table: students
         $this->forge->addField([
             'id'          => [
                 'type'           => 'INT',
@@ -55,18 +92,14 @@ class CreateVotingTables extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'username'    => [
+            'user_id'      => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
+            ],
+            'fullname'        => [
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
-            ],
-            'password'    => [
-                'type'       => 'VARCHAR',
-                'constraint' => 255,
-            ],
-            'role'        => [
-                'type'       => 'ENUM',
-                'constraint' => ['Siswa', 'Admin'],
-                'default'    => 'Siswa',
             ],
             'created_at'  => [
                 'type' => 'TIMESTAMP',
@@ -80,7 +113,9 @@ class CreateVotingTables extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('users', true);
+        $this->forge->addKey('user_id');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->createTable('students', true);
 
         // Table: votes
         $this->forge->addField([
@@ -90,7 +125,7 @@ class CreateVotingTables extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'user_id'      => [
+            'student_id'      => [
                 'type'       => 'INT',
                 'constraint' => 11,
                 'unsigned'   => true,
@@ -100,23 +135,24 @@ class CreateVotingTables extends Migration
                 'constraint' => 11,
                 'unsigned'   => true,
             ],
-            'timestamp'    => [
+            'voted_at'    => [
                 'type' => 'DATETIME',
                 'default' => new RawSql('CURRENT_TIMESTAMP')
 
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->addKey(['user_id', 'candidate_id' ]);
-        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addKey(['student_id', 'candidate_id' ]);
+        $this->forge->addForeignKey('student_id', 'students', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('candidate_id', 'candidates', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('votes', true);
     }
 
     public function down()
     {
+        $this->forge->dropTable('admins', true);
         $this->forge->dropTable('votes', true);
-        $this->forge->dropTable('users', true);
+        $this->forge->dropTable('students', true);
         $this->forge->dropTable('candidates', true);
     }
 }
