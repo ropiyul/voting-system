@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
+use CodeIgniter\Database\RawSql;
 
 class CreateVotingTables extends Migration
 {
@@ -23,7 +25,7 @@ class CreateVotingTables extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => 255,
             ],
-            'mision'      => [
+            'mission'      => [
                 'type'       => 'VARCHAR',
                 'constraint' => 255,
             ],
@@ -33,15 +35,17 @@ class CreateVotingTables extends Migration
             ],
             'created_at'  => [
                 'type' => 'TIMESTAMP',
-                'default' => 'CURRENT_TIMESTAMP',
+                'default' => new RawSql('CURRENT_TIMESTAMP')
+
             ],
             'updated_at'  => [
                 'type' => 'TIMESTAMP',
-                'default' => 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+                'default' => new RawSql('CURRENT_TIMESTAMP')
+
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('candidates');
+        $this->forge->createTable('candidates', true);
 
         // Table: users
         $this->forge->addField([
@@ -66,15 +70,17 @@ class CreateVotingTables extends Migration
             ],
             'created_at'  => [
                 'type' => 'TIMESTAMP',
-                'default' => 'CURRENT_TIMESTAMP',
+                'default' => new RawSql('CURRENT_TIMESTAMP')
+
             ],
             'updated_at'  => [
                 'type' => 'TIMESTAMP',
-                'default' => 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+                'default' => new RawSql('CURRENT_TIMESTAMP')
+
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('users');
+        $this->forge->createTable('users', true);
 
         // Table: votes
         $this->forge->addField([
@@ -96,19 +102,21 @@ class CreateVotingTables extends Migration
             ],
             'timestamp'    => [
                 'type' => 'DATETIME',
-                'default' => 'CURRENT_TIMESTAMP',
+                'default' => new RawSql('CURRENT_TIMESTAMP')
+
             ],
         ]);
         $this->forge->addKey('id', true);
+        $this->forge->addKey(['user_id', 'candidate_id' ]);
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('candidate_id', 'candidates', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->createTable('votes');
+        $this->forge->createTable('votes', true);
     }
 
     public function down()
     {
-        $this->forge->dropTable('votes');
-        $this->forge->dropTable('users');
-        $this->forge->dropTable('candidates');
+        $this->forge->dropTable('votes', true);
+        $this->forge->dropTable('users', true);
+        $this->forge->dropTable('candidates', true);
     }
 }
