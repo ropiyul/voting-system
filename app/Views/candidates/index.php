@@ -41,7 +41,6 @@
                                     <th>Nama</th>
                                     <th>Visi</th>
                                     <th>Misi</th>
-                                    <th>jumlah voting</th>
                                     <th>Action</th>
                                 </tr>
                                 <?php $i = 1; ?>
@@ -51,22 +50,19 @@
                                         <?= $i++ ?>
                                     </td>
                                     <td>
-                                        <img alt="image" src="<?= $candidate["image"] ?>" class="rounded-circle" width="35" data-toggle="tooltip" title="Wildan Ahdian">
+                                        <img alt="image" src="<?=base_url('img/') . $candidate["image"] ?>" class="rounded-circle" width="35" data-toggle="tooltip" title="Wildan Ahdian">
                                     </td>
                                     <td class="align-middle">
                                         <?= $candidate["name"] ?>
                                     </td>
                                     <td><?= $candidate["vision"] ?></td>
-                                    <td><?= $candidate["vision"] ?></td>
-                                    <td>
-                                        jumlah
-                                    </td>
+                                    <td><?= $candidate["mission"] ?></td>
                                     <td>
                                         <form action="<?= base_url() ?>candidate/delete/<?= $candidate["id"] ?>" method="post" class="d-inline">
                                             <input type="hidden" name="_method" value="DELETE">
                                             <button class="btn btn-danger" type="submit">hapus</button>
                                         </form>
-                                        <a href="<?= base_url("candidate/edit") ?>" class="btn btn-warning">edit</a>
+                                        <a href="<?= base_url("candidate/edit/". $candidate['id']) ?>" class="btn btn-warning">edit</a>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>

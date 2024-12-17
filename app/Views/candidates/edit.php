@@ -31,34 +31,34 @@
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['name']) ? 'is-invalid' : ''; ?>" name="name" value="<?= old('name') ?>" >
+                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['name']) ? 'is-invalid' : ''; ?>" name="name" value="<?= old('name', $candidate['name']) ?>">
                                 <div class="valid-feedback">
-                                <?= (session('errors')['name']) ?? null ?>
+                                    <?= (session('errors')['name']) ?? null ?>
                                 </div>
                             </div>
                         </div>
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Visi</label>
-                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['vision']) ? 'is-invalid' : ''; ?>" name="vision" value="<?= old('vision') ?>" >
+                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['vision']) ? 'is-invalid' : ''; ?>" name="vision" value="<?= old('vision', $candidate['vision'])  ?>">
                                 <div class="invalid-feedback">
-                                <?= (session('errors')['vision']) ?? null ?>
+                                    <?= (session('errors')['vision']) ?? null ?>
                                 </div>
                             </div>
                         </div>
                         <div class="col-6 col-md-6 col-lg-6">
-                        <div class="form-group">
+                            <div class="form-group">
                                 <label>Misi</label>
-                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['mission']) ? 'is-invalid' : ''; ?>" name="mission" value="<?= old('mision') ?>">
+                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['mission']) ? 'is-invalid' : ''; ?>" name="mission" value="<?= old('mission'), $candidate['mission']  ?>">
                                 <div class="invalid-feedback">
-                                <?= (session('errors')['mission']) ?? null ?>
+                                    <?= (session('errors')['mission']) ?? null ?>
                                 </div>
                             </div>
                         </div>
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group mb-0">
                                 <label for="image" class="form-label">Image</label>
-                                <input class="form-control  <?= session('errors') && isset(session('errors')['image']) ? 'is-invalid' : ''; ?>" id="image" name="image" type="file">
+                                <input class="form-control  <?= session('errors') && isset(session('errors')['image']) ? 'is-invalid' : ''; ?>" id="image" name="image" type="file" value="<?= old('image', $candidate['image']) ?>">
                                 <div class="invalid-feedback" id="validationServerUsernameFeedback">
                                     <?= (session('errors')['image']) ?? null ?>
                                 </div>
