@@ -3,11 +3,15 @@
 namespace App\Controllers;
 
 use App\Models\CandidateModel;
+use App\Models\UserModel;
 
 class Candidate extends BaseController{
     protected $candidateModel;
+    protected $userModel;
+
 
     public function __construct(){
+        $this->candidateModel = new CandidateModel();
         $this->candidateModel = new CandidateModel();
     }
 

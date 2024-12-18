@@ -49,6 +49,10 @@ class CreateVotingTables extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
+            'nis'          => [
+                'type'           => 'VARCHAR',
+                'constraint'     => 12,
+            ],
             'user_id'      => [
                 'type'       => 'INT',
                 'constraint' => 11,
@@ -84,13 +88,17 @@ class CreateVotingTables extends Migration
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('candidates', true);
 
-        // Table: students
+        // Table: voters
         $this->forge->addField([
             'id'          => [
                 'type'           => 'INT',
                 'constraint'     => 11,
                 'unsigned'       => true,
                 'auto_increment' => true,
+            ],
+            'nis'          => [
+                'type'           => 'VARCHAR',
+                'constraint'     => 12,
             ],
             'user_id'      => [
                 'type'       => 'INT',
@@ -115,7 +123,7 @@ class CreateVotingTables extends Migration
         $this->forge->addKey('id', true);
         $this->forge->addKey('user_id');
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->createTable('students', true);
+        $this->forge->createTable('voters', true);
 
         // Table: votes
         $this->forge->addField([
@@ -125,7 +133,7 @@ class CreateVotingTables extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'student_id'      => [
+            'voter_id'      => [
                 'type'       => 'INT',
                 'constraint' => 11,
                 'unsigned'   => true,
@@ -142,8 +150,8 @@ class CreateVotingTables extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->addKey(['student_id', 'candidate_id' ]);
-        $this->forge->addForeignKey('student_id', 'students', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addKey(['voter_id', 'candidate_id' ]);
+        $this->forge->addForeignKey('voter_id', 'voters', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('candidate_id', 'candidates', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('votes', true);
     }
@@ -152,7 +160,7 @@ class CreateVotingTables extends Migration
     {
         $this->forge->dropTable('admins', true);
         $this->forge->dropTable('votes', true);
-        $this->forge->dropTable('students', true);
+        $this->forge->dropTable('voters', true);
         $this->forge->dropTable('candidates', true);
     }
 }

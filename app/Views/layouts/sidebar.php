@@ -10,7 +10,8 @@
             <li class="menu-header">Dashboard</li>
             <li><a class="nav-link" href="<?= base_url('dashboard') ?>"><i class="fas fa-fire"></i> <span>Dashboard</span></a></li>
             <li class="menu-header">Starter</li>
-            <li><a class="nav-link" href="<?= base_url('candidate') ?>"><i class="fas fa-fire"></i> <span>Candidate</span></a></li>
+            <li><a class="nav-link" href="<?= base_url('candidate') ?>"><i class="fas fa-fire"></i> <span>Kandidat</span></a></li>
+            <li><a class="nav-link" href="<?= base_url('voter') ?>"><i class="fas fa-fire"></i> <span>Pemilih</span></a></li>
             
             
            

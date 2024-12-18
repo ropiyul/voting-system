@@ -18,7 +18,7 @@ $routes->get('voter', 'voter::index');
 $routes->get('voter/create', 'voter::create');
 $routes->post('voter/save', 'voter::save');
 $routes->get('voter/edit/(:num)', 'voter::edit/$1');
-$routes->post('voter/update/(:num)', 'voter::update/$1');
+$routes->post('voter/update/(:num)/(:num)', 'voter::update/$1/$2');
 $routes->delete('voter/delete/(:num)', 'voter::delete/$1');
 
 

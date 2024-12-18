@@ -7,10 +7,9 @@ use CodeIgniter\Session\Session;
 use Myth\Auth\Config\Auth as AuthConfig;
 use Myth\Auth\Entities\User;
 use Myth\Auth\Models\UserModel;
-use Myth\Auth\Controllers\AuthController as Auth;
+use Myth\Auth\Controllers\AuthController as BaseController;
 
-
-class AuthController extends Auth
+class AuthController extends BaseController
 {
     protected $auth;
 
