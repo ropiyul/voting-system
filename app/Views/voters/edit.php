@@ -22,7 +22,8 @@
         <!-- <div class="row"> -->
 
         <div class="card">
-            <form Action="<?= base_url('voter/update/'.$voter['id']).'/'.$voter['user_id'] ?>" method="post">
+            <form Action="<?= base_url('voter/update/'.$voter['id']) ?>" method="post">
+                <input type="hidden" name="user_id" value="<?= $voter['user_id'] ?>" hidden>
                 <div class="card-header">
                     <h4>Server-side Validation</h4>
                 </div>
@@ -67,7 +68,7 @@
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['password']) ? 'is-invalid' : ''; ?>" name="password" value="<?= old('password', $voter['password'] ?? '') ?>">
+                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['password']) ? 'is-invalid' : ''; ?>" name="password" value="<?= old('password', $voter['password'] ?? '') ?>">
                                 <div class="invalid-feedback">
                                     <?= (session('errors')['password']) ?? null ?>
                                 </div>
@@ -76,7 +77,7 @@
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Ulang Password</label>
-                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['pass_confirm']) ? 'is-invalid' : ''; ?>" name="pass_confirm" value="<?= old('pass_confirm', $voter['pass_confirm'] ?? '') ?>">
+                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['pass_confirm']) ? 'is-invalid' : ''; ?>" name="pass_confirm" value="<?= old('pass_confirm', $voter['pass_confirm'] ?? '') ?>">
                                 <div class="invalid-feedback">
                                     <?= (session('errors')['pass_confirm']) ?? null ?>
                                 </div>

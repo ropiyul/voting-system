@@ -10,6 +10,9 @@ class Home extends BaseController
     }
     public function dashboard(): string
     {
-        return view('dashboard/index');
+        $data = [
+            'title' => 'Dashboard',
+        ];
+        return view('dashboard/index',$data);
     }
 }
