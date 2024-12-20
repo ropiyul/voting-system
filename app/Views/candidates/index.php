@@ -17,6 +17,8 @@
         <p class="section-lead">Example of some Bootstrap table components.</p>
         <div class="row">
             <div class="col-12">
+            <?= $this->include('auth/_message_block.php') ?>
+
                 <div class="card">
                     <div class="card-header">
                         <h4>Advanced Table</h4>
@@ -39,6 +41,7 @@
                                     <th>No</th>
                                     <th>image</th>
                                     <th>Nama</th>
+                                    <th>username</th>
                                     <th>Visi</th>
                                     <th>Misi</th>
                                     <th>Action</th>
@@ -53,8 +56,9 @@
                                         <img alt="image" src="<?=base_url('img/') . $candidate["image"] ?>" class="rounded-circle" width="35" data-toggle="tooltip" title="Wildan Ahdian">
                                     </td>
                                     <td class="align-middle">
-                                        <?= $candidate["name"] ?>
+                                        <?= $candidate["fullname"] ?>
                                     </td>
+                                    <td><?= $candidate["username"] ?></td>
                                     <td><?= $candidate["vision"] ?></td>
                                     <td><?= $candidate["mission"] ?></td>
                                     <td>

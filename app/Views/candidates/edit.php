@@ -22,7 +22,8 @@
         <!-- <div class="row"> -->
 
         <div class="card">
-            <form Action="<?= base_url('candidate/save') ?>" method="post" enctype="multipart/form-data">
+            <form Action="<?= base_url('candidate/update/'.$candidate['id']) ?>" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="user_id" value="<?= $candidate['user_id'] ?>" hidden>
                 <div class="card-header">
                     <h4>Server-side Validation</h4>
                 </div>
@@ -31,9 +32,46 @@
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['name']) ? 'is-invalid' : ''; ?>" name="name" value="<?= old('name', $candidate['name']) ?>">
-                                <div class="valid-feedback">
-                                    <?= (session('errors')['name']) ?? null ?>
+                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['fullname']) ? 'is-invalid' : ''; ?>" name="fullname" value="<?= old('fullname', $candidate['fullname']) ?>">
+                                <div class="invalid-feedback">
+                                    <?= (session('errors')['fullname']) ?? null ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['username']) ? 'is-invalid' : ''; ?>" name="username" value="<?= old('username', $candidate['username']) ?>">
+                                <div class="invalid-feedback">
+                                    <?= (session('errors')['username']) ?? null ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label>email</label>
+                                <input type="email" class="form-control <?= session('errors') && isset(session('errors')['email']) ? 'is-invalid' : ''; ?>" name="email" value="<?= old('email', $candidate['email']) ?>">
+                                <div class="invalid-feedback">
+                                    <?= (session('errors')['email']) ?? null ?>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['password']) ? 'is-invalid' : ''; ?>" name="password" value="<?= old('password', $candidate['password'] ?? '') ?>">
+                                <div class="invalid-feedback">
+                                    <?= (session('errors')['password']) ?? null ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label>Ulang Password</label>
+                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['pass_confirm']) ? 'is-invalid' : ''; ?>" name="pass_confirm" value="<?= old('pass_confirm', $candidate['pass_confirm'] ?? '') ?>">
+                                <div class="invalid-feedback">
+                                    <?= (session('errors')['pass_confirm']) ?? null ?>
                                 </div>
                             </div>
                         </div>
@@ -64,6 +102,7 @@
                                 </div>
                             </div>
                         </div>
+                       
                     </div>
                 </div>
                 <div class="card-footer text-right">

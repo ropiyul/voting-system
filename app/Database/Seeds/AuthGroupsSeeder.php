@@ -21,8 +21,6 @@ class AuthGroupsSeeder extends Seeder
                 'name' => 'voter',
                 'description' => 'Group for voter in the voting system',
             ],
-            
-
         ];
 
         // Insert data ke tabel auth_groups
