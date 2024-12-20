@@ -14,12 +14,20 @@ $routes->post('candidate/save', 'Candidate::save');
 $routes->get('candidate/edit/(:num)', 'Candidate::edit/$1');
 $routes->post('candidate/update/(:num)', 'Candidate::update/$1');
 $routes->delete('candidate/delete/(:num)', 'Candidate::delete/$1');
+
 $routes->get('voter', 'voter::index');
 $routes->get('voter/create', 'voter::create');
 $routes->post('voter/save', 'voter::save');
 $routes->get('voter/edit/(:num)', 'voter::edit/$1');
 $routes->post('voter/update/(:num)', 'voter::update/$1');
 $routes->delete('voter/delete/(:num)', 'voter::delete/$1');
+
+$routes->get('admin', 'Admin::index');
+$routes->get('admin/create', 'Admin::create');
+$routes->post('admin/save', 'Admin::save');
+$routes->get('admin/edit/(:num)', 'Admin::edit/$1');
+$routes->post('admin/update/(:num)', 'Admin::update/$1');
+$routes->delete('admin/delete/(:num)', 'Admin::delete/$1');
 
 
 
