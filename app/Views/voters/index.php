@@ -1,5 +1,5 @@
 <?= $this->extend('layouts/main'); ?>
-<?= $this->section('main') ?>
+
 
 <?= $this->section('content') ?>
 <section class="section">
@@ -35,7 +35,7 @@
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table table-striped">
+                            <table class="table table-striped" id="table-1">
                                 <tr>
                                     <th>No</th>
                                     <th>NIS</th>
@@ -74,7 +74,23 @@
 
     </div>
 </section>
-<?= $this->endSection('content') ?>
 
+
+
+
+<?= $this->section('style') ?>
+<link rel="stylesheet" href="<?= base_url() ?>assets/modules/datatables/datatables.min.css">
+<link rel="stylesheet" href="<?= base_url() ?>assets/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="<?= base_url() ?>assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css">
+<?= $this->endSection() ?>
+<?= $this->section('script') ?>
+<script src="<?= base_url() ?>assets/modules/datatables/datatables.min.js"></script>
+    <script src="<?= base_url() ?>assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    <script src="<?= base_url() ?>assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>
+    <script src="<?= base_url() ?>assets/modules/jquery-ui/jquery-ui.min.js"></script>
+
+    <!-- Page Specific JS File -->
+    <script src="<?= base_url() ?>assets/js/page/modules-datatables.js"></script>
+<?= $this->endSection() ?>
 
 <?= $this->endSection() ?>

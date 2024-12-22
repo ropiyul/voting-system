@@ -11,12 +11,12 @@
     <link rel="stylesheet" href="<?= base_url() ?>assets/modules/fontawesome/css/all.min.css">
 
     <!-- CSS Libraries -->
+    <?= $this->renderSection("style") ?>
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/style.css">
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/components.css">
     <!-- Start GA -->
-    <?= $this->renderSection("style") ?>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
     <script>
@@ -36,13 +36,13 @@
     <div id="app">
         <div class="main-wrapper main-wrapper-1">
 
-            <?= $this->include("layouts/navbar") ?>
+         tps<?= $this->include("layouts/navbar") ?>
             <?= $this->include("layouts/sidebar") ?>
 
             <!-- Main Content -->
             <div class="main-content">
                 <?= $this->renderSection("content") ?>
-                
+
             </div>
 
 

@@ -96,7 +96,7 @@
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group mb-0">
                                 <label for="image" class="form-label">Image</label>
-                                <input class="form-control  <?= session('errors') && isset(session('errors')['image']) ? 'is-invalid' : ''; ?>" id="image" name="image" type="file" value="<?= old('image', $candidate['image']) ?>">
+                                <input class="form-control  <?= session('errors') && isset(session('errors')['image']) ? 'is-invalid' : ''; ?>" id="image" name="image" type="file" >
                                 <div class="invalid-feedback" id="validationServerUsernameFeedback">
                                     <?= (session('errors')['image']) ?? null ?>
                                 </div>

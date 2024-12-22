@@ -157,6 +157,7 @@ class Candidate extends BaseController
             'title' => 'Add Candidate',
             'candidate' => $this->candidateModel->getCandidate($id),
         ];
+        
         return view('candidates/edit', $data);
     }
 
@@ -235,14 +236,14 @@ class Candidate extends BaseController
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
+        
         $fileImage = $this->request->getFile('image');
-        if ($fileImage->getError() == 4) {
-            $fileName = 'default.png';
-        } else {
+
+        if(!$fileImage->getError() == 4):
+
             $fileName = $fileImage->getRandomName();
             $fileImage->move('img', $fileName);
-        }
-
+        
         $this->db->transStart();
         $this->userModel->save([
             'id' => $this->request->getPost('user_id'),
@@ -259,7 +260,24 @@ class Candidate extends BaseController
             'image' => $fileName,
         ]);
         $this->db->transComplete();
+    else:
+        $this->db->transStart();
+        $this->userModel->save([
+            'id' => $this->request->getPost('user_id'),
+            'username' => $this->request->getPost('username'),
+            'password_hash' => Password::hash($this->request->getPost('password')),
+            'email' => $this->request->getPost('email'),
+        ]);
 
+        $this->candidateModel->save([
+            'id' => $id,
+            'fullname' => $this->request->getPost('fullname'),
+            'vision' => $this->request->getPost('vision'),
+            'mission' => $this->request->getPost('mission'),
+        ]);
+        $this->db->transComplete();
+
+    endif;
 
         if ($this->db->transStatus() === false) {
             return redirect()->back()->withInput()->with('errors', 'Data gagal disimpan.');
