@@ -1,9 +1,9 @@
 <?= $this->extend('layouts/main'); ?>
-<?= $this->section('main') ?>
+
 
 
 <?= $this->section('style') ?>
-<link rel="stylesheet" href="assets/modules/dropzonejs/dropzone.css">
+<link rel="stylesheet" href="<?= base_url() ?>assets/modules/dropzonejs/dropzone.css">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -82,12 +82,6 @@
                     <div class="form-group mb-0">
                         <label for="image" class="form-label">Image</label>
                         <input class="form-control  <?= session('errors') && isset(session('errors')['image']) ? 'is-invalid' : ''; ?>" id="image" name="image" type="file">
-                        <!-- <form class="dropzone" id="mydropzone">
-                                    <div class="fallback">
-                                        <input name="file" type="file" multiple />
-                                    </div>
-                                    
-                                </form> -->
                         <div class="invalid-feedback" id="validationServerUsernameFeedback">
                             <?= (session('errors')['image']) ?? null ?>
                         </div>
@@ -96,7 +90,7 @@
                 <div class="col-6 col-md-6 col-lg-6">
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="text" class="form-control <?= session('errors') && isset(session('errors')['password']) ? 'is-invalid' : ''; ?>" name="password" value="<?= old('mision') ?>">
+                        <input type="password" class="form-control <?= session('errors') && isset(session('errors')['password']) ? 'is-invalid' : ''; ?>" name="password" value="<?= old('mision') ?>">
                         <div class="invalid-feedback">
                             <?= (session('errors')['password']) ?? null ?>
                         </div>
@@ -105,7 +99,7 @@
                 <div class="col-6 col-md-6 col-lg-6">
                     <div class="form-group">
                         <label>Ulang Password</label>
-                        <input type="text" class="form-control <?= session('errors') && isset(session('errors')['pass_confirm']) ? 'is-invalid' : ''; ?>" name="pass_confirm" value="<?= old('mision') ?>">
+                        <input type="password" class="form-control <?= session('errors') && isset(session('errors')['pass_confirm']) ? 'is-invalid' : ''; ?>" name="pass_confirm" value="<?= old('mision') ?>">
                         <div class="invalid-feedback">
                             <?= (session('errors')['pass_confirm']) ?? null ?>
                         </div>
@@ -123,16 +117,14 @@
     </div>
 </section>
 
-<?= $this->endSection('content') ?>
+<?= $this->endSection() ?>
 
 <?= $this->section('script') ?>
 <!-- JS Libraies -->
-<script src="assets/modules/dropzonejs/min/dropzone.min.js"></script>
+<script src="<?= base_url() ?>assets/modules/dropzonejs/min/dropzone.min.js"></script>
 
 <!-- Page Specific JS File -->
-<script src="assets/js/page/components-multiple-upload.js"></script>
+<script src="<?= base_url() ?>assets/js/page/components-multiple-upload.js"></script>
 <!-- Page Specific JS File -->
 <?= $this->endSection() ?>
 
-
-<?= $this->endSection() ?>

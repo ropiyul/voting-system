@@ -169,21 +169,6 @@ class Voter extends BaseController
             //         'is_unique' => 'email sudah terdaftar.'
             //     ]
             // ],
-            'password' => [
-                'label' => 'Password',
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Password harus diisi.',
-                ]
-            ],
-            'pass_confirm' => [
-                'label' => 'pass_confirm',
-                'rules' => 'required|matches[password]',
-                'errors' => [
-                    'required' => 'Password harus diisi.',
-                    'matches' => 'Password harus sama.'
-                ]
-            ],
             'nis' => [
                 'label' => 'NIS',
                 'rules' => "required|is_unique[voters.nis,id,{$voterId}]",
@@ -205,7 +190,6 @@ class Voter extends BaseController
         $saveUser = $this->userModel->save([
             'id' => $this->request->getPost('user_id'),
             'username' => $this->request->getPost('username'),
-            'password_hash' => Password::hash($this->request->getPost('password')),
             'email' => $this->request->getPost('email'),
         ]);
 

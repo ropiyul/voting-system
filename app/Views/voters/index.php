@@ -33,36 +33,40 @@
                             <a href="<?= base_url('voter/create') ?>" class="btn btn-primary">Tambah Data</a>
                         </div>
                     </div>
-                    <div class="card-body p-0">
+                    <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped" id="table-1">
-                                <tr>
-                                    <th>No</th>
-                                    <th>NIS</th>
-                                    <th>Nama</th>
-                                    <!-- <th>Visi</th>
-                                    <th>Misi</th> -->
-                                    <th>Action</th>
-                                </tr>
-                                <?php $i = 1; ?>
-                                <?php foreach ($voters as $voter) : ?>
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <?= $i++ ?>
-                                        </td>
-                                        <td class="align-middle">
-                                            <?= $voter["nis"] ?>
-                                        </td>
-                                        <td><?= $voter["fullname"] ?></td>
-                                        <td>
-                                            <form action="<?= base_url() ?>voter/delete/<?= $voter["user_id"] ?>" method="post" class="d-inline">
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <button class="btn btn-danger" type="submit">hapus</button>
-                                            </form>
-                                            <a href="<?= base_url("voter/edit/" . $voter['id']) ?>" class="btn btn-warning">edit</a>
-                                        </td>
+                                        <th>No</th>
+                                        <th>NIS</th>
+                                        <th>Nama</th>
+                                        <!-- <th>Visi</th>
+                                        <th>Misi</th> -->
+                                        <th>Action</th>
                                     </tr>
-                                <?php endforeach; ?>
+                                </thead>
+                                <tbody>
+                                    <?php $i = 1; ?>
+                                    <?php foreach ($voters as $voter) : ?>
+                                        <tr>
+                                            <td>
+                                                <?= $i++ ?>
+                                            </td>
+                                            <td class="align-middle">
+                                                <?= $voter["nis"] ?>
+                                            </td>
+                                            <td><?= $voter["fullname"] ?></td>
+                                            <td>
+                                                <form action="<?= base_url() ?>voter/delete/<?= $voter["user_id"] ?>" method="post" class="d-inline">
+                                                    <input type="hidden" name="_method" value="DELETE">
+                                                    <button class="btn btn-danger" type="submit">hapus</button>
+                                                </form>
+                                                <a href="<?= base_url("voter/edit/" . $voter['id']) ?>" class="btn btn-warning">edit</a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -75,7 +79,7 @@
     </div>
 </section>
 
-
+<?= $this->endSection() ?>
 
 
 <?= $this->section('style') ?>
@@ -93,4 +97,3 @@
     <script src="<?= base_url() ?>assets/js/page/modules-datatables.js"></script>
 <?= $this->endSection() ?>
 
-<?= $this->endSection() ?>

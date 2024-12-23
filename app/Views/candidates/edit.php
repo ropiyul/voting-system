@@ -56,25 +56,6 @@
                                 </div>
                             </div>
                         </div>
-                       
-                        <div class="col-6 col-md-6 col-lg-6">
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['password']) ? 'is-invalid' : ''; ?>" name="password" value="<?= old('password', $candidate['password'] ?? '') ?>">
-                                <div class="invalid-feedback">
-                                    <?= (session('errors')['password']) ?? null ?>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-6 col-lg-6">
-                            <div class="form-group">
-                                <label>Ulang Password</label>
-                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['pass_confirm']) ? 'is-invalid' : ''; ?>" name="pass_confirm" value="<?= old('pass_confirm', $candidate['pass_confirm'] ?? '') ?>">
-                                <div class="invalid-feedback">
-                                    <?= (session('errors')['pass_confirm']) ?? null ?>
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Visi</label>
@@ -102,7 +83,6 @@
                                 </div>
                             </div>
                         </div>
-                       
                     </div>
                 </div>
                 <div class="card-footer text-right">
