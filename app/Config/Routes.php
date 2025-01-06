@@ -6,7 +6,8 @@ use \Myth\Auth\Config\Auth as AuthConfig;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
+$routes->get('/', 'Vote::index');
+$routes->post('vote/save', 'Vote::saveVote');
 $routes->get('dashboard', 'Home::dashboard');
 $routes->get('candidate', 'Candidate::index');
 $routes->get('candidate/create', 'Candidate::create');

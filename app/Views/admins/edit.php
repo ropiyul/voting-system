@@ -23,6 +23,7 @@
 
         <div class="card">
             <form Action="<?= base_url('admin/update/'.$admin['id']) ?>" method="post">
+            <?php csrf_field() ?>
                 <input type="hidden" name="user_id" value="<?= $admin['user_id'] ?>" hidden>
                 <div class="card-header">
                     <h4>Server-side Validation</h4>

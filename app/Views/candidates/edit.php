@@ -22,7 +22,8 @@
         <!-- <div class="row"> -->
 
         <div class="card">
-            <form Action="<?= base_url('candidate/update/'.$candidate['id']) ?>" method="post" enctype="multipart/form-data">
+            <form Action="<?= base_url('candidate/update/' . $candidate['id']) ?>" method="post" enctype="multipart/form-data">
+                <?php csrf_field() ?>
                 <input type="hidden" name="user_id" value="<?= $candidate['user_id'] ?>" hidden>
                 <div class="card-header">
                     <h4>Server-side Validation</h4>
@@ -77,7 +78,7 @@
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group mb-0">
                                 <label for="image" class="form-label">Image</label>
-                                <input class="form-control  <?= session('errors') && isset(session('errors')['image']) ? 'is-invalid' : ''; ?>" id="image" name="image" type="file" >
+                                <input class="form-control  <?= session('errors') && isset(session('errors')['image']) ? 'is-invalid' : ''; ?>" id="image" name="image" type="file">
                                 <div class="invalid-feedback" id="validationServerUsernameFeedback">
                                     <?= (session('errors')['image']) ?? null ?>
                                 </div>

@@ -23,6 +23,7 @@
 
         <div class="card">
             <form Action="<?= base_url('voter/save') ?>" method="post">
+            <?php csrf_field() ?>
                 <div class="card-header">
                     <h4>Server-side Validation</h4>
                 </div>

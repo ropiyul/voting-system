@@ -144,6 +144,7 @@ class admin extends BaseController
                     'required' => 'Nama lengkap harus diisi.',
                 ],
             ],
+            
             // 'username' => [
             //     'label' => 'Username',
             //     'rules' => "required|is_unique[users.username,users.id,{id}]",

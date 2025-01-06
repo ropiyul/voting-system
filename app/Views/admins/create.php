@@ -1,5 +1,6 @@
 <?= $this->extend('layouts/main'); ?>
-<?= $this->section('main') ?>
+
+
 
 <?= $this->section('content') ?>
 
@@ -23,6 +24,7 @@
 
         <div class="card">
             <form Action="<?= base_url('admin/save') ?>" method="post">
+            <?php csrf_field() ?>
                 <div class="card-header">
                     <h4>Server-side Validation</h4>
                 </div>
@@ -86,7 +88,6 @@
     </div>
 </section>
 
-<?= $this->endSection('content') ?>
-
 
 <?= $this->endSection() ?>
+
