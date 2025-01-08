@@ -10,7 +10,7 @@ use \Myth\Auth\Config\Auth as AuthConfig;
 use Myth\Auth\Config\Services;
 use Myth\Auth\Password;
 
-class admin extends BaseController
+class Admin extends BaseController
 {
 
     protected $adminModel;

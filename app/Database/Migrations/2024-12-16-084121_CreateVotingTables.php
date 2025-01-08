@@ -154,6 +154,45 @@ class CreateVotingTables extends Migration
         $this->forge->addForeignKey('voter_id', 'voters', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('candidate_id', 'candidates', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('votes', true);
+
+            // periods
+            $this->forge->addField([
+                'id' => [
+                    'type'           => 'INT',
+                    'constraint'     => 11,
+                    'unsigned'       => true,
+                    'auto_increment' => true,
+                ],
+                'name' => [
+                    'type'       => 'VARCHAR',
+                    'constraint' => '255',
+                ],
+                'status' => [
+                    'type'       => 'ENUM',
+                    'constraint' => ['pending', 'ongoing', 'completed'],
+                    'default'    => 'pending',
+                ],
+                'start_date' => [
+                    'type' => 'DATETIME',
+                    'null' => false,
+                ],
+                'end_date' => [
+                    'type' => 'DATETIME',
+                    'null' => false,
+                ],
+                'created_at' => [
+                    'type' => 'DATETIME',
+                    'null' => true,
+                    'default' => new RawSql('CURRENT_TIMESTAMP'),
+                ],
+                'updated_at' => [
+                    'type' => 'DATETIME',
+                    'null' => true,
+                    'default' => new RawSql('CURRENT_TIMESTAMP'),
+                ],
+            ]);
+            $this->forge->addKey('id', true);
+            $this->forge->createTable('periods', true);
     }
 
     public function down()
@@ -162,5 +201,6 @@ class CreateVotingTables extends Migration
         $this->forge->dropTable('votes', true);
         $this->forge->dropTable('voters', true);
         $this->forge->dropTable('candidates', true);
+        $this->forge->dropTable('periods', true);
     }
 }

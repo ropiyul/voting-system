@@ -36,6 +36,13 @@ $routes->get('admin/edit/(:num)', 'Admin::edit/$1', ['filter' => 'role:admin']);
 $routes->post('admin/update/(:num)', 'Admin::update/$1', ['filter' => 'role:admin']);
 $routes->delete('admin/delete/(:num)', 'Admin::delete/$1', ['filter' => 'role:admin']);
 
+$routes->get('period', 'Period::index', ['filter' => 'role:admin']);
+$routes->get('period/create', 'Period::create', ['filter' => 'role:admin']);
+$routes->post('period/save', 'Period::save', ['filter' => 'role:admin']);
+$routes->get('period/edit/(:num)', 'Period::edit/$1', ['filter' => 'role:admin']);
+$routes->post('period/update/(:num)', 'Period::update/$1', ['filter' => 'role:admin']);
+$routes->delete('period/delete/(:num)', 'Period::delete/$1', ['filter' => 'role:admin']);
+
 
 
 
