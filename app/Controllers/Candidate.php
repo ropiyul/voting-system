@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Models\CandidateModel;
+use App\Models\GradeModel;
+use App\Models\ProgramModel;
 use App\Models\UserModel;
 use Exception;
 use \Myth\Auth\Config\Auth as AuthConfig;
@@ -40,8 +42,13 @@ class Candidate extends BaseController
 
     public function create()
     {
+        $gradeModel = new GradeModel();
+        $programModel = new ProgramModel();
+       
         $data = [
             'title' => 'Add Candidate',
+            'grades' =>  $gradeModel->findAll(),
+            'programs' =>  $programModel->findAll(),
         ];
         return view('candidates/create', $data);
     }
@@ -82,6 +89,20 @@ class Candidate extends BaseController
                 'rules' => 'required',
                 'errors' => [
                     'required' => 'Password harus diisi.',
+                ]
+            ],
+            'grade_id' => [
+                'label' => 'grade_id',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Kelas harus diisi.',
+                ]
+            ],
+            'program_id' => [
+                'label' => 'program_id',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Jurusan harus diisi.',
                 ]
             ],
             'pass_confirm' => [
@@ -129,6 +150,8 @@ class Candidate extends BaseController
         }
 
 
+
+
         $this->db->transStart();
         $this->userModel->withGroup('candidate')->save([
             'username' => $this->request->getPost('username'),
@@ -139,7 +162,9 @@ class Candidate extends BaseController
 
         $this->candidateModel->save([
             'user_id' => $this->userModel->getInsertID(),
-            'fullname' => $this->request->getPost('username'),
+            'grade_id' => $this->request->getPost('grade_id'),
+            'program_id' => $this->request->getPost('program_id'),
+            'fullname' => $this->request->getPost('fullname'),
             'vision' => $this->request->getPost('vision'),
             'mission' => $this->request->getPost('mission'),
             'image' => $fileName,

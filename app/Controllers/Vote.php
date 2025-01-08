@@ -57,7 +57,7 @@ class Vote extends BaseController
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Terjadi kesalahan'
+                'message' => 'Terjadi kesalahan '.user_id()
             ]);
         }
     }

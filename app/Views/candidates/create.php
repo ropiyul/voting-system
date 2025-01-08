@@ -130,22 +130,26 @@
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Kelas</label>
-                                <select class="form-control <?= session('errors') && isset(session('errors')['grade']) ? 'is-invalid' : ''; ?>" name="grade" value="<?= old('grade') ?>">
-                                    <option value=""></option>
+                                <select class="form-control <?= session('errors') && isset(session('errors')['grade_id']) ? 'is-invalid' : ''; ?>" name="grade_id" value="<?= old('grade_id') ?>">
+                                    <?php foreach ($grades as $grade): ?>
+                                        <option value="<?= $grade['id'] ?>"><?= $grade['name'] ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                                 <div class="invalid-feedback">
-                                    <?= (session('errors')['grade']) ?? null ?>
+                                    <?= (session('errors')['grade_id']) ?? null ?>
                                 </div>
                             </div>
                         </div>
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Jurusan</label>
-                                <select class="form-control <?= session('errors') && isset(session('errors')['program']) ? 'is-invalid' : ''; ?>" name="program" value="<?= old('program') ?>">
-                                    <option value=""></option>
+                                <select class="form-control <?= session('errors') && isset(session('errors')['program_id']) ? 'is-invalid' : ''; ?>" name="program_id" value="<?= old('program_id') ?>">
+                                    <?php foreach ($programs as $program): ?>
+                                        <option value="<?= $program['id'] ?>"><?= $program['name'] ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                                 <div class="invalid-feedback">
-                                    <?= (session('errors')['program']) ?? null ?>
+                                    <?= (session('errors')['program_id']) ?? null ?>
                                 </div>
                             </div>
                         </div>
@@ -237,7 +241,7 @@
         previewsContainer: "#myDropzone",
         dictDefaultMessage: "Drop gambar atau klik untuk upload",
         init: function() {
-           
+
             this.on("addedfile", function(file) {
                 let dzMessage = this.element.querySelector(".dz-message");
                 if (dzMessage) {

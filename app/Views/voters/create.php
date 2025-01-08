@@ -67,6 +67,32 @@
                         </div>
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
+                                <label>Kelas</label>
+                                <select class="form-control <?= session('errors') && isset(session('errors')['grade_id']) ? 'is-invalid' : ''; ?>" name="grade_id" value="<?= old('grade_id') ?>">
+                                    <?php foreach ($grades as $grade): ?>
+                                        <option value="<?= $grade['id'] ?>"><?= $grade['name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <?= (session('errors')['grade_id']) ?? null ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label>Jurusan</label>
+                                <select class="form-control <?= session('errors') && isset(session('errors')['program_id']) ? 'is-invalid' : ''; ?>" name="program_id" value="<?= old('program_id') ?>">
+                                    <?php foreach ($programs as $program): ?>
+                                        <option value="<?= $program['id'] ?>"><?= $program['name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <?= (session('errors')['program_id']) ?? null ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="form-group">
                                 <label>Password</label>
                                 <input type="password" class="form-control <?= session('errors') && isset(session('errors')['password']) ? 'is-invalid' : ''; ?>" name="password" value="<?= old('mision') ?>">
                                 <div class="invalid-feedback">
