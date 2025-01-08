@@ -5,10 +5,40 @@ namespace App\Database\Migrations;
 use CodeIgniter\Database\Migration;
 use CodeIgniter\Database\RawSql;
 
-class CreateVotingTables extends Migration
+class AllMigration extends Migration
 {
     public function up()
     {
+
+        $this->forge->addField([
+            'id'          => [
+                'type'           => 'INT',
+                'unsigned'       => true,
+                'auto_increment' => true,
+            ],
+            'name'        => [
+                'type'           => 'VARCHAR',
+                'constraint'     => '50',
+            ],
+        ]);
+        $this->forge->addPrimaryKey('id');
+        $this->forge->createTable('grades', true);
+  
+        $this->forge->addField([
+            'id'          => [
+                'type'           => 'INT',
+                'unsigned'       => true,
+                'auto_increment' => true,
+            ],
+            'name'        => [
+                'type'           => 'VARCHAR',
+                'constraint'     => '255',
+            ],
+        ]);
+        $this->forge->addPrimaryKey('id');
+        $this->forge->createTable('programs', true);
+
+
         // Table: admin
         $this->forge->addField([
             'id'          => [
@@ -58,6 +88,16 @@ class CreateVotingTables extends Migration
                 'constraint' => 11,
                 'unsigned'   => true,
             ],
+            'grade_id'      => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
+            ],
+            'program_id'      => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
+            ],
             'fullname'        => [
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
@@ -85,7 +125,11 @@ class CreateVotingTables extends Migration
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addKey('user_id');
+        $this->forge->addKey('grade_id');
+        $this->forge->addKey('program_id');
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('grade_id', 'grades', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('program_id', 'programs', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('candidates', true);
 
         // Table: voters
@@ -96,14 +140,24 @@ class CreateVotingTables extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'nis'          => [
-                'type'           => 'VARCHAR',
-                'constraint'     => 12,
-            ],
             'user_id'      => [
                 'type'       => 'INT',
                 'constraint' => 11,
                 'unsigned'   => true,
+            ],
+            'grade_id'      => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
+            ],
+            'program_id'      => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
+            ],
+            'nis'          => [
+                'type'           => 'VARCHAR',
+                'constraint'     => 12,
             ],
             'fullname'        => [
                 'type'       => 'VARCHAR',
@@ -122,7 +176,11 @@ class CreateVotingTables extends Migration
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addKey('user_id');
+        $this->forge->addKey('grade_id');
+        $this->forge->addKey('program_id');
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('grade_id', 'grades', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('program_id', 'programs', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('voters', true);
 
         // Table: votes
@@ -197,6 +255,8 @@ class CreateVotingTables extends Migration
 
     public function down()
     {
+        $this->forge->dropTable('grades', true);
+        $this->forge->dropTable('programs', true);
         $this->forge->dropTable('admins', true);
         $this->forge->dropTable('votes', true);
         $this->forge->dropTable('voters', true);

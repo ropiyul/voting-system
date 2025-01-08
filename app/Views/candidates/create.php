@@ -129,6 +129,28 @@
                         </div>
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
+                                <label>Kelas</label>
+                                <select class="form-control <?= session('errors') && isset(session('errors')['grade']) ? 'is-invalid' : ''; ?>" name="grade" value="<?= old('grade') ?>">
+                                    <option value=""></option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <?= (session('errors')['grade']) ?? null ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label>Jurusan</label>
+                                <select class="form-control <?= session('errors') && isset(session('errors')['program']) ? 'is-invalid' : ''; ?>" name="program" value="<?= old('program') ?>">
+                                    <option value=""></option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <?= (session('errors')['program']) ?? null ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="form-group">
                                 <label>Password</label>
                                 <input type="password" class="form-control <?= session('errors') && isset(session('errors')['password']) ? 'is-invalid' : ''; ?>" name="password" value="<?= old('password') ?>">
                                 <div class="invalid-feedback">
