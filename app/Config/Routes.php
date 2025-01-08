@@ -43,6 +43,20 @@ $routes->get('period/edit/(:num)', 'Period::edit/$1', ['filter' => 'role:admin']
 $routes->post('period/update/(:num)', 'Period::update/$1', ['filter' => 'role:admin']);
 $routes->delete('period/delete/(:num)', 'Period::delete/$1', ['filter' => 'role:admin']);
 
+$routes->get('grade', 'Grade::index', ['filter' => 'role:admin']);
+$routes->get('grade/create', 'Grade::create', ['filter' => 'role:admin']);
+$routes->post('grade/save', 'Grade::save', ['filter' => 'role:admin']);
+$routes->get('grade/edit/(:num)', 'Grade::edit/$1', ['filter' => 'role:admin']);
+$routes->post('grade/update/(:num)', 'Grade::update/$1', ['filter' => 'role:admin']);
+$routes->delete('grade/delete/(:num)', 'Grade::delete/$1', ['filter' => 'role:admin']);
+
+$routes->get('program', 'Program::index', ['filter' => 'role:admin']);
+$routes->get('program/create', 'Program::create', ['filter' => 'role:admin']);
+$routes->post('program/save', 'Program::save', ['filter' => 'role:admin']);
+$routes->get('program/edit/(:num)', 'Program::edit/$1', ['filter' => 'role:admin']);
+$routes->post('program/update/(:num)', 'Program::update/$1', ['filter' => 'role:admin']);
+$routes->delete('program/delete/(:num)', 'Program::delete/$1', ['filter' => 'role:admin']);
+
 
 
 
