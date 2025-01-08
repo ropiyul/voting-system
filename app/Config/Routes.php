@@ -6,33 +6,35 @@ use \Myth\Auth\Config\Auth as AuthConfig;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Vote::index');
-$routes->post('vote/save', 'Vote::saveVote');
-$routes->get('dashboard', 'Home::dashboard');
-$routes->get('candidate', 'Candidate::index');
-$routes->get('candidate/create', 'Candidate::create');
-$routes->post('candidate/save', 'Candidate::save');
-$routes->post('candidate/upload', 'Candidate::upload');
-$routes->post('candidate/upload_temp', 'Candidate::upload_temp');
-$routes->post('candidate/remove_temp', 'Candidate::remove_temp');
-$routes->get('candidate/get_uploaded_image/(:num)', 'Candidate::get_uploaded_image/$1');
-$routes->get('candidate/edit/(:num)', 'Candidate::edit/$1');
-$routes->post('candidate/update/(:num)', 'Candidate::update/$1');
-$routes->delete('candidate/delete/(:num)', 'Candidate::delete/$1');
+$routes->get('/', 'Vote::index', ['filter' => 'role:admin,voter']);
+$routes->post('vote/save', 'Vote::saveVote', ['filter' => 'role:admin,voter']);
 
-$routes->get('voter', 'voter::index');
-$routes->get('voter/create', 'voter::create');
-$routes->post('voter/save', 'voter::save');
-$routes->get('voter/edit/(:num)', 'voter::edit/$1');
-$routes->post('voter/update/(:num)', 'voter::update/$1');
-$routes->delete('voter/delete/(:num)', 'voter::delete/$1');
+$routes->get('dashboard', 'Home::dashboard', ['filter' => 'role:admin']);
 
-$routes->get('admin', 'Admin::index');
-$routes->get('admin/create', 'Admin::create');
-$routes->post('admin/save', 'Admin::save');
-$routes->get('admin/edit/(:num)', 'Admin::edit/$1');
-$routes->post('admin/update/(:num)', 'Admin::update/$1');
-$routes->delete('admin/delete/(:num)', 'Admin::delete/$1');
+$routes->get('candidate', 'Candidate::index', ['filter' => 'role:admin']);
+$routes->get('candidate/create', 'Candidate::create', ['filter' => 'role:admin']);
+$routes->post('candidate/save', 'Candidate::save', ['filter' => 'role:admin']);
+$routes->post('candidate/upload', 'Candidate::upload', ['filter' => 'role:admin']);
+$routes->post('candidate/upload_temp', 'Candidate::upload_temp', ['filter' => 'role:admin']);
+$routes->post('candidate/remove_temp', 'Candidate::remove_temp', ['filter' => 'role:admin']);
+$routes->get('candidate/get_uploaded_image/(:num)', 'Candidate::get_uploaded_image/$1', ['filter' => 'role:admin']);
+$routes->get('candidate/edit/(:num)', 'Candidate::edit/$1', ['filter' => 'role:admin']);
+$routes->post('candidate/update/(:num)', 'Candidate::update/$1', ['filter' => 'role:admin']);
+$routes->delete('candidate/delete/(:num)', 'Candidate::delete/$1', ['filter' => 'role:admin']);
+
+$routes->get('voter', 'voter::index', ['filter' => 'role:admin']);
+$routes->get('voter/create', 'voter::create', ['filter' => 'role:admin']);
+$routes->post('voter/save', 'voter::save', ['filter' => 'role:admin']);
+$routes->get('voter/edit/(:num)', 'voter::edit/$1', ['filter' => 'role:admin']);
+$routes->post('voter/update/(:num)', 'voter::update/$1', ['filter' => 'role:admin']);
+$routes->delete('voter/delete/(:num)', 'voter::delete/$1', ['filter' => 'role:admin']);
+
+$routes->get('admin', 'Admin::index', ['filter' => 'role:admin']);
+$routes->get('admin/create', 'Admin::create', ['filter' => 'role:admin']);
+$routes->post('admin/save', 'Admin::save', ['filter' => 'role:admin']);
+$routes->get('admin/edit/(:num)', 'Admin::edit/$1', ['filter' => 'role:admin']);
+$routes->post('admin/update/(:num)', 'Admin::update/$1', ['filter' => 'role:admin']);
+$routes->delete('admin/delete/(:num)', 'Admin::delete/$1', ['filter' => 'role:admin']);
 
 
 
