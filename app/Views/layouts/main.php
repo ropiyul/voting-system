@@ -60,6 +60,9 @@
     <script src="<?= base_url() ?>assets/modules/nicescroll/jquery.nicescroll.min.js"></script>
     <script src="<?= base_url() ?>assets/modules/moment.min.js"></script>
     <script src="<?= base_url() ?>assets/js/stisla.js"></script>
+
+    <script src="<?= base_url() ?>assets/js/page/modules-chartjs.js"></script>
+    <script src="<?= base_url() ?>node_modules/chart.js/dist/Chart.min.js"></script>
     <?= $this->renderSection("script") ?>
     <!-- JS Libraies -->
 
