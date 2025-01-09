@@ -43,12 +43,10 @@ class Candidate extends BaseController
     public function create()
     {
         $gradeModel = new GradeModel();
-        $programModel = new ProgramModel();
-       
+
         $data = [
             'title' => 'Add Candidate',
             'grades' =>  $gradeModel->findAll(),
-            'programs' =>  $programModel->findAll(),
         ];
         return view('candidates/create', $data);
     }
@@ -96,13 +94,6 @@ class Candidate extends BaseController
                 'rules' => 'required',
                 'errors' => [
                     'required' => 'Kelas harus diisi.',
-                ]
-            ],
-            'program_id' => [
-                'label' => 'program_id',
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Jurusan harus diisi.',
                 ]
             ],
             'pass_confirm' => [
@@ -163,7 +154,6 @@ class Candidate extends BaseController
         $this->candidateModel->save([
             'user_id' => $this->userModel->getInsertID(),
             'grade_id' => $this->request->getPost('grade_id'),
-            'program_id' => $this->request->getPost('program_id'),
             'fullname' => $this->request->getPost('fullname'),
             'vision' => $this->request->getPost('vision'),
             'mission' => $this->request->getPost('mission'),
@@ -197,7 +187,7 @@ class Candidate extends BaseController
     }
     public function remove_temp()
     {
-       
+
         $filename = $this->request->getJSON()->filename; // Ambil nama file dari request
         $filepath = WRITEPATH . 'uploads/temp/' . $filename; // Tentukan path file di folder temp
 
@@ -314,7 +304,7 @@ class Candidate extends BaseController
             if (!empty($dropzoneImage)) {
                 $tempPath = WRITEPATH . 'uploads/temp/' . $dropzoneImage;
                 $targetPath = 'img/' . $dropzoneImage;
-    
+
                 if (file_exists($tempPath)) {
                     // Pindahkan file dari temporary ke folder final
                     rename($tempPath, FCPATH . $targetPath);
