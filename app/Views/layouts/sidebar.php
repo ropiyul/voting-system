@@ -19,10 +19,10 @@
 
 
             <!-- Menu Kelas dan Jurusan -->
-            <li class="menu-header">Kelas & Jurusan</li>
+            <li class="menu-header">Kelas </li>
             <li><a class="nav-link" href="<?= base_url('grade') ?>"><i class="fas fa-chalkboard-teacher"></i> <span>Kelas</span></a></li>
-            <li><a class="nav-link" href="<?= base_url('program') ?>"><i class="fas fa-book-open"></i> <span>Jurusan</span></a></li>
-            
+
+
             <li class="menu-header">Logout</li>
 
             <li><a class="nav-link" href="<?= base_url('logout') ?>"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>

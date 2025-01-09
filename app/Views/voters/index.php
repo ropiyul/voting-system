@@ -42,7 +42,6 @@
                                         <th>NIS</th>
                                         <th>Nama</th>
                                         <th>Kelas</th>
-                                        <th>Jurusan</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -91,11 +90,10 @@
 <?= $this->endSection() ?>
 <?= $this->section('script') ?>
 <script src="<?= base_url() ?>assets/modules/datatables/datatables.min.js"></script>
-    <script src="<?= base_url() ?>assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
-    <script src="<?= base_url() ?>assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>
-    <script src="<?= base_url() ?>assets/modules/jquery-ui/jquery-ui.min.js"></script>
+<script src="<?= base_url() ?>assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
+<script src="<?= base_url() ?>assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>
+<script src="<?= base_url() ?>assets/modules/jquery-ui/jquery-ui.min.js"></script>
 
-    <!-- Page Specific JS File -->
-    <script src="<?= base_url() ?>assets/js/page/modules-datatables.js"></script>
+<!-- Page Specific JS File -->
+<script src="<?= base_url() ?>assets/js/page/modules-datatables.js"></script>
 <?= $this->endSection() ?>
-
