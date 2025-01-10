@@ -223,4 +223,52 @@ class Voter extends BaseController
         $this->userModel->delete($userId, true);
         return redirect()->to('voter');
     }
+
+    public function export_excel()
+{
+
+    $voter = $this->voterModel->getVoter();
+
+
+    // $user = $this->userModel->('candidate')->findAll();
+
+    
+
+    if (!$voter) {
+        return redirect()->back()->with('error', 'Data tidak ditemukan!');
+    }
+
+    // Load library PhpSpreadsheet
+    $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    // Header kolom
+    $sheet->setCellValue('A1', 'No');
+    $sheet->setCellValue('B1', 'NIS');
+    $sheet->setCellValue('C1', 'Nama');
+    $sheet->setCellValue('D1', 'Kelas');
+    $sheet->setCellValue('E1', 'Jurusan');
+
+    // Isi data kandidat
+    $rowNumber = 2; // Dimulai dari baris kedua
+    foreach ($voter as $index => $voter);
+        $sheet->setCellValue('A' . $rowNumber, $index + 1);
+        $sheet->setCellValue('B' . $rowNumber, $voter['nis']);
+        $sheet->setCellValue('C' . $rowNumber, $voter['fullname']);
+        $sheet->setCellValue('D' . $rowNumber, $voter['grade_id']);
+        $sheet->setCellValue('E' . $rowNumber, $voter['program_id']);
+        $rowNumber++;
+
+    // Nama file
+    $filename = 'All_Pemilih_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+    // Download file
+    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="' . $filename . '"');
+    header('Cache-Control: max-age=0');
+
+    $writer->save('php://output');
+    exit;
+}
 }
