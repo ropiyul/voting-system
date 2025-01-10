@@ -45,12 +45,10 @@ class Voter extends BaseController
     public function create()
     {
         $gradeModel = new GradeModel();
-        $programModel = new ProgramModel();
-        
+
         $data = [
             'title' => 'Add voter',
             'grades' =>  $gradeModel->findAll(),
-            'programs' =>  $programModel->findAll(),
         ];
         return view('voters/create', $data);
     }
@@ -126,7 +124,6 @@ class Voter extends BaseController
 
         $savevoter = $this->voterModel->save([
             'grade_id' => $this->request->getPost('grade_id'),
-            'program_id' => $this->request->getPost('program_id'),
             'nis' => $this->request->getPost('nis'),
             'user_id' => $this->userModel->getInsertID(),
             'fullname' => $this->request->getPost('fullname'),
