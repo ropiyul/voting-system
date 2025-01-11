@@ -5,64 +5,13 @@
 <link rel="stylesheet" href="<?= base_url() ?>assets/modules/codemirror/lib/codemirror.css">
 <link rel="stylesheet" href="<?= base_url() ?>assets/modules/codemirror/theme/duotone-dark.css">
 <link rel="stylesheet" href="<?= base_url() ?>assets/modules/jquery-selectric/selectric.css">
-<link rel="stylesheet" href="<?= base_url() ?>assets/modules/dropzonejs/dropzone.css">
+<link rel="stylesheet" href="<?= base_url() ?>assets/modules/perfect-scrollbar/perfect-scrollbar.css">
+<link rel="stylesheet" href="<?= base_url() ?>assets/modules/toastify/toastify.css">
+<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+<link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+
 <style>
-    .dropzone {
-        min-height: 150px !important;
-        border: 2px dashed #ddd !important;
-        border-radius: 5px;
-        padding: 10px !important;
-    }
-
-    /* Hide all default dropzone elements */
-    .dropzone .dz-preview .dz-details,
-    .dropzone .dz-preview .dz-progress,
-    .dropzone .dz-preview .dz-error-message,
-    .dropzone .dz-preview .dz-success-mark,
-    .dropzone .dz-preview .dz-error-mark {
-        display: none !important;
-    }
-
-    /* Style for image preview only */
-    .dropzone .dz-preview {
-        min-height: 80px !important;
-        margin: 8px !important;
-    }
-
-    .dropzone .dz-preview .dz-image {
-        width: 120px !important;
-        height: 120px !important;
-        border-radius: 4px !important;
-    }
-
-    /* Hide remove link text, show only icon */
-    .dropzone .dz-preview .dz-remove {
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        z-index: 10;
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-        background-color: #fff;
-        border-radius: 50%;
-        text-align: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        font-size: 0;
-        /* Hide text */
-    }
-
-    .dropzone .dz-preview .dz-remove:before {
-        content: "×";
-        font-size: 16px;
-        color: #dc3545;
-    }
-
-    /* Center initial message */
-    .dropzone .dz-message {
-        margin: 2em 0 !important;
-        text-align: center;
-    }
+ 
 </style>
 <?= $this->endSection() ?>
 
@@ -118,15 +67,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6 col-md-6 col-lg-6">
-                            <div class="form-group">
-                                <label>Visi</label>
-                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['vision']) ? 'is-invalid' : ''; ?>" name="vision" value="<?= old('vision') ?>">
-                                <div class="invalid-feedback">
-                                    <?= (session('errors')['vision']) ?? null ?>
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Kelas</label>
@@ -158,7 +99,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label for="mission">Misi</label>
@@ -168,18 +108,21 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
-                                <label>Upload Gambar</label>
-                                <div class="dropzone" id="myDropzone">
-                                    <div class="dz-message">
-                                        <h3>Drop gambar atau klik untuk upload</h3>
-                                    </div>
+                                <label for="vision">Visi</label>
+                                <textarea class="form-control summernote" id="vision" name="vision" required><?= old('vision') ?></textarea>
+                                <div class="invalid-feedback">
+                                    <?= (session('errors')['vision']) ?? null ?>
                                 </div>
-                                <input type="hidden" name="dropzone_image" id="dropzone_image" required>
                             </div>
                         </div>
-
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label>Upload Gambar</label>
+                                <input type="file" name="image" id="image" class="image-preview-filepond">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer text-right">
@@ -199,69 +142,103 @@
 <script src="<?= base_url() ?>assets/modules/jquery-selectric/jquery.selectric.min.js"></script>
 <script src="<?= base_url() ?>assets/modules/upload-preview/assets/js/jquery.uploadPreview.min.js"></script>
 <script src="<?= base_url() ?>assets/modules/dropzonejs/min/dropzone.min.js"></script>
+<script src="<?= base_url() ?>assets/modules/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="<?= base_url() ?>assets/modules/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+
+<!-- filepond validation -->
+<script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+<script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+
+<!-- image editor -->
+<script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-filter/dist/filepond-plugin-image-filter.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+
+<script src="<?= base_url() ?>assets/modules/toastify/toastify.js"></script>
+
+<script src="https://unpkg.com/filepond/dist/filepond.js"></script>
 
 <script>
-    // Summernote initialization
+  
+    FilePond.registerPlugin(
+        FilePondPluginFileValidateSize,
+        FilePondPluginFileValidateType,
+        FilePondPluginImageCrop,
+        FilePondPluginImagePreview
+    );
+
+
+    const pondConfig = {
+        // Image handling options
+        allowImagePreview: true,
+        allowImageFilter: false,
+        allowImageExifOrientation: false,
+        allowImageCrop: false,
+        
+        // File validation
+        acceptedFileTypes: ['image/png', 'image/jpg', 'image/jpeg'],
+        fileValidateTypeDetectType: (source, type) => new Promise((resolve) => {
+            resolve(type);
+        }),
+
+
+        server: {
+            process: '<?= base_url('candidate/upload_temp') ?>',
+            revert: (uniqueFileId, load, error) => {
+                handleFileRevert(uniqueFileId, load, error);
+            },
+            headers: {
+                'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+            }
+        }
+    };
+
+
+    const handleFileRevert = (uniqueFileId, load, error) => {
+        fetch('<?= base_url('candidate/remove_temp') ?>', {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '<?= csrf_hash() ?>',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ filename: uniqueFileId })
+        })
+        .then(response => {
+            if (response.ok) {
+                load();
+            } else {
+                throw new Error('Failed to delete file');
+            }
+        })
+        .catch(err => {
+            console.error('Error:', err);
+            error('Network error occurred');
+        });
+    };
+
+
+    const pond = FilePond.create(document.querySelector('input[type="file"]'), pondConfig);
+
+    // Initialize Summernote with minimal toolbar
     $('.summernote').summernote({
         toolbar: [
             ['para', ['ul', 'ol']]
         ]
     });
 
+    
+    pond.on('error', error => {
+        console.error('FilePond error:', error);
+    });
 
-    Dropzone.autoDiscover = false; // Disable auto-discovery
-    const myDropzone = new Dropzone("#myDropzone", {
-        url: "<?= base_url('candidate/upload_temp') ?>", // Endpoint sementara untuk upload
-        method: "post",
-        paramName: "file",
-        maxFilesize: 2,
-        acceptedFiles: "image/*",
-        addRemoveLinks: true,
-        dictRemoveFile: "",
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        maxFiles: 1,
-
-        thumbnailWidth: 120,
-        thumbnailHeight: 120,
-        previewsContainer: "#myDropzone",
-        dictDefaultMessage: "Drop gambar atau klik untuk upload",
-        init: function() {
-
-            this.on("addedfile", function(file) {
-                let dzMessage = this.element.querySelector(".dz-message");
-                if (dzMessage) {
-                    dzMessage.style.display = "none";
-                }
-            });
-
-            this.on("success", function(file, response) {
-                // Simpan nama file ke input hidden
-                document.getElementById('dropzone_image').value = response.filename;
-            });
-
-            this.on("removedfile", function(file) {
-                const fileName = document.getElementById('dropzone_image').value;
-                document.getElementById('dropzone_image').value = '';
-                // Hapus file temporary
-                alert(fileName);
-                fetch('<?= base_url('candidate/remove_temp') ?>', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        filename: fileName
-                    })
-                });
-            });
-
-            this.on("maxfilesexceeded", function(file) {
-                this.removeAllFiles();
-                this.addFile(file);
-            });
+    pond.on('processfile', (error, file) => {
+        if (error) {
+            console.error('File processing error:', error);
+            return;
         }
+        console.log('File processed successfully:', file.filename);
     });
 </script>
 <?= $this->endSection() ?>

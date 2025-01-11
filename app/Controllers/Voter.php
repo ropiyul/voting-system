@@ -115,7 +115,7 @@ class Voter extends BaseController
         }
 
         $this->db->transStart();
-        $saveUser = $this->userModel->withGroup($this->config->defaultUserGroup)->save([
+        $saveUser = $this->userModel->withGroup('voter')->save([
             'username' => $this->request->getVar('username'),
             'password_hash' => Password::hash($this->request->getVar('password')),
             'email' => $this->request->getVar('email'),

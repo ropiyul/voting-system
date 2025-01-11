@@ -9,7 +9,6 @@ use App\Models\UserModel;
 use Exception;
 use \Myth\Auth\Config\Auth as AuthConfig;
 use Myth\Auth\Password;
-use PHPUnit\Framework\Constraint\ExceptionMessageIsOrContains;
 
 class Candidate extends BaseController
 {
@@ -53,8 +52,6 @@ class Candidate extends BaseController
 
     public function save()
     {
-
-
         $validation = \Config\Services::validation();
 
         // Menentukan aturan validasi
@@ -126,24 +123,17 @@ class Candidate extends BaseController
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
-        $dropzoneImage = $this->request->getPost('dropzone_image');
-        if (!empty($dropzoneImage)) {
-            $tempPath = WRITEPATH . 'uploads/temp/' . $dropzoneImage;
-            $targetPath = 'img/' . $dropzoneImage;
+        $this->db->transStart();
+        $filename = $this->request->getVar('image');
+        $tempPath = WRITEPATH . 'uploads/temp/' . $filename;
+        $targetPath = 'img/' . $filename;
 
-            if (file_exists($tempPath)) {
-                // Pindahkan file dari temporary ke folder final
-                rename($tempPath, FCPATH . $targetPath);
-                $fileName = $dropzoneImage;
-            }
-        } else {
-            $fileName = 'default.png';
+        if (file_exists($tempPath)) {
+            // Pindahkan file dari temporary ke folder final
+            rename($tempPath, FCPATH . $targetPath);
+            $fileName = $filename;
         }
 
-
-
-
-        $this->db->transStart();
         $this->userModel->withGroup('candidate')->save([
             'username' => $this->request->getPost('username'),
             'password_hash' => Password::hash($this->request->getPost('password')),
@@ -166,18 +156,18 @@ class Candidate extends BaseController
         }
         return redirect()->to('candidate')->with('message', 'Data berhasil disimpan.');
     }
+
     public function upload_temp()
     {
-        $file = $this->request->getFile('file');
+        $file = $this->request->getFile('image');
 
         if ($file->isValid() && !$file->hasMoved()) {
             $fileName = $file->getRandomName();
             $file->move(WRITEPATH . 'uploads/temp', $fileName);
 
-            return $this->response->setJSON([
-                'success' => true,
-                'filename' => $fileName
-            ]);
+            return $this->response
+            ->setHeader('Content-Type', 'text/plain')
+            ->setBody($fileName);
         }
 
         return $this->response->setJSON([
@@ -187,42 +177,33 @@ class Candidate extends BaseController
     }
     public function remove_temp()
     {
+        $request = $this->request->getJSON();
+        $fileName = $request->filename;
 
-        $filename = $this->request->getJSON()->filename; // Ambil nama file dari request
-        $filepath = WRITEPATH . 'uploads/temp/' . $filename; // Tentukan path file di folder temp
-
-        // Mengecek apakah file ada dan menghapusnya
-        if (file_exists($filepath)) {
-            unlink($filepath); // Menghapus file
+        $filePath = WRITEPATH . 'uploads/temp/' . $fileName;
+        if (file_exists($filePath)) {
+            unlink(filename: $filePath); // Hapus file dari server
             return $this->response->setJSON(['success' => true]);
         }
 
-        return $this->response->setJSON(['success' => false, 'error' => 'File tidak ditemukan']);
+        return $this->response->setJSON(['success' => false, 'error' => 'File not found']);
     }
-    public function upload()
+    public function remove_temp1()
     {
-        // Menangani request file dari Dropzone
-        $fileImage = $this->request->getFile('dropzone_image');
-
-        // Cek apakah file ada dan valid
-        if ($fileImage && $fileImage->isValid() && !$fileImage->hasMoved()) {
-            // Menyimpan file gambar dengan nama acak di folder 'img'
-            $fileName = $fileImage->getRandomName();
-            $fileImage->move('img', $fileName); // Pindahkan file ke folder 'img'
-
-            // Kirim respons JSON dengan nama file
-            return $this->response->setJSON([
-                'status' => 'success',
-                'filename' => $fileName
-            ]);
-        } else {
-            // Jika file tidak valid, kirim respons error
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'File tidak valid atau gagal diupload.'
-            ]);
+        $json = $this->request->getJSON();
+        $filename = $json->filename;
+    
+        $tempPath = WRITEPATH . 'uploads/temp/';
+        $filePath = $tempPath . $filename;
+    
+        if (file_exists($filePath)) {
+            unlink($filePath);
+            return $this->response->setJSON(['success' => true]);
         }
+    
+        return $this->response->setJSON(['success' => false]);
     }
+
 
 
     public function edit($id)
@@ -290,31 +271,26 @@ class Candidate extends BaseController
         ]);
 
         // Menjalankan validasi
-        if (!$validation->withRequest($this->request)->run()) {
-            // Jika validasi gagal, kembali dengan pesan error
-            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
-        }
+        // if (!$validation->withRequest($this->request)->run()) {
+        //     // Jika validasi gagal, kembali dengan pesan error
+        //     return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        // }
 
 
-        $dropzoneImage = $this->request->getPost('dropzone_image');
-
-        if (!$dropzoneImage->getError() == 4):
-
-            $dropzoneImage = $this->request->getPost('dropzone_image');
-            if (!empty($dropzoneImage)) {
-                $tempPath = WRITEPATH . 'uploads/temp/' . $dropzoneImage;
-                $targetPath = 'img/' . $dropzoneImage;
-
-                if (file_exists($tempPath)) {
-                    // Pindahkan file dari temporary ke folder final
-                    rename($tempPath, FCPATH . $targetPath);
-                    $fileName = $dropzoneImage;
-                }
-            } else {
-                $fileName = 'default.png';
+        $filename = $this->request->getVar('image');
+        $oldImage = $this->request->getPost('oldImage');
+        // return dd([  $filename, $oldImage]);
+        if ($filename != $oldImage):
+            
+            $this->db->transStart();
+            $tempPath = WRITEPATH . 'uploads/temp/' . $filename;
+            $targetPath = 'img/' . $filename;
+            if (file_exists($tempPath)) {
+                // Pindahkan file dari temporary ke folder final
+                rename($tempPath, FCPATH . $targetPath);
+                $fileName = $filename;
             }
 
-            $this->db->transStart();
             $this->userModel->save([
                 'id' => $this->request->getPost('user_id'),
                 'username' => $this->request->getPost('username'),

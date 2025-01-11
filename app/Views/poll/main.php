@@ -15,11 +15,22 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/components.css">
+    <style>
+     
+
+     
+
+
+        /* Optional: Add hover effect for smooth image scaling */
+    </style>
     <!-- Start GA -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
         gtag('js', new Date());
 
         gtag('config', 'UA-94034622-3');
@@ -32,7 +43,7 @@
         <div class="main-wrapper container">
             <div class="navbar-bg"></div>
             <nav class="navbar navbar-expand-lg main-navbar">
-                <img src="<?base_url()?>assets/" alt="">
+                <img src="<? base_url() ?>assets/" alt="">
                 <a href="index.html" class="navbar-brand sidebar-gone-hide">SMKN 2 Kuningan</a>
                 <a href="#" class="nav-link sidebar-gone-show m-3" data-toggle="sidebar">SMKN 2 Kuningan</a>
 
@@ -54,7 +65,7 @@
                             <div class="d-sm-none d-lg-inline-block">Hi, Ujang Maman</div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            
+
                             <a href="#" class="dropdown-item has-icon text-danger">
                                 <i class="fas fa-sign-out-alt"></i> Logout
                             </a>
@@ -63,35 +74,84 @@
                 </ul>
             </nav>
 
+            <nav class="navbar navbar-secondary navbar-expand-lg">
+                <div class="container">
+                    <ul class="navbar-nav">
+                        
+                        <li class="nav-item active">
+                            <a href="#" class="nav-link"><i class="fas fa-fire"></i><span>Home</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
 
             <!-- Main Content -->
             <div class="main-content">
-                <section class="section bg-primary rounded p-1 mb-3">
+                <!-- <section class="section bg-primary rounded p-1 mb-3">
                     <h1 class="text-center text-white text-uppercase mt-2">Para Kandidat</h1>
+                </section> -->
+
+                <section class="section">
+                    <div class="section-header">
+                        <h1>Top Navigation</h1>
+                        <div class="section-header-breadcrumb">
+                            <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                            <div class="breadcrumb-item"><a href="#">Layout</a></div>
+                            <div class="breadcrumb-item">Top Navigation</div>
+                        </div>
+                    </div>
+
+                    <div class="section-body">
+
+                        <div class="row justify-content-center ">
+                            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                                <article class="article ">
+                                    <div class="article-header rounded">
+                                        <div class="article-image bg-secondary"
+                                            data-background="https://picsum.photos/400/300">
+                                        </div>
+                                    </div>
+                                    <div class="article-details">
+                                        <h3 class="text-center font-weight-bold">Gustavo Fring</h3>
+                                        <p class="text-center text-muted">Kandidat 1</p>
+                                        <div class="article-cta">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#exampleModal">
+                                                Vote
+                                            </button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                            </div>
+                            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                                <article class="article ">
+                                    <div class="article-header rounded">
+                                        <div class="article-image bg-secondary"
+                                            data-background="https://picsum.photos/400/300">
+                                        </div>
+                                    </div>
+                                    <div class="article-details">
+                                        <h3 class="text-center font-weight-bold">Gustavo Fring</h3>
+                                        <p class="text-center text-muted">Kandidat 1</p>
+                                        <div class="article-cta">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#exampleModal">
+                                                Vote
+                                            </button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                            </div>
+                            
+                        </div>
+                    </div>
                 </section>
 
                 <!-- card kandidat -->
-                <div class="row">
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-4">
-                        <article class="article ">
-                            <div class="article-header rounded">
-                                <div class="article-image bg-secondary"
-                                    data-background="<?= base_url() ?>assets/img/news/img08.jpg">
-                                </div>
-                            </div>
-                            <div class="article-details">
-                                <h3 class="text-center font-weight-bold">Gustavo Fring</h3>
-                                <p class="text-center text-muted">Kandidat 1</p>
-                                <div class="article-cta">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal"
-                                        data-target="#exampleModal">
-                                        Vote
-                                    </button>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                </div>
+
 
             </div>
         </div>
@@ -101,44 +161,50 @@
 
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl"> <!-- Kelas modal-xl untuk modal large -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Detail Kandidat</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <!-- Bagian kiri untuk gambar -->
-                    <div class="col-3">
-                        <img src="<?= base_url() ?>assets/img/avatar/avatar-1.png" class="img-fluid" alt="kandidat">
-                    </div>
-                    <!-- Bagian kanan untuk detail -->
-                    <div class="col-9">
-                        <h3>Gustavo Fring</h3>
-                        <div>
-                            <p><strong>Visi:</strong> 
-                                <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cum quis fuga eos facere pariatur laudantium deleniti, accusamus modi doloremque architecto, minus enim sed aliquam quasi laborum iure id accusantium temporibus.</span>
-                            </p>
-                            <p><strong>Misi:</strong>
-                                <ul>
-                                    <li>1. ambasing</li>
-                                    <li>2. ambasing</li>
-                                    <li>3. ambasing</li>
-                                    <li>4. ambasing</li>
-                                    <li>5. ambasing</li>
-                                </ul>
-                            </p>
+                <div class="container-fluid p-0">
+                    <div class="row">
+                        <!-- Bagian kiri untuk gambar -->
+                        <div class="col-lg-4 col-md-12 mb-4">
+                            <img src="<?= base_url() ?>assets/img/avatar/avatar-1.png" class="img-fluid rounded mx-auto d-block" alt="kandidat" style="max-height: 300px;">
+                        </div>
+                        <!-- Bagian kanan untuk detail -->
+                        <div class="col-lg-8 col-md-12">
+                            <h3 class="mb-4 text-center text-lg-left">Gustavo Fring</h3>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="mb-4">
+                                        <h5><strong>Visi:</strong></h5>
+                                        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cum quis fuga eos facere pariatur laudantium deleniti, accusamus modi doloremque architecto, minus enim sed aliquam quasi laborum iure id accusantium temporibus.</p>
+                                    </div>
+                                    <div>
+                                        <h5><strong>Misi:</strong></h5>
+                                        <ul class="pl-3">
+                                            <li>1. ambasing</li>
+                                            <li>2. ambasing</li>
+                                            <li>3. ambasing</li>
+                                            <li>4. ambasing</li>
+                                            <li>5. ambasing</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary">Vote Kandidat</button>
             </div>
         </div>
     </div>

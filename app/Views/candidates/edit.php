@@ -6,6 +6,14 @@
 <link rel="stylesheet" href="<?= base_url() ?>assets/modules/codemirror/theme/duotone-dark.css">
 <link rel="stylesheet" href="<?= base_url() ?>assets/modules/jquery-selectric/selectric.css">
 <link rel="stylesheet" href="<?= base_url() ?>assets/modules/dropzonejs/dropzone.css">
+<link rel="stylesheet" href="<?= base_url() ?>assets/modules/perfect-scrollbar/perfect-scrollbar.css">
+<link rel="stylesheet" href="<?= base_url() ?>assets/modules/toastify/toastify.css">
+<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+<link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+<link
+    href="https://unpkg.com/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css"
+    rel="stylesheet" />
+
 <style>
     .dropzone {
         min-height: 150px !important;
@@ -37,6 +45,7 @@
         <div class="card">
             <form action="<?= base_url('candidate/update/' . $candidate['id']) ?>" method="post" enctype="multipart/form-data">
                 <?= csrf_field() ?>
+                <input type="hidden" name="oldImage" value="<?= base_url('img/').$candidate['image'] ?>">
                 <div class="card-header">
                     <h4>Update Candidate Information</h4>
                 </div>
@@ -76,15 +85,10 @@
                         </div>
 
                         <!-- Upload Image -->
-                        <div class="col-6">
+                        <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Upload Gambar</label>
-                                <div class="dropzone" id="myDropzone">
-                                    <div class="dz-message">
-                                        <h3>Drop gambar atau klik untuk upload</h3>
-                                    </div>
-                                </div>
-                                <input type="hidden" name="dropzone_image" id="dropzone_image" required>
+                                <input type="file" name="image" id="image" class="image-preview-filepond">
                             </div>
                         </div>
                     </div>
@@ -104,109 +108,119 @@
 <script src="<?= base_url() ?>assets/modules/codemirror/mode/javascript/javascript.js"></script>
 <script src="<?= base_url() ?>assets/modules/jquery-selectric/jquery.selectric.min.js"></script>
 <script src="<?= base_url() ?>assets/modules/upload-preview/assets/js/jquery.uploadPreview.min.js"></script>
-<script src="<?= base_url() ?>assets/modules/dropzonejs/min/dropzone.min.js"></script>
+<script src="<?= base_url() ?>assets/modules/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+
+<!-- filepond validation -->
+<script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+<script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+
+<!-- image editor -->
+<script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-filter/dist/filepond-plugin-image-filter.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+<script src="https://unpkg.com/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.js"></script>
+
+<script src="<?= base_url() ?>assets/modules/toastify/toastify.js"></script>
+
+<script src="https://unpkg.com/filepond/dist/filepond.js"></script>
 
 <script>
-    // Nonaktifkan auto-discovery Dropzone
-    Dropzone.autoDiscover = false;
+    // Register plugins yang diperlukan untuk preview
+    FilePond.registerPlugin(
+        FilePondPluginFileValidateSize,
+        FilePondPluginFileValidateType,
+        FilePondPluginImagePreview,
+        FilePondPluginFilePoster,
+        FilePondPluginImageExifOrientation,
+        FilePondPluginImageCrop,
+        FilePondPluginImageResize,
+        FilePondPluginImageFilter
+    );
 
-    // Inisialisasi Dropzone
-    let myDropzone = new Dropzone("#myDropzone", {
-        url: "<?= base_url('candidate/upload_temp') ?>", // URL untuk mengupload file
-        method: "post", // HTTP method yang digunakan
-        paramName: "file", // Nama parameter file yang dikirimkan
-        maxFilesize: 2, // Maksimum ukuran file (dalam MB)
-        acceptedFiles: "image/*", // Hanya menerima file gambar
-        addRemoveLinks: true, // Menampilkan link untuk menghapus file
-        dictRemoveFile: "Remove", // Pesan untuk link hapus
-        maxFiles: 1, // Maksimum jumlah file yang bisa diupload
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-TOKEN': '<?= csrf_hash() ?>' // CSRF Token untuk keamanan
-        },
-        init: function() {
-            const dropzone = this;
-            const currentImage = '<?= $candidate['image'] ?? '' ?>'; // Ambil gambar yang sudah ada
 
-          
-            // Jika gambar sudah ada, tampilkan gambar tersebut
-            if (currentImage) {
-                // Membuat file tiruan (mock file)
-                let mockFile = {
-                    name: currentImage,
-                    size: 12345 // Ukuran file (boleh disesuaikan)
-                };
+    const imageUrl = '<?= base_url('img/' . $candidate['image']) ?>';
+    console.log('Image URL:', imageUrl);
 
-                // Emit event untuk menambahkan file
-                dropzone.emit("addedfile", mockFile);
+   
+    const pond = FilePond.create(document.querySelector('input[type="file"]'), {
+        allowImagePreview: true,
+        allowFilePoster: true,
+        allowImageFilter: false,
+        allowImageExifOrientation: false,
+        allowImageCrop: false,
+        acceptedFileTypes: ['image/png', 'image/jpg', 'image/jpeg'],
+        
 
-                // Buat thumbnail untuk file yang ada
-                dropzone.emit("thumbnail", mockFile, `<?= base_url('img/') ?>${currentImage}`);
-
-                // Tandai file sebagai diterima
-                dropzone.emit("success", mockFile);
-                dropzone.emit("complete", mockFile);
-
-                // Simpan nama file di input tersembunyi
-                document.getElementById('dropzone_image').value = currentImage;
-
-                // Tambahkan mock file ke dalam daftar file
-                dropzone.files.push(mockFile);
-            }
-
-            this.on("addedfile", function(file) {
-                let dzMessage = this.element.querySelector(".dz-message");
-                if (dzMessage) {
-                    dzMessage.style.display = "none";
-                }
-            });
-
-            // Event ketika file berhasil diupload
-            this.on("success", function(file, response) {
-                if (response.success) {
-                    // Simpan nama file di input tersembunyi
-                    document.getElementById('dropzone_image').value = response.filename;
-                } else {
-                    // Jika gagal upload, hapus file yang baru saja ditambahkan
-                    this.removeFile(file);
-                    alert('Upload failed: ' + response.error);
-                }
-            });
-
-            // Event ketika melebihi batas file yang diizinkan
-            this.on("maxfilesexceeded", function(file) {
-                // Hapus semua file dan tambahkan file yang baru
-                this.removeAllFiles();
-                this.addFile(file);
-            });
-
-            // Event ketika file dihapus
-            this.on("removedfile", function(file) {
-                const fileName = document.getElementById('dropzone_image').value;
-                document.getElementById('dropzone_image').value = '';
-                // Hapus file temporary
-                alert(fileName);
-                fetch('<?= base_url('candidate/remove_temp') ?>', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+        files: [
+            {
+                source: imageUrl,
+                options: {
+                    type: 'local',
+                    metadata: {
+                        poster: imageUrl
                     },
-                    body: JSON.stringify({
-                        filename: fileName
-                    })
-                });
+        
+                    file: {
+                        name: '<?= $candidate['image'] ?>',
+                        size: 0,
+                        type: 'image/png'
+                    }
+                }
+            }
+        ],
+
+   
+        server: {
+            // Load endpoint untuk mengambil gambar
+            load: (source, load, error, progress, abort, headers) => {
+                fetch(source)
+                    .then(response => response.blob())
+                    .then(load)
+                    .catch(error);
+            },
+            process: '<?= base_url('candidate/upload_temp') ?>',
+            revert:  (uniqueFileId, load, error) => {
+            fetch('<?= base_url('candidate/remove_temp') ?>', {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '<?= csrf_hash() ?>',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    filename: uniqueFileId
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    load();
+                } else {
+                    error('Failed to delete file');
+                }
+            })
+            .catch(() => {
+                error('Network error');
             });
+        },
+
+            headers: {
+                'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+            }
         }
     });
 
-    // Handling pengiriman form
-    document.querySelector('form').addEventListener('submit', function(e) {
-        // Cek apakah file sudah diupload, jika belum tampilkan alert
-        if (!document.getElementById('dropzone_image').value) {
-            e.preventDefault();
-            alert('Please upload an image');
+
+    pond.on('init', () => {
+        console.log('FilePond initialized');
+    });
+
+    pond.on('addfile', (error, file) => {
+        if (error) {
+            console.error('Error adding file:', error);
+            return;
         }
+        console.log('File added:', file);
     });
 </script>
 <?= $this->endSection() ?>
