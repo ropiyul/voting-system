@@ -39,7 +39,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>NIS</th>
+                                        <th>Username</th>
                                         <th>Nama</th>
                                         <th>Kelas</th>
                                         <th>Action</th>
@@ -52,12 +52,9 @@
                                             <td>
                                                 <?= $i++ ?>
                                             </td>
-                                            <td class="align-middle">
-                                                <?= $voter["nis"] ?>
-                                            </td>
+                                            <td><?= $voter["username"] ?></td>
                                             <td><?= $voter["fullname"] ?></td>
                                             <td><?= $voter["grade"] ?></td>
-                                       
                                             <td>
                                                 <form action="<?= base_url() ?>voter/delete/<?= $voter["user_id"] ?>" method="post" class="d-inline">
                                                     <input type="hidden" name="_method" value="DELETE">

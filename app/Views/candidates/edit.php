@@ -94,13 +94,16 @@
                             </div>
                         </div>
 
-                        <!-- Email Field -->
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" class="form-control <?= session('errors') && isset(session('errors')['email']) ? 'is-invalid' : ''; ?>" name="email" value="<?= old('email', $candidate['email']) ?>">
+                                <label>Kelas</label>
+                                <select class="form-control <?= session('errors') && isset(session('errors')['grade_id']) ? 'is-invalid' : ''; ?>" name="grade_id" value="<?= old('grade_id', $candidate['grade_id']) ?>">
+                                    <?php foreach ($grades as $grade): ?>
+                                        <option <?= $candidate['grade_id'] == $grade['id']  ? 'selected' : '' ?> value="<?= $grade['id'] ?>"><?= $grade['name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                                 <div class="invalid-feedback">
-                                    <?= (session('errors')['email']) ?? null ?>
+                                    <?= (session('errors')['grade_id']) ?? null ?>
                                 </div>
                             </div>
                         </div>

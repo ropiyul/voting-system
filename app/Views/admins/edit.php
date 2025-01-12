@@ -48,15 +48,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6 col-md-6 col-lg-6">
-                            <div class="form-group">
-                                <label>email</label>
-                                <input type="email" class="form-control <?= session('errors') && isset(session('errors')['email']) ? 'is-invalid' : ''; ?>" name="email" value="<?= old('email', $admin['email']) ?>">
-                                <div class="invalid-feedback">
-                                    <?= (session('errors')['email']) ?? null ?>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="card-footer text-right">

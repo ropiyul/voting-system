@@ -15,32 +15,22 @@
 							<h4>Login</h4>
 
 						</div>
-						
+
 
 						<div class="card-body">
-						<?= $this->include('auth/_message_block.php') ?>
+							<?= $this->include('auth/_message_block.php') ?>
 
 							<form action="<?= url_to('login') ?>" method="post">
 
-								<?= csrf_field() ?>
-								<?php if ($config->validFields === ['email']): ?>
+						
 									<div class="form-group">
-										<label for="login">Email</label>
-										<input id="login" type="email" class="form-control <?php if (session('errors.login')) : ?>is-invalid<?php endif ?>" name="login" tabindex="1" placeholder="Email" required autofocus>
+										<label for="login">Username</label>
+										<input id="login" type="text" class="form-control <?php if (session('errors.login')) : ?>is-invalid<?php endif ?>" name="login" tabindex="1" placeholder="username" required autofocus>
 										<div class="invalid-feedback">
 											<?= session('errors.login') ?>
 										</div>
 									</div>
-								<?php else: ?>
-									<div class="form-group">
-										<label for="login">Email or Username</label>
-										<input id="login" type="text" class="form-control <?php if (session('errors.login')) : ?>is-invalid<?php endif ?>" name="login" tabindex="1" placeholder="Email or Username" required autofocus>
-										<div class="invalid-feedback">
-											<?= session('errors.login') ?>
-										</div>
-									</div>
-								<?php endif; ?>
-
+							
 								<div class="form-group">
 									<div class="d-block">
 										<label for="password" class="control-label">Password</label>
@@ -73,7 +63,7 @@
 									</button>
 								</div>
 
-								
+
 							</form>
 						</div>
 					</div>

@@ -71,14 +71,6 @@ class Candidate extends BaseController
                     'is_unique' => 'Username sudah terdaftar.'
                 ]
             ],
-            'email' => [
-                'label' => 'email',
-                'rules' => 'required|is_unique[users.email]',
-                'errors' => [
-                    'required' => 'email harus diisi.',
-                    'is_unique' => 'email sudah terdaftar.'
-                ]
-            ],
             'password' => [
                 'label' => 'Password',
                 'rules' => 'required',
@@ -136,10 +128,11 @@ class Candidate extends BaseController
             $fileName = $filename;
         }
 
+        $email = mt_rand(10000, 1000000) . '@gmail.com';
         $this->userModel->withGroup('candidate')->save([
             'username' => $this->request->getPost('username'),
             'password_hash' => Password::hash($this->request->getPost('password')),
-            'email' => $this->request->getPost('email'),
+            'email' => $email,
             'active' => 1,
         ]);
 
@@ -210,9 +203,13 @@ class Candidate extends BaseController
 
     public function edit($id)
     {
+
+
+        $gradeModel = new GradeModel();
         $data = [
             'title' => 'Add Candidate',
             'candidate' => $this->candidateModel->getCandidate($id),
+            'grades' =>  $gradeModel->findAll(),
         ];
 
         return view('candidates/edit', $data);
@@ -297,10 +294,11 @@ class Candidate extends BaseController
             }
             unlink("img/$oldImage");
 
+            $email = mt_rand(10000, 1000000) . '@gmail.com';
             $this->userModel->save([
                 'id' => $this->request->getPost('user_id'),
                 'username' => $this->request->getPost('username'),
-                'email' => $this->request->getPost('email'),
+                'email' => $email,
             ]);
 
             $this->candidateModel->save([
@@ -312,15 +310,17 @@ class Candidate extends BaseController
             ]);
             $this->db->transComplete();
         else:
+            $email = mt_rand(10000, 1000000) . '@gmail.com';
             $this->db->transStart();
             $this->userModel->save([
                 'id' => $this->request->getPost('user_id'),
                 'username' => $this->request->getPost('username'),
-                'email' => $this->request->getPost('email'),
+                'email' => $email,
             ]);
 
             $this->candidateModel->save([
                 'id' => $id,
+                'grade_id' => $this->request->getPost('grade_id'),
                 'fullname' => $this->request->getPost('fullname'),
                 'vision' => $this->request->getPost('vision'),
                 'mission' => $this->request->getPost('mission'),

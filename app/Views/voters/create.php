@@ -47,21 +47,22 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
-                                <label>email</label>
-                                <input type="email" class="form-control <?= session('errors') && isset(session('errors')['email']) ? 'is-invalid' : ''; ?>" name="email" value="<?= old('email') ?>">
+                                <label>Password</label>
+                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['password']) ? 'is-invalid' : ''; ?>" name="password" value="<?= old('password') ?>">
                                 <div class="invalid-feedback">
-                                    <?= (session('errors')['email']) ?? null ?>
+                                    <?= (session('errors')['password']) ?? null ?>
                                 </div>
                             </div>
                         </div>
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
-                                <label>nis</label>
-                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['nis']) ? 'is-invalid' : ''; ?>" name="nis" value="<?= old('nis') ?>">
+                                <label>Ulang Password</label>
+                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['pass_confirm']) ? 'is-invalid' : ''; ?>" name="pass_confirm" value="<?= old('pass_confirm') ?>">
                                 <div class="invalid-feedback">
-                                    <?= (session('errors')['nis']) ?? null ?>
+                                    <?= (session('errors')['pass_confirm']) ?? null ?>
                                 </div>
                             </div>
                         </div>
@@ -78,25 +79,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6 col-md-6 col-lg-6">
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['password']) ? 'is-invalid' : ''; ?>" name="password" value="<?= old('mision') ?>">
-                                <div class="invalid-feedback">
-                                    <?= (session('errors')['password']) ?? null ?>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-6 col-lg-6">
-                            <div class="form-group">
-                                <label>Ulang Password</label>
-                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['pass_confirm']) ? 'is-invalid' : ''; ?>" name="pass_confirm" value="<?= old('mision') ?>">
-                                <div class="invalid-feedback">
-                                    <?= (session('errors')['pass_confirm']) ?? null ?>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
                 <div class="card-footer text-right">

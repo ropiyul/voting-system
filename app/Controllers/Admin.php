@@ -70,14 +70,6 @@ class Admin extends BaseController
                     'is_unique' => 'Username sudah terdaftar.'
                 ]
             ],
-            'email' => [
-                'label' => 'email',
-                'rules' => 'required|is_unique[users.email]',
-                'errors' => [
-                    'required' => 'email harus diisi.',
-                    'is_unique' => 'email sudah terdaftar.'
-                ]
-            ],
             'password' => [
                 'label' => 'Password',
                 'rules' => 'required',
@@ -95,17 +87,17 @@ class Admin extends BaseController
             ],
         ]);
 
-        // Menjalankan validasi
         if (!$validation->withRequest($this->request)->run()) {
             // Jika validasi gagal, kembali dengan pesan error
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
         $this->db->transStart();
+        $email = mt_rand(10000, 1000000) . '@gmail.com';
         $this->userModel->withGroup('admin')->save([
             'username' => $this->request->getVar('username'),
             'password_hash' => Password::hash($this->request->getVar('password')),
-            'email' => $this->request->getVar('email'),
+            'email' => $email,
             'active' => 1,
         ]);
 
@@ -171,10 +163,11 @@ class Admin extends BaseController
 
 
         $this->db->transStart();
+        $email = mt_rand(10000, 1000000) . '@gmail.com';
         $this->userModel->save([
             'id' => $this->request->getPost('user_id'),
             'username' => $this->request->getPost('username'),
-            'email' => $this->request->getPost('email'),
+            'email' => $email,
         ]);
 
         $this->adminModel->save([
