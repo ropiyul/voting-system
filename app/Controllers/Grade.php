@@ -22,57 +22,53 @@ class Grade extends BaseController
     }
 
     public function save()
-    {
-        $validation = \Config\Services::validation();
+{
+    $data = [
+        'name' => $this->request->getPost('name')
+    ];
+    
+    $this->gradeModel->insert($data);
+    $insertedId = $this->gradeModel->insertID();
+    
+    $response = [
+        'success' => true,
+        'data' => [
+            'id' => $insertedId,
+            'name' => $data['name']
+        ]
+    ];
+    
+    return $this->response->setJSON($response);
+}
 
-        $validation->setRules([
-            'name' => [
-                'label' => 'name',
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Name must be filled',
-                ],
-            ],
-        ]);
-
-        if (!$validation->withRequest($this->request)->run()) {
-            return redirect()->to('grade/create')->withInput()->with('errors', $validation->getErrors());
-        }
-
-        $this->gradeModel->save([
-            'name' => $this->request->getPost('name'),
-        ]);
-        return redirect()->to('grade')->with('success', 'Grade created successfully');
-    }
-
-    public function update($id)
-    {
-        $validation = \Config\Services::validation();
-
-        $validation->setRules([
-            'name' => [
-                'label' => 'name',
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Name must be filled',
-                ],
-            ],
-        ]);
-
-        if (!$validation->withRequest($this->request)->run()) {
-            return redirect()->to('grade/edit/' . $id)->withInput()->with('errors', $validation->getErrors());
-        }
-
-        $this->gradeModel->save([
+public function update($id = null)
+{
+    $data = [
+        'name' => $this->request->getPost('name')
+    ];
+    
+    $this->gradeModel->update($id, $data);
+    
+    $response = [
+        'success' => true,
+        'data' => [
             'id' => $id,
-            'name' => $this->request->getPost('name'),
-        ]);
-        return redirect()->to('grade')->with('success', 'Grade updated successfully');
-    }
+            'name' => $data['name']
+        ]
+    ];
+    
+    return $this->response->setJSON($response);
+}
 
-    public function delete($id)
-    {
-        $this->gradeModel->delete($id);
-        return redirect()->to('grade')->with('success', 'Grade deleted successfully');
-    }
+public function delete($id)
+{
+    $this->gradeModel->delete($id);
+    
+    $response = [
+        'success' => true,
+        'message' => 'Data berhasil dihapus'
+    ];
+    
+    return $this->response->setJSON($response);
+}
 }

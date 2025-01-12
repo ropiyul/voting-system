@@ -54,7 +54,7 @@
                                             <td><?= $i++ ?></td>
                                             <td><?= $grade["name"] ?></td>
                                             <td>
-                                                <form action="<?= base_url('grade/delete/' . $grade['id']) ?>" method="post" class="d-inline">
+                                                <form class="delete-form d-inline" action="<?= base_url('grade/delete/' . $grade['id']) ?>" method="post">
                                                     <?= csrf_field() ?>
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
@@ -86,25 +86,26 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Default Modal</h4>
+                <h4 class="modal-title">Tambah Grade</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="<?= base_url('grade/save') ?>" method="post">
-                    <label for="name">Nama</label>
-                    <input type="text" name="name" id="name" class="form-control">
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
+                <form id="addGradeForm" action="<?= base_url('grade/save') ?>" method="post">
+                    <?= csrf_field() ?>
+                    <div class="form-group">
+                        <label for="name">Nama</label>
+                        <input type="text" name="name" id="name" class="form-control">
+                    </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
             </form>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
 </div>
 
 <!--**** EDIT MODAL ***-->
@@ -118,14 +119,15 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="<?= base_url('grade/save') ?>" method="post" id="editGradeForm">
+                <form action="" method="post" id="editGradeForm">
+                    <?= csrf_field() ?>
                     <label for="name">Nama</label>
                     <input type="text" name="name" id="gradeName" class="form-control">
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
             </form>
         </div>
         <!-- /.modal-content -->
@@ -146,33 +148,133 @@
 <script src="<?= base_url() ?>assets/modules/toastr/toastr.min.js"></script>
 <script>
     $(function() {
-        $("#table-1").DataTable({
+        // Inisialisasi DataTable
+        let dataTable = $("#table-1").DataTable({
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    });
-    <?php if (session('success')) : ?>
-        toastr.success('<?= session('success') ?>', 'Sukses', {
-            closeButton: true,
-            progressBar: true,
-            positionClass: "toast-top-right",
-            timeOut: 3000
         });
-    <?php endif; ?>
 
+        // Handle delete dengan AJAX
+        $(document).on('submit', '.delete-form', function(e) {
+            e.preventDefault();
+            if (confirm('Apakah anda yakin ingin menghapus data ini?')) {
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            // Hapus row dari DataTable
+                            let tr = $(e.target).closest('tr');
+                            dataTable.row(tr).remove().draw(false);
 
-    $(document).on('click', '.btn-edit', function() {
-        let gradeId = $(this).data('id');
-        let gradeName = $(this).data('name');
+                            toastr.success('Data berhasil dihapus', 'Sukses');
 
+                            // Update nomor urut
+                            dataTable.rows().every(function(rowIdx) {
+                                $(this.node()).find('td:first').html(rowIdx + 1);
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        toastr.error('Gagal menghapus data', 'Error');
+                    }
+                });
+            }
+        });
 
-        // Isi data di modal
-        $('#gradeName').val(gradeName);
-        $('#editGradeForm').attr('action', '/grade/update/' + gradeId);
+        // Template untuk button aksi
+        function getActionButtons(id, name) {
+            return `<form class="delete-form d-inline" action="<?= base_url('grade/delete/') ?>${id}" method="post">
+            <?= csrf_field() ?>
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+        </form>
+        <button type="button" class="btn btn-secondary btn-sm btn-edit"
+            data-toggle="modal"
+            data-id="${id}"
+            data-name="${name}">
+            Edit
+        </button>`;
+        }
 
-        // Tampilkan modal
-        $('#modal-edit').modal('show');
+        // Handle form tambah dengan AJAX
+        $(document).on('submit', '#addGradeForm', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr('action'),
+                method: 'POST',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        // Tambah row baru ke DataTable
+                        dataTable.row.add([
+                            dataTable.rows().count() + 1,
+                            response.data.name,
+                            getActionButtons(response.data.id, response.data.name)
+                        ]).draw(false);
+
+                        $('#modal-default').modal('hide');
+                        $('#addGradeForm')[0].reset();
+
+                        toastr.success('Data berhasil ditambahkan', 'Sukses');
+                    }
+                },
+                error: function(xhr) {
+                    toastr.error('Gagal menambahkan data', 'Error');
+                }
+            });
+        });
+
+        // Handle form edit dengan AJAX
+        $(document).on('submit', '#editGradeForm', function(e) {
+            e.preventDefault();
+            let id = $(this).attr('action').split('/').pop();
+            $.ajax({
+                url: $(this).attr('action'),
+                method: 'POST',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        let tr = $(`button[data-id="${id}"]`).closest('tr');
+                        let rowData = dataTable.row(tr);
+
+                        rowData.data([
+                            rowData.index() + 1,
+                            response.data.name,
+                            getActionButtons(response.data.id, response.data.name)
+                        ]).draw(false);
+
+                        $('#modal-edit').modal('hide');
+                        $('#editGradeForm')[0].reset();
+
+                        toastr.success('Data berhasil diupdate', 'Sukses');
+                    }
+                },
+                error: function(xhr) {
+                    toastr.error('Gagal mengupdate data', 'Error');
+                }
+            });
+        });
+
+        // Handle tombol edit
+        $(document).on('click', '.btn-edit', function() {
+            let gradeId = $(this).data('id');
+            let gradeName = $(this).data('name');
+
+            $('#gradeName').val(gradeName);
+            $('#editGradeForm').attr('action', '<?= base_url('grade/update/') ?>' + gradeId);
+            $('#modal-edit').modal('show');
+        });
+
+        // Reset form saat modal ditutup
+        $('#modal-edit, #modal-default').on('hidden.bs.modal', function() {
+            $(this).find('form')[0].reset();
+        });
     });
 </script>
 

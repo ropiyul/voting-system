@@ -178,7 +178,7 @@ class Admin extends BaseController
         ]);
 
         $this->adminModel->save([
-            'id' => $this->request->getPost('user_id'),
+            'id' => $adminId,
             'fullname' => $this->request->getPost('fullname'),
         ]);
         $this->db->transComplete();

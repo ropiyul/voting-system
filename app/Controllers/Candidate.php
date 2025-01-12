@@ -119,7 +119,10 @@ class Candidate extends BaseController
         ]);
 
         if (!$validation->withRequest($this->request)->run()) {
-            // Jika validasi gagal, kembali dengan pesan error
+            $filename = $this->request->getVar('image');
+            if ($filename) {
+                unlink(WRITEPATH . 'uploads/temp/'.$filename);
+            }
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
@@ -129,7 +132,6 @@ class Candidate extends BaseController
         $targetPath = 'img/' . $filename;
 
         if (file_exists($tempPath)) {
-            // Pindahkan file dari temporary ke folder final
             rename($tempPath, FCPATH . $targetPath);
             $fileName = $filename;
         }
@@ -259,27 +261,30 @@ class Candidate extends BaseController
                     'required' => 'Misi harus di isi',
                 ]
             ],
-            'image' => [
-                'label' => 'image',
-                'rules' => 'max_size[image,3048]|is_image[image]|mime_in[image,image/png,image/jpg,image/jpeg]',
-                'errors' => [
-                    'max_size' => 'Ukuran {field} terlalu besar, max 3MB.',
-                    'is_image' => '{field} harus berupa gambar',
-                    'mime_in' =>  '{field} harus berformat png, jpg, atau jpeg.'
-                ]
-            ],
+            // 'image' => [
+            //     'label' => 'image',
+            //     'rules' => 'max_size[image,5108]|is_image[image]|mime_in[image,image/png,image/jpg,image/jpeg]',
+            //     'errors' => [
+            //         'max_size' => 'Ukuran {field} terlalu besar, max 5MB.',
+            //         'is_image' => '{field} harus berupa gambar',
+            //         'mime_in' =>  '{field} harus berformat png, jpg, atau jpeg.'
+            //     ]
+            // ],
         ]);
 
         // Menjalankan validasi
-        // if (!$validation->withRequest($this->request)->run()) {
-        //     // Jika validasi gagal, kembali dengan pesan error
-        //     return redirect()->back()->withInput()->with('errors', $validation->getErrors());
-        // }
+        if (!$validation->withRequest($this->request)->run()) {
+            $filename = $this->request->getVar('image');
+            if ($filename) {
+                unlink(WRITEPATH . 'uploads/temp/'.$filename);
+            }
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
 
 
         $filename = $this->request->getVar('image');
         $oldImage = $this->request->getPost('oldImage');
-        // return dd([  $filename, $oldImage]);
+        // return dd([$filename,$oldImage]);
         if ($filename != $oldImage):
             
             $this->db->transStart();
@@ -290,6 +295,7 @@ class Candidate extends BaseController
                 rename($tempPath, FCPATH . $targetPath);
                 $fileName = $filename;
             }
+            unlink("img/$oldImage");
 
             $this->userModel->save([
                 'id' => $this->request->getPost('user_id'),

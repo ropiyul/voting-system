@@ -31,7 +31,7 @@
         <p class="section-lead">
             Form validation using default from Bootstrap 4
         </p>
-
+        <?= $this->include('auth/_message_block.php') ?>
         <div class="card">
             <form action="<?= base_url('candidate/save') ?>" method="post" enctype="multipart/form-data">
                 <?= csrf_field() ?>
@@ -101,19 +101,20 @@
                         </div>
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
-                                <label for="mission">Misi</label>
-                                <textarea class="form-control summernote" id="mission" name="mission" required><?= old('mission') ?></textarea>
+                                <label for="vision">Visi</label>
+                                <textarea class="form-control summernote" id="vision-summernote" name="vision" ><?= old('vision') ?></textarea>
                                 <div class="invalid-feedback">
-                                    <?= (session('errors')['mission']) ?? null ?>
+                                    <?= (session('errors')['vision']) ?? null ?>
                                 </div>
                             </div>
                         </div>
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
-                                <label for="vision">Visi</label>
-                                <textarea class="form-control summernote" id="vision" name="vision" required><?= old('vision') ?></textarea>
+                                <label for="mission">Misi</label>
+                                <textarea class="form-control summernote" id="mission-summernote" name="mission" 
+                                ><?= old('mission') ?></textarea>
                                 <div class="invalid-feedback">
-                                    <?= (session('errors')['vision']) ?? null ?>
+                                    <?= (session('errors')['mission']) ?? null ?>
                                 </div>
                             </div>
                         </div>
@@ -227,6 +228,9 @@
             ['para', ['ul', 'ol']]
         ]
     });
+    $("#vision-summernote").summernote("code", '<?= htmlspecialchars_decode(old('vision')) ?>' );
+    $("#mission-summernote").summernote("code", "<?= htmlspecialchars_decode(old('mission')) ?>" );
+
 
     
     pond.on('error', error => {

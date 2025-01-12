@@ -42,10 +42,11 @@
     </div>
 
     <div class="section-body">
+        <?= $this->include('auth/_message_block.php') ?>
         <div class="card">
             <form action="<?= base_url('candidate/update/' . $candidate['id']) ?>" method="post" enctype="multipart/form-data">
                 <?= csrf_field() ?>
-                <input type="hidden" name="oldImage" value="<?= base_url('img/').$candidate['image'] ?>">
+                <input type="hidden" name="oldImage" value="<?= $candidate['image'] ?>">
                 <div class="card-header">
                     <h4>Update Candidate Information</h4>
                 </div>
@@ -72,6 +73,26 @@
                                 </div>
                             </div>
                         </div>
+                        <!--  visi -->
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="vision">Visi</label>
+                                <textarea class="form-control summernote" id="vision-summernote" name="vision" required><?= old('vision') ?></textarea>
+                                <div class="invalid-feedback">
+                                    <?= (session('errors')['vision']) ?? null ?>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- misi -->
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="mission">Misi</label>
+                                <textarea class="form-control summernote" id="mission-summernote" name="mission" value="alalal" required><?= old('mission') ?></textarea>
+                                <div class="invalid-feedback">
+                                    <?= (session('errors')['mission']) ?? null ?>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Email Field -->
                         <div class="col-6 col-md-6 col-lg-6">
@@ -88,7 +109,10 @@
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Upload Gambar</label>
-                                <input type="file" name="image" id="image" class="image-preview-filepond">
+                                <input type="file" name="image" id="image" class="image-preview-filepond is-invalid">
+                                <div class="invalid-feedback">
+                                    <?= "rararara" ?>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -127,6 +151,8 @@
 <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
 
 <script>
+    console.log("<?= old('mission', $candidate['mission']) ?>             <?=  $candidate['mission'] ?>")
+
     // Register plugins yang diperlukan untuk preview
     FilePond.registerPlugin(
         FilePondPluginFileValidateSize,
@@ -143,7 +169,7 @@
     const imageUrl = '<?= base_url('img/' . $candidate['image']) ?>';
     console.log('Image URL:', imageUrl);
 
-   
+
     const pond = FilePond.create(document.querySelector('input[type="file"]'), {
         allowImagePreview: true,
         allowFilePoster: true,
@@ -151,27 +177,25 @@
         allowImageExifOrientation: false,
         allowImageCrop: false,
         acceptedFileTypes: ['image/png', 'image/jpg', 'image/jpeg'],
-        
 
-        files: [
-            {
-                source: imageUrl,
-                options: {
-                    type: 'local',
-                    metadata: {
-                        poster: imageUrl
-                    },
-        
-                    file: {
-                        name: '<?= $candidate['image'] ?>',
-                        size: 0,
-                        type: 'image/png'
-                    }
+
+        files: [{
+            source: '<?= $candidate['image'] ?>',
+            options: {
+                type: 'local',
+                metadata: {
+                    poster: imageUrl
+                },
+
+                file: {
+                    name: '<?= $candidate['image'] ?>',
+                    size: 0,
+                    type: 'image/png'
                 }
             }
-        ],
+        }],
 
-   
+
         server: {
             // Load endpoint untuk mengambil gambar
             load: (source, load, error, progress, abort, headers) => {
@@ -181,34 +205,43 @@
                     .catch(error);
             },
             process: '<?= base_url('candidate/upload_temp') ?>',
-            revert:  (uniqueFileId, load, error) => {
-            fetch('<?= base_url('candidate/remove_temp') ?>', {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '<?= csrf_hash() ?>',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    filename: uniqueFileId
-                })
-            })
-            .then(response => {
-                if (response.ok) {
-                    load();
-                } else {
-                    error('Failed to delete file');
-                }
-            })
-            .catch(() => {
-                error('Network error');
-            });
-        },
+            revert: (uniqueFileId, load, error) => {
+                fetch('<?= base_url('candidate/remove_temp') ?>', {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '<?= csrf_hash() ?>',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            filename: uniqueFileId
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            load();
+                        } else {
+                            error('Failed to delete file');
+                        }
+                    })
+                    .catch(() => {
+                        error('Network error');
+                    });
+            },
 
             headers: {
                 'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
             }
         }
     });
+
+        // Initialize Summernote with minimal toolbar
+        $('.summernote').summernote({
+        toolbar: [
+            ['para', ['ul', 'ol']]
+        ]
+    });
+    $("#vision-summernote").summernote("code", '<?= htmlspecialchars_decode(old('vision', $candidate['vision'])) ?>' );
+    $("#mission-summernote").summernote("code", "<?= htmlspecialchars_decode(old('mission', $candidate['mission'])) ?>" );
 
 
     pond.on('init', () => {
