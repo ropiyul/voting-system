@@ -10,6 +10,8 @@ $routes->get('/', 'Vote::index', ['filter' => 'role:voter']);
 $routes->post('vote/save', 'Vote::saveVote', ['filter' => 'role:admin,voter']);
 
 $routes->get('dashboard', 'Home::dashboard', ['filter' => 'role:admin,voter']);
+$routes->get('report', 'Report::index', ['filter' => 'role:admin,voter']);
+$routes->get('dashboard/getStatisticsByGrade/(:any)', 'Home::getStatisticsByGrade/$1');
 
 $routes->get('candidate', 'Candidate::index', ['filter' => 'role:admin']);
 $routes->get('candidate/create', 'Candidate::create', ['filter' => 'role:admin']);
