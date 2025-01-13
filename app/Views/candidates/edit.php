@@ -112,7 +112,7 @@
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Upload Gambar</label>
-                                <input type="file" name="image" id="image" class="image-preview-filepond is-invalid">
+                                <input type="file" name="image" id="image" class="image-preview-filepond is-invalid image">
                                 <div class="invalid-feedback">
                                     <?= "rararara" ?>
                                 </div>
@@ -154,7 +154,7 @@
 <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
 
 <script>
-    console.log("<?= old('mission', $candidate['mission']) ?>             <?=  $candidate['mission'] ?>")
+    console.log("<?= old('mission', $candidate['mission']) ?>             <?= $candidate['mission'] ?>")
 
     // Register plugins yang diperlukan untuk preview
     FilePond.registerPlugin(
@@ -173,7 +173,7 @@
     console.log('Image URL:', imageUrl);
 
 
-    const pond = FilePond.create(document.querySelector('input[type="file"]'), {
+    const pond = FilePond.create(document.querySelector('.image'), {
         allowImagePreview: true,
         allowFilePoster: true,
         allowImageFilter: false,
@@ -197,66 +197,75 @@
                 }
             }
         }],
-
-
-        server: {
-            // Load endpoint untuk mengambil gambar
-            load: (source, load, error, progress, abort, headers) => {
-                fetch(source)
-                    .then(response => response.blob())
-                    .then(load)
-                    .catch(error);
-            },
-            process: '<?= base_url('candidate/upload_temp') ?>',
-            revert: (uniqueFileId, load, error) => {
-                fetch('<?= base_url('candidate/remove_temp') ?>', {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': '<?= csrf_hash() ?>',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            filename: uniqueFileId
-                        })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            load();
-                        } else {
-                            error('Failed to delete file');
-                        }
-                    })
-                    .catch(() => {
-                        error('Network error');
-                    });
-            },
-
-            headers: {
-                'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
-            }
-        }
-    });
-
-        // Initialize Summernote with minimal toolbar
-        $('.summernote').summernote({
+        acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg", "application/pdf"],
+        fileValidateTypeDetectType: (source, type) =>
+            new Promise((resolve, reject) => {
+                // Do custom type detection here and return with promise
+                resolve(type)
+            }),
+        storeAsFile: true,
+    })
+    $('.summernote').summernote({
         toolbar: [
             ['para', ['ul', 'ol']]
         ]
     });
-    $("#vision-summernote").summernote("code", '<?= htmlspecialchars_decode(old('vision', $candidate['vision'])) ?>' );
-    $("#mission-summernote").summernote("code", "<?= htmlspecialchars_decode(old('mission', $candidate['mission'])) ?>" );
+    $("#vision-summernote").summernote("code", '<?= htmlspecialchars_decode(old('vision', $candidate['vision'])) ?>');
+    $("#mission-summernote").summernote("code", "<?= htmlspecialchars_decode(old('mission', $candidate['mission'])) ?>");
 
 
-    pond.on('init', () => {
-        console.log('FilePond initialized');
-    });
 
-    pond.on('addfile', (error, file) => {
-        if (error) {
-            console.error('Error adding file:', error);
-            return;
-        }
-        console.log('File added:', file);
-    });
+    /*     //     server: {
+        //         // Load endpoint untuk mengambil gambar
+        //         load: (source, load, error, progress, abort, headers) => {
+        //             fetch(source)
+        //                 .then(response => response.blob())
+        //                 .then(load)
+        //                 .catch(error);
+        //         },
+        //         process: '<?= base_url('candidate/upload_temp') ?>',
+        //         revert: (uniqueFileId, load, error) => {
+        //             fetch('<?= base_url('candidate/remove_temp') ?>', {
+        //                     method: 'DELETE',
+        //                     headers: {
+        //                         'X-CSRF-TOKEN': '<?= csrf_hash() ?>',
+        //                         'Content-Type': 'application/json'
+        //                     },
+        //                     body: JSON.stringify({
+        //                         filename: uniqueFileId
+        //                     })
+        //                 })
+        //                 .then(response => {
+        //                     if (response.ok) {
+        //                         load();
+        //                     } else {
+        //                         error('Failed to delete file');
+        //                     }
+        //                 })
+        //                 .catch(() => {
+        //                     error('Network error');
+        //                 });
+        //         },
+
+        //         headers: {
+        //             'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+        //         }
+        //     }
+        // });
+
+        // // Initialize Summernote with minimal toolbar
+
+
+        // pond.on('init', () => {
+        //     console.log('FilePond initialized');
+        // });
+
+        // pond.on('addfile', (error, file) => {
+        //     if (error) {
+        //         console.error('Error adding file:', error);
+        //         return;
+        //     }
+        //     console.log('File added:', file);
+        // }); */
 </script>
 <?= $this->endSection() ?>

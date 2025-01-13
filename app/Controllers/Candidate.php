@@ -111,26 +111,31 @@ class Candidate extends BaseController
                     'required' => 'Misi harus di isi',
                 ]
             ],
-
+            'image' => [
+                'label' => 'image',
+                'rules' => 'max_size[image,5108]|is_image[image]|mime_in[image,image/png,image/jpg,image/jpeg]',
+                'errors' => [
+                    'max_size' => 'Ukuran {field} terlalu besar, max 5MB.',
+                    'is_image' => '{field} harus berupa gambar',
+                    'mime_in' =>  '{field} harus berformat png, jpg, atau jpeg.'
+                ]
+            ],
         ]);
+        $tes = $this->request->getFile('image');
+        return dd($tes->getClientName());
 
         if (!$validation->withRequest($this->request)->run()) {
-            $filename = $this->request->getVar('image');
-            if ($filename) {
-                unlink(WRITEPATH . 'uploads/temp/'.$filename);
-            }
+
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
         $this->db->transStart();
-        $filename = $this->request->getVar('image');
-        $tempPath = WRITEPATH . 'uploads/temp/' . $filename;
-        $targetPath = 'img/' . $filename;
-
-        if (file_exists($tempPath)) {
-            rename($tempPath, FCPATH . $targetPath);
-            $fileName = $filename;
+        $image = $this->request->getFile('image');
+        if ($image->isValid()) {
+            $filename = $image->getRandomName();
+            $image->move('img/', $filename);
         }
+
 
         $email = mt_rand(10000, 1000000) . '@gmail.com';
         $this->userModel->withGroup('candidate')->save([
@@ -146,7 +151,7 @@ class Candidate extends BaseController
             'fullname' => $this->request->getPost('fullname'),
             'vision' => $this->request->getPost('vision'),
             'mission' => $this->request->getPost('mission'),
-            'image' => $fileName,
+            'image' => $filename,
         ]);
         $this->db->transComplete();
 
@@ -165,8 +170,8 @@ class Candidate extends BaseController
             $file->move(WRITEPATH . 'uploads/temp', $fileName);
 
             return $this->response
-            ->setHeader('Content-Type', 'text/plain')
-            ->setBody($fileName);
+                ->setHeader('Content-Type', 'text/plain')
+                ->setBody($fileName);
         }
 
         return $this->response->setJSON([
@@ -191,15 +196,15 @@ class Candidate extends BaseController
     {
         $json = $this->request->getJSON();
         $filename = $json->filename;
-    
+
         $tempPath = WRITEPATH . 'uploads/temp/';
         $filePath = $tempPath . $filename;
-    
+
         if (file_exists($filePath)) {
             unlink($filePath);
             return $this->response->setJSON(['success' => true]);
         }
-    
+
         return $this->response->setJSON(['success' => false]);
     }
 
@@ -262,41 +267,35 @@ class Candidate extends BaseController
                     'required' => 'Misi harus di isi',
                 ]
             ],
-            // 'image' => [
-            //     'label' => 'image',
-            //     'rules' => 'max_size[image,5108]|is_image[image]|mime_in[image,image/png,image/jpg,image/jpeg]',
-            //     'errors' => [
-            //         'max_size' => 'Ukuran {field} terlalu besar, max 5MB.',
-            //         'is_image' => '{field} harus berupa gambar',
-            //         'mime_in' =>  '{field} harus berformat png, jpg, atau jpeg.'
-            //     ]
-            // ],
+            'image' => [
+                'label' => 'image',
+                'rules' => 'max_size[image,5108]|is_image[image]|mime_in[image,image/png,image/jpg,image/jpeg]',
+                'errors' => [
+                    'max_size' => 'Ukuran {field} terlalu besar, max 5MB.',
+                    'is_image' => '{field} harus berupa gambar',
+                    'mime_in' =>  '{field} harus berformat png, jpg, atau jpeg.'
+                ]
+            ],
         ]);
+
 
         // Menjalankan validasi
         if (!$validation->withRequest($this->request)->run()) {
-            $filename = $this->request->getVar('image');
-            if ($filename) {
-                unlink(WRITEPATH . 'uploads/temp/'.$filename);
-            }
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
 
-        $filename = $this->request->getVar('image');
+
         $oldImage = $this->request->getPost('oldImage');
-        // return dd([$filename,$oldImage]);
-        if ($filename != $oldImage):
-            
+        $image = $this->request->getFile('image');
+        if ($image):
             $this->db->transStart();
-            $tempPath = WRITEPATH . 'uploads/temp/' . $filename;
-            $targetPath = 'img/' . $filename;
-            if (file_exists($tempPath)) {
-                // Pindahkan file dari temporary ke folder final
-                rename($tempPath, FCPATH . $targetPath);
-                $fileName = $filename;
+            if ($image->isValid()) {
+                $filename = $image->getRandomName();
+                $image->move('img/', $filename);
             }
-            unlink("img/$oldImage");
+
+           if(file_exists('img/' .$oldImage)) unlink('img/' . $oldImage);
 
             $email = mt_rand(10000, 1000000) . '@gmail.com';
             $this->userModel->save([
@@ -310,7 +309,7 @@ class Candidate extends BaseController
                 'fullname' => $this->request->getPost('fullname'),
                 'vision' => $this->request->getPost('vision'),
                 'mission' => $this->request->getPost('mission'),
-                'image' => $fileName,
+                'image' => $filename,
             ]);
             $this->db->transComplete();
         else:
@@ -349,54 +348,53 @@ class Candidate extends BaseController
         $this->candidateModel->delete($id);
         return redirect()->to('/candidate');
     }
-    
+
     public function export_excel()
-{
+    {
 
-    $candidates = $this->candidateModel->getCandidate();
+        $candidates = $this->candidateModel->getCandidate();
 
 
-    // $user = $this->userModel->('candidate')->findAll();
+        // $user = $this->userModel->('candidate')->findAll();
 
-    
 
-    if (!$candidates) {
-        return redirect()->back()->with('error', 'Data tidak ditemukan!');
+
+        if (!$candidates) {
+            return redirect()->back()->with('error', 'Data tidak ditemukan!');
+        }
+
+        // Load library PhpSpreadsheet
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Header kolom
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Nama');
+        $sheet->setCellValue('C1', 'Username');
+        $sheet->setCellValue('D1', 'Visi');
+        $sheet->setCellValue('E1', 'Misi');
+
+        // Isi data kandidat
+        $rowNumber = 2; // Dimulai dari baris kedua
+        foreach ($candidates as $index => $candidate) {
+            $sheet->setCellValue('A' . $rowNumber, $index + 1);
+            $sheet->setCellValue('B' . $rowNumber, $candidate['fullname']);
+            $sheet->setCellValue('C' . $rowNumber, $candidate['username']);
+            $sheet->setCellValue('D' . $rowNumber, $candidate['vision']);
+            $sheet->setCellValue('E' . $rowNumber, $candidate['mission']);
+            $rowNumber++;
+        }
+
+        // Nama file
+        $filename = 'All_Candidates_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        // Download file
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+        exit;
     }
-
-    // Load library PhpSpreadsheet
-    $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-    $sheet = $spreadsheet->getActiveSheet();
-
-    // Header kolom
-    $sheet->setCellValue('A1', 'No');
-    $sheet->setCellValue('B1', 'Nama');
-    $sheet->setCellValue('C1', 'Username');
-    $sheet->setCellValue('D1', 'Visi');
-    $sheet->setCellValue('E1', 'Misi');
-
-    // Isi data kandidat
-    $rowNumber = 2; // Dimulai dari baris kedua
-    foreach ($candidates as $index => $candidate) {
-        $sheet->setCellValue('A' . $rowNumber, $index + 1);
-        $sheet->setCellValue('B' . $rowNumber, $candidate['fullname']);
-        $sheet->setCellValue('C' . $rowNumber, $candidate['username']);
-        $sheet->setCellValue('D' . $rowNumber, $candidate['vision']);
-        $sheet->setCellValue('E' . $rowNumber, $candidate['mission']);
-        $rowNumber++;
-    }
-
-    // Nama file
-    $filename = 'All_Candidates_' . date('Y-m-d_H-i-s') . '.xlsx';
-
-    // Download file
-    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="' . $filename . '"');
-    header('Cache-Control: max-age=0');
-
-    $writer->save('php://output');
-    exit;
-}
-
 }
