@@ -190,4 +190,49 @@ class Admin extends BaseController
         $this->userModel->delete($userId, true);
         return redirect()->to('admin');
     }
+
+    public function export_excel()
+{
+
+    $admin = $this->adminModel->getAdmin();
+
+
+    // $user = $this->userModel->('candidate')->findAll();
+
+    
+
+    if (!$admin) {
+        return redirect()->back()->with('error', 'Data tidak ditemukan!');
+    }
+
+    // Load library PhpSpreadsheet
+    $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    // Header kolom
+    $sheet->setCellValue('A1', 'No');
+    $sheet->setCellValue('B1', 'Nama');
+    $sheet->setCellValue('C1', 'Username');
+
+    // Isi data kandidat
+    $rowNumber = 2; // Dimulai dari baris kedua
+    foreach ($admin as $index => $admin) {
+        $sheet->setCellValue('A' . $rowNumber, $index + 1);
+        $sheet->setCellValue('B' . $rowNumber, $admin['fullname']);
+        $sheet->setCellValue('C' . $rowNumber, $admin['username']);
+        $rowNumber++;
+    }
+
+    // Nama file
+    $filename = 'All_Admin_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+    // Download file
+    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="' . $filename . '"');
+    header('Cache-Control: max-age=0');
+
+    $writer->save('php://output');
+    exit;
+}
 }

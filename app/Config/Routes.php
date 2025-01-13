@@ -24,6 +24,7 @@ $routes->get('candidate/get_uploaded_image/(:num)', 'Candidate::get_uploaded_ima
 $routes->get('candidate/edit/(:num)', 'Candidate::edit/$1', ['filter' => 'role:admin']);
 $routes->post('candidate/update/(:num)', 'Candidate::update/$1', ['filter' => 'role:admin']);
 $routes->delete('candidate/delete/(:num)', 'Candidate::delete/$1', ['filter' => 'role:admin']);
+$routes->get('candidate/export_excel', 'Candidate::export_excel', ['filter' => 'role:admin']);
 
 $routes->get('voter', 'voter::index', ['filter' => 'role:admin']);
 $routes->get('voter/create', 'voter::create', ['filter' => 'role:admin']);
@@ -31,6 +32,7 @@ $routes->post('voter/save', 'voter::save', ['filter' => 'role:admin']);
 $routes->get('voter/edit/(:num)', 'voter::edit/$1', ['filter' => 'role:admin']);
 $routes->post('voter/update/(:num)', 'voter::update/$1', ['filter' => 'role:admin']);
 $routes->delete('voter/delete/(:num)', 'voter::delete/$1', ['filter' => 'role:admin']);
+$routes->get('voter/export_excel', 'voter::export_excel', ['filter' => 'role:admin']);
 
 $routes->get('admin', 'Admin::index', ['filter' => 'role:admin']);
 $routes->get('admin/create', 'Admin::create', ['filter' => 'role:admin']);
@@ -38,6 +40,7 @@ $routes->post('admin/save', 'Admin::save', ['filter' => 'role:admin']);
 $routes->get('admin/edit/(:num)', 'Admin::edit/$1', ['filter' => 'role:admin']);
 $routes->post('admin/update/(:num)', 'Admin::update/$1', ['filter' => 'role:admin']);
 $routes->delete('admin/delete/(:num)', 'Admin::delete/$1', ['filter' => 'role:admin']);
+$routes->get('admin/export_excel', 'Admin::export_excel', ['filter' => 'role:admin']);
 
 $routes->get('period', 'Period::index', ['filter' => 'role:admin']);
 $routes->get('period/create', 'Period::create', ['filter' => 'role:admin']);

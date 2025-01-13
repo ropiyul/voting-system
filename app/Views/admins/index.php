@@ -29,6 +29,7 @@
                                     </div>
                                 </div>
                             </form> -->
+                            <a href="<?= base_url('admin/export_excel') ?>" class="btn btn-success mr-2">Export Excel</a>
                             <a href="<?= base_url('admin/create') ?>" class="btn btn-primary">Tambah Data</a>
                         </div>
                     </div>

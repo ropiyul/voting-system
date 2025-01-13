@@ -9,6 +9,10 @@ use App\Models\UserModel;
 use Exception;
 use \Myth\Auth\Config\Auth as AuthConfig;
 use Myth\Auth\Password;
+use PHPUnit\Framework\Constraint\ExceptionMessageIsOrContains;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 
 class Candidate extends BaseController
 {
@@ -345,4 +349,54 @@ class Candidate extends BaseController
         $this->candidateModel->delete($id);
         return redirect()->to('/candidate');
     }
+    
+    public function export_excel()
+{
+
+    $candidates = $this->candidateModel->getCandidate();
+
+
+    // $user = $this->userModel->('candidate')->findAll();
+
+    
+
+    if (!$candidates) {
+        return redirect()->back()->with('error', 'Data tidak ditemukan!');
+    }
+
+    // Load library PhpSpreadsheet
+    $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    // Header kolom
+    $sheet->setCellValue('A1', 'No');
+    $sheet->setCellValue('B1', 'Nama');
+    $sheet->setCellValue('C1', 'Username');
+    $sheet->setCellValue('D1', 'Visi');
+    $sheet->setCellValue('E1', 'Misi');
+
+    // Isi data kandidat
+    $rowNumber = 2; // Dimulai dari baris kedua
+    foreach ($candidates as $index => $candidate) {
+        $sheet->setCellValue('A' . $rowNumber, $index + 1);
+        $sheet->setCellValue('B' . $rowNumber, $candidate['fullname']);
+        $sheet->setCellValue('C' . $rowNumber, $candidate['username']);
+        $sheet->setCellValue('D' . $rowNumber, $candidate['vision']);
+        $sheet->setCellValue('E' . $rowNumber, $candidate['mission']);
+        $rowNumber++;
+    }
+
+    // Nama file
+    $filename = 'All_Candidates_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+    // Download file
+    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="' . $filename . '"');
+    header('Cache-Control: max-age=0');
+
+    $writer->save('php://output');
+    exit;
+}
+
 }
