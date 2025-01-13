@@ -210,14 +210,14 @@ class Voter extends BaseController
     public function export_excel()
 {
 
-    $voter = $this->voterModel->getVoter();
+    $voters = $this->voterModel->getVoter();
 
 
     // $user = $this->userModel->('candidate')->findAll();
 
     
 
-    if (!$voter) {
+    if (!$voters) {
         return redirect()->back()->with('error', 'Data tidak ditemukan!');
     }
 
@@ -227,19 +227,17 @@ class Voter extends BaseController
 
     // Header kolom
     $sheet->setCellValue('A1', 'No');
-    $sheet->setCellValue('B1', 'NIS');
     $sheet->setCellValue('C1', 'Nama');
     $sheet->setCellValue('D1', 'Kelas');
-    $sheet->setCellValue('E1', 'Jurusan');
+    // $sheet->setCellValue('E1', 'Jurusan');
 
     // Isi data kandidat
     $rowNumber = 2; // Dimulai dari baris kedua
-    foreach ($voter as $index => $voter);
+    foreach ($voters as $index => $voter);
         $sheet->setCellValue('A' . $rowNumber, $index + 1);
-        $sheet->setCellValue('B' . $rowNumber, $voter['nis']);
         $sheet->setCellValue('C' . $rowNumber, $voter['fullname']);
         $sheet->setCellValue('D' . $rowNumber, $voter['grade_id']);
-        $sheet->setCellValue('E' . $rowNumber, $voter['program_id']);
+        // $sheet->setCellValue('E' . $rowNumber, $voter['program_id']);
         $rowNumber++;
 
     // Nama file

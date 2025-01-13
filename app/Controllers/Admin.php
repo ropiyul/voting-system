@@ -194,14 +194,14 @@ class Admin extends BaseController
     public function export_excel()
 {
 
-    $admin = $this->adminModel->getAdmin();
+    $admins = $this->adminModel->getAdmin();
 
 
     // $user = $this->userModel->('candidate')->findAll();
 
     
 
-    if (!$admin) {
+    if (!$admins) {
         return redirect()->back()->with('error', 'Data tidak ditemukan!');
     }
 
@@ -216,7 +216,7 @@ class Admin extends BaseController
 
     // Isi data kandidat
     $rowNumber = 2; // Dimulai dari baris kedua
-    foreach ($admin as $index => $admin) {
+    foreach ($admins as $index => $admin) {
         $sheet->setCellValue('A' . $rowNumber, $index + 1);
         $sheet->setCellValue('B' . $rowNumber, $admin['fullname']);
         $sheet->setCellValue('C' . $rowNumber, $admin['username']);
