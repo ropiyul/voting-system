@@ -45,12 +45,10 @@ class Voter extends BaseController
     public function create()
     {
         $gradeModel = new GradeModel();
-        $programModel = new ProgramModel();
-        
+
         $data = [
             'title' => 'Add voter',
             'grades' =>  $gradeModel->findAll(),
-            'programs' =>  $programModel->findAll(),
         ];
         return view('voters/create', $data);
     }
@@ -77,12 +75,11 @@ class Voter extends BaseController
                     'is_unique' => 'Username sudah terdaftar.'
                 ]
             ],
-            'email' => [
-                'label' => 'email',
-                'rules' => 'required|is_unique[users.email]',
+            'grade_id' => [
+                'label' => 'grade_id',
+                'rules' => 'required',
                 'errors' => [
-                    'required' => 'email harus diisi.',
-                    'is_unique' => 'email sudah terdaftar.'
+                    'required' => 'Kelas harus diisi.',
                 ]
             ],
             'password' => [
@@ -100,14 +97,6 @@ class Voter extends BaseController
                     'matches' => 'Password harus sama.'
                 ]
             ],
-            'nis' => [
-                'label' => 'NIS',
-                'rules' => 'required|is_unique[voters.nis]',
-                'errors' => [
-                    'required' => 'NIS harus diisi.',
-                    'is_unique' => 'NIS sudah terdaftar.'
-                ]
-            ],
         ]);
 
         // Menjalankan validasi
@@ -117,18 +106,17 @@ class Voter extends BaseController
         }
 
         $this->db->transStart();
-        $saveUser = $this->userModel->withGroup($this->config->defaultUserGroup)->save([
+        $email = mt_rand(10000, 1000000) . '@gmail.com';
+        $saveUser = $this->userModel->withGroup('voter')->save([
             'username' => $this->request->getVar('username'),
             'password_hash' => Password::hash($this->request->getVar('password')),
-            'email' => $this->request->getVar('email'),
+            'email' => $email,
             'active' => 1,
         ]);
 
         $savevoter = $this->voterModel->save([
-            'grade_id' => $this->request->getPost('grade_id'),
-            'program_id' => $this->request->getPost('program_id'),
-            'nis' => $this->request->getPost('nis'),
             'user_id' => $this->userModel->getInsertID(),
+            'grade_id' => $this->request->getPost('grade_id'),
             'fullname' => $this->request->getPost('fullname'),
         ]);
         $this->db->transComplete();
@@ -142,9 +130,12 @@ class Voter extends BaseController
 
     public function edit($id)
     {
+
+        $gradeModel = new GradeModel();
         $data = [
             'title' => 'Edit voter',
             'voter' => $this->voterModel->getVoter($id),
+            'grades' =>  $gradeModel->findAll(),
         ];
         return view('voters/edit', $data);
     }
@@ -178,14 +169,6 @@ class Voter extends BaseController
             //         'is_unique' => 'email sudah terdaftar.'
             //     ]
             // ],
-            'nis' => [
-                'label' => 'NIS',
-                'rules' => "required|is_unique[voters.nis,id,{$voterId}]",
-                'errors' => [
-                    'required' => 'NIS harus diisi.',
-                    'is_unique' => 'NIS sudah terdaftar.'
-                ]
-            ],
         ]);
 
         // Menjalankan validasi
@@ -194,18 +177,18 @@ class Voter extends BaseController
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
-
         $this->db->transStart();
+        $email = mt_rand(10000, 1000000) . '@gmail.com';
         $saveUser = $this->userModel->save([
             'id' => $this->request->getPost('user_id'),
             'username' => $this->request->getPost('username'),
-            'email' => $this->request->getPost('email'),
+            'email' => $email,
         ]);
 
         $savevoter = $this->voterModel->save([
-            'id' => $this->request->getPost('user_id'),
-            'nis' => $this->request->getPost('nis'),
+            'id' => $voterId,
             'fullname' => $this->request->getPost('fullname'),
+            'grade_id' => $this->request->getPost('grade_id'),
         ]);
         $this->db->transComplete();
 

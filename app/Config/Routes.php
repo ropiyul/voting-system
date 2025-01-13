@@ -6,17 +6,20 @@ use \Myth\Auth\Config\Auth as AuthConfig;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Vote::index', ['filter' => 'role:admin,voter']);
+$routes->get('/', 'Vote::index', ['filter' => 'role:voter']);
 $routes->post('vote/save', 'Vote::saveVote', ['filter' => 'role:admin,voter']);
 
-$routes->get('dashboard', 'Home::dashboard', ['filter' => 'role:admin']);
+$routes->get('dashboard', 'Home::dashboard', ['filter' => 'role:admin,voter']);
+$routes->get('report', 'Report::index', ['filter' => 'role:admin,voter']);
+$routes->get('dashboard/getStatisticsByGrade/(:any)', 'Home::getStatisticsByGrade/$1');
 
 $routes->get('candidate', 'Candidate::index', ['filter' => 'role:admin']);
 $routes->get('candidate/create', 'Candidate::create', ['filter' => 'role:admin']);
 $routes->post('candidate/save', 'Candidate::save', ['filter' => 'role:admin']);
 $routes->post('candidate/upload', 'Candidate::upload', ['filter' => 'role:admin']);
 $routes->post('candidate/upload_temp', 'Candidate::upload_temp', ['filter' => 'role:admin']);
-$routes->post('candidate/remove_temp', 'Candidate::remove_temp', ['filter' => 'role:admin']);
+$routes->delete('candidate/remove_temp', 'Candidate::remove_temp', ['filter' => 'role:admin']);
+$routes->post('candidate/remove_temp1', 'Candidate::remove_temp1', ['filter' => 'role:admin']);
 $routes->get('candidate/get_uploaded_image/(:num)', 'Candidate::get_uploaded_image/$1', ['filter' => 'role:admin']);
 $routes->get('candidate/edit/(:num)', 'Candidate::edit/$1', ['filter' => 'role:admin']);
 $routes->post('candidate/update/(:num)', 'Candidate::update/$1', ['filter' => 'role:admin']);

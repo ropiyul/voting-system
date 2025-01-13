@@ -13,6 +13,7 @@ use PHPUnit\Framework\Constraint\ExceptionMessageIsOrContains;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+
 class Candidate extends BaseController
 {
     protected $candidateModel;
@@ -45,20 +46,16 @@ class Candidate extends BaseController
     public function create()
     {
         $gradeModel = new GradeModel();
-        $programModel = new ProgramModel();
-       
+
         $data = [
             'title' => 'Add Candidate',
             'grades' =>  $gradeModel->findAll(),
-            'programs' =>  $programModel->findAll(),
         ];
         return view('candidates/create', $data);
     }
 
     public function save()
     {
-
-
         $validation = \Config\Services::validation();
 
         // Menentukan aturan validasi
@@ -78,14 +75,6 @@ class Candidate extends BaseController
                     'is_unique' => 'Username sudah terdaftar.'
                 ]
             ],
-            'email' => [
-                'label' => 'email',
-                'rules' => 'required|is_unique[users.email]',
-                'errors' => [
-                    'required' => 'email harus diisi.',
-                    'is_unique' => 'email sudah terdaftar.'
-                ]
-            ],
             'password' => [
                 'label' => 'Password',
                 'rules' => 'required',
@@ -98,13 +87,6 @@ class Candidate extends BaseController
                 'rules' => 'required',
                 'errors' => [
                     'required' => 'Kelas harus diisi.',
-                ]
-            ],
-            'program_id' => [
-                'label' => 'program_id',
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Jurusan harus diisi.',
                 ]
             ],
             'pass_confirm' => [
@@ -133,39 +115,34 @@ class Candidate extends BaseController
         ]);
 
         if (!$validation->withRequest($this->request)->run()) {
-            // Jika validasi gagal, kembali dengan pesan error
+            $filename = $this->request->getVar('image');
+            if ($filename) {
+                unlink(WRITEPATH . 'uploads/temp/'.$filename);
+            }
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
-        $dropzoneImage = $this->request->getPost('dropzone_image');
-        if (!empty($dropzoneImage)) {
-            $tempPath = WRITEPATH . 'uploads/temp/' . $dropzoneImage;
-            $targetPath = 'img/' . $dropzoneImage;
+        $this->db->transStart();
+        $filename = $this->request->getVar('image');
+        $tempPath = WRITEPATH . 'uploads/temp/' . $filename;
+        $targetPath = 'img/' . $filename;
 
-            if (file_exists($tempPath)) {
-                // Pindahkan file dari temporary ke folder final
-                rename($tempPath, FCPATH . $targetPath);
-                $fileName = $dropzoneImage;
-            }
-        } else {
-            $fileName = 'default.png';
+        if (file_exists($tempPath)) {
+            rename($tempPath, FCPATH . $targetPath);
+            $fileName = $filename;
         }
 
-
-
-
-        $this->db->transStart();
+        $email = mt_rand(10000, 1000000) . '@gmail.com';
         $this->userModel->withGroup('candidate')->save([
             'username' => $this->request->getPost('username'),
             'password_hash' => Password::hash($this->request->getPost('password')),
-            'email' => $this->request->getPost('email'),
+            'email' => $email,
             'active' => 1,
         ]);
 
         $this->candidateModel->save([
             'user_id' => $this->userModel->getInsertID(),
             'grade_id' => $this->request->getPost('grade_id'),
-            'program_id' => $this->request->getPost('program_id'),
             'fullname' => $this->request->getPost('fullname'),
             'vision' => $this->request->getPost('vision'),
             'mission' => $this->request->getPost('mission'),
@@ -178,18 +155,18 @@ class Candidate extends BaseController
         }
         return redirect()->to('candidate')->with('message', 'Data berhasil disimpan.');
     }
+
     public function upload_temp()
     {
-        $file = $this->request->getFile('file');
+        $file = $this->request->getFile('image');
 
         if ($file->isValid() && !$file->hasMoved()) {
             $fileName = $file->getRandomName();
             $file->move(WRITEPATH . 'uploads/temp', $fileName);
 
-            return $this->response->setJSON([
-                'success' => true,
-                'filename' => $fileName
-            ]);
+            return $this->response
+            ->setHeader('Content-Type', 'text/plain')
+            ->setBody($fileName);
         }
 
         return $this->response->setJSON([
@@ -199,49 +176,44 @@ class Candidate extends BaseController
     }
     public function remove_temp()
     {
-       
-        $filename = $this->request->getJSON()->filename; // Ambil nama file dari request
-        $filepath = WRITEPATH . 'uploads/temp/' . $filename; // Tentukan path file di folder temp
+        $request = $this->request->getJSON();
+        $fileName = $request->filename;
 
-        // Mengecek apakah file ada dan menghapusnya
-        if (file_exists($filepath)) {
-            unlink($filepath); // Menghapus file
+        $filePath = WRITEPATH . 'uploads/temp/' . $fileName;
+        if (file_exists($filePath)) {
+            unlink(filename: $filePath); // Hapus file dari server
             return $this->response->setJSON(['success' => true]);
         }
 
-        return $this->response->setJSON(['success' => false, 'error' => 'File tidak ditemukan']);
+        return $this->response->setJSON(['success' => false, 'error' => 'File not found']);
     }
-    public function upload()
+    public function remove_temp1()
     {
-        // Menangani request file dari Dropzone
-        $fileImage = $this->request->getFile('dropzone_image');
-
-        // Cek apakah file ada dan valid
-        if ($fileImage && $fileImage->isValid() && !$fileImage->hasMoved()) {
-            // Menyimpan file gambar dengan nama acak di folder 'img'
-            $fileName = $fileImage->getRandomName();
-            $fileImage->move('img', $fileName); // Pindahkan file ke folder 'img'
-
-            // Kirim respons JSON dengan nama file
-            return $this->response->setJSON([
-                'status' => 'success',
-                'filename' => $fileName
-            ]);
-        } else {
-            // Jika file tidak valid, kirim respons error
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'File tidak valid atau gagal diupload.'
-            ]);
+        $json = $this->request->getJSON();
+        $filename = $json->filename;
+    
+        $tempPath = WRITEPATH . 'uploads/temp/';
+        $filePath = $tempPath . $filename;
+    
+        if (file_exists($filePath)) {
+            unlink($filePath);
+            return $this->response->setJSON(['success' => true]);
         }
+    
+        return $this->response->setJSON(['success' => false]);
     }
+
 
 
     public function edit($id)
     {
+
+
+        $gradeModel = new GradeModel();
         $data = [
             'title' => 'Add Candidate',
             'candidate' => $this->candidateModel->getCandidate($id),
+            'grades' =>  $gradeModel->findAll(),
         ];
 
         return view('candidates/edit', $data);
@@ -290,47 +262,47 @@ class Candidate extends BaseController
                     'required' => 'Misi harus di isi',
                 ]
             ],
-            'image' => [
-                'label' => 'image',
-                'rules' => 'max_size[image,3048]|is_image[image]|mime_in[image,image/png,image/jpg,image/jpeg]',
-                'errors' => [
-                    'max_size' => 'Ukuran {field} terlalu besar, max 3MB.',
-                    'is_image' => '{field} harus berupa gambar',
-                    'mime_in' =>  '{field} harus berformat png, jpg, atau jpeg.'
-                ]
-            ],
+            // 'image' => [
+            //     'label' => 'image',
+            //     'rules' => 'max_size[image,5108]|is_image[image]|mime_in[image,image/png,image/jpg,image/jpeg]',
+            //     'errors' => [
+            //         'max_size' => 'Ukuran {field} terlalu besar, max 5MB.',
+            //         'is_image' => '{field} harus berupa gambar',
+            //         'mime_in' =>  '{field} harus berformat png, jpg, atau jpeg.'
+            //     ]
+            // ],
         ]);
 
         // Menjalankan validasi
         if (!$validation->withRequest($this->request)->run()) {
-            // Jika validasi gagal, kembali dengan pesan error
+            $filename = $this->request->getVar('image');
+            if ($filename) {
+                unlink(WRITEPATH . 'uploads/temp/'.$filename);
+            }
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
 
-        $dropzoneImage = $this->request->getPost('dropzone_image');
-
-        if (!$dropzoneImage->getError() == 4):
-
-            $dropzoneImage = $this->request->getPost('dropzone_image');
-            if (!empty($dropzoneImage)) {
-                $tempPath = WRITEPATH . 'uploads/temp/' . $dropzoneImage;
-                $targetPath = 'img/' . $dropzoneImage;
-    
-                if (file_exists($tempPath)) {
-                    // Pindahkan file dari temporary ke folder final
-                    rename($tempPath, FCPATH . $targetPath);
-                    $fileName = $dropzoneImage;
-                }
-            } else {
-                $fileName = 'default.png';
-            }
-
+        $filename = $this->request->getVar('image');
+        $oldImage = $this->request->getPost('oldImage');
+        // return dd([$filename,$oldImage]);
+        if ($filename != $oldImage):
+            
             $this->db->transStart();
+            $tempPath = WRITEPATH . 'uploads/temp/' . $filename;
+            $targetPath = 'img/' . $filename;
+            if (file_exists($tempPath)) {
+                // Pindahkan file dari temporary ke folder final
+                rename($tempPath, FCPATH . $targetPath);
+                $fileName = $filename;
+            }
+            unlink("img/$oldImage");
+
+            $email = mt_rand(10000, 1000000) . '@gmail.com';
             $this->userModel->save([
                 'id' => $this->request->getPost('user_id'),
                 'username' => $this->request->getPost('username'),
-                'email' => $this->request->getPost('email'),
+                'email' => $email,
             ]);
 
             $this->candidateModel->save([
@@ -342,15 +314,17 @@ class Candidate extends BaseController
             ]);
             $this->db->transComplete();
         else:
+            $email = mt_rand(10000, 1000000) . '@gmail.com';
             $this->db->transStart();
             $this->userModel->save([
                 'id' => $this->request->getPost('user_id'),
                 'username' => $this->request->getPost('username'),
-                'email' => $this->request->getPost('email'),
+                'email' => $email,
             ]);
 
             $this->candidateModel->save([
                 'id' => $id,
+                'grade_id' => $this->request->getPost('grade_id'),
                 'fullname' => $this->request->getPost('fullname'),
                 'vision' => $this->request->getPost('vision'),
                 'mission' => $this->request->getPost('mission'),

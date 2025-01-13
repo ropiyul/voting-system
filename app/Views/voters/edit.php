@@ -50,19 +50,14 @@
                         </div>
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
-                                <label>email</label>
-                                <input type="email" class="form-control <?= session('errors') && isset(session('errors')['email']) ? 'is-invalid' : ''; ?>" name="email" value="<?= old('email', $voter['email']) ?>">
+                                <label>Kelas</label>
+                                <select class="form-control <?= session('errors') && isset(session('errors')['grade_id']) ? 'is-invalid' : ''; ?>" name="grade_id" value="<?= old('grade_id', $voter['grade_id']) ?>">
+                                    <?php foreach ($grades as $grade): ?>
+                                        <option <?= $voter['grade_id'] == $grade['id']  ? 'selected' : '' ?> value="<?= $grade['id'] ?>"><?= $grade['name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                                 <div class="invalid-feedback">
-                                    <?= (session('errors')['email']) ?? null ?>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-6 col-lg-6">
-                            <div class="form-group">
-                                <label>nis</label>
-                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['nis']) ? 'is-invalid' : ''; ?>" name="nis" value="<?= old('nis', $voter['nis']) ?>">
-                                <div class="invalid-feedback">
-                                    <?= (session('errors')['nis']) ?? null ?>
+                                    <?= (session('errors')['grade_id']) ?? null ?>
                                 </div>
                             </div>
                         </div>
