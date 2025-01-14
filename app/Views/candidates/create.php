@@ -11,7 +11,7 @@
 <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
 
 <style>
- 
+
 </style>
 <?= $this->endSection() ?>
 
@@ -80,7 +80,7 @@
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label for="vision">Visi</label>
-                                <textarea class="form-control summernote" id="vision-summernote" name="vision" ><?= old('vision') ?></textarea>
+                                <textarea class="form-control summernote" id="vision-summernote" name="vision"><?= old('vision') ?></textarea>
                                 <div class="invalid-feedback">
                                     <?= (session('errors')['vision']) ?? null ?>
                                 </div>
@@ -89,8 +89,7 @@
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label for="mission">Misi</label>
-                                <textarea class="form-control summernote" id="mission-summernote" name="mission" 
-                                ><?= old('mission') ?></textarea>
+                                <textarea class="form-control summernote" id="mission-summernote" name="mission"><?= old('mission') ?></textarea>
                                 <div class="invalid-feedback">
                                     <?= (session('errors')['mission']) ?? null ?>
                                 </div>
@@ -112,7 +111,7 @@
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Upload Gambar</label>
-                                <input type="file" name="image" id="image" class="image-preview-filepond">
+                                <input type="file" name="image" id="image" class="image-preview-filepond image">
                             </div>
                         </div>
                     </div>
@@ -153,7 +152,6 @@
 <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
 
 <script>
-  
     FilePond.registerPlugin(
         FilePondPluginFileValidateSize,
         FilePondPluginFileValidateType,
@@ -162,78 +160,84 @@
     );
 
 
-    const pondConfig = {
-        // Image handling options
-        allowImagePreview: true,
-        allowImageFilter: false,
-        allowImageExifOrientation: false,
-        allowImageCrop: false,
-        
-        // File validation
-        acceptedFileTypes: ['image/png', 'image/jpg', 'image/jpeg'],
-        fileValidateTypeDetectType: (source, type) => new Promise((resolve) => {
-            resolve(type);
-        }),
-
-
-        server: {
-            process: '<?= base_url('candidate/upload_temp') ?>',
-            revert: (uniqueFileId, load, error) => {
-                handleFileRevert(uniqueFileId, load, error);
-            },
-            headers: {
-                'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
-            }
-        }
-    };
-
-
-    const handleFileRevert = (uniqueFileId, load, error) => {
-        fetch('<?= base_url('candidate/remove_temp') ?>', {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': '<?= csrf_hash() ?>',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ filename: uniqueFileId })
+     // Filepond:
+     FilePond.create(document.querySelector(".image"), {
+            credits: null,
+            allowImagePreview: true,
+            allowMultiple: false,
+            allowFileEncode: false,
+            required: false,
+            acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg", "application/pdf"],
+            fileValidateTypeDetectType: (source, type) =>
+                new Promise((resolve, reject) => {
+                    // Do custom type detection here and return with promise
+                    resolve(type)
+                }),
+            storeAsFile: true,
         })
-        .then(response => {
-            if (response.ok) {
-                load();
-            } else {
-                throw new Error('Failed to delete file');
-            }
-        })
-        .catch(err => {
-            console.error('Error:', err);
-            error('Network error occurred');
-        });
-    };
-
-
-    const pond = FilePond.create(document.querySelector('input[type="file"]'), pondConfig);
-
-    // Initialize Summernote with minimal toolbar
+         // Initialize Summernote with minimal toolbar
     $('.summernote').summernote({
         toolbar: [
             ['para', ['ul', 'ol']]
         ]
     });
-    $("#vision-summernote").summernote("code", '<?= htmlspecialchars_decode(old('vision')) ?>' );
-    $("#mission-summernote").summernote("code", "<?= htmlspecialchars_decode(old('mission')) ?>" );
+    $("#vision-summernote").summernote("code", '<?= htmlspecialchars_decode(old('vision')) ?>');
+    $("#mission-summernote").summernote("code", "<?= htmlspecialchars_decode(old('mission')) ?>");
 
 
-    
-    pond.on('error', error => {
-        console.error('FilePond error:', error);
-    });
 
-    pond.on('processfile', (error, file) => {
-        if (error) {
-            console.error('File processing error:', error);
-            return;
-        }
-        console.log('File processed successfully:', file.filename);
-    });
+    //   /*   server: {
+    //         process: '<?= base_url('candidate/upload_temp') ?>',
+    //         revert: (uniqueFileId, load, error) => {
+    //             handleFileRevert(uniqueFileId, load, error);
+    //         },
+    //         headers: {
+    //             'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+    //         }
+    //     }
+    // };
+
+
+    // const handleFileRevert = (uniqueFileId, load, error) => {
+    //     fetch('<?= base_url('candidate/remove_temp') ?>', {
+    //             method: 'DELETE',
+    //             headers: {
+    //                 'X-CSRF-TOKEN': '<?= csrf_hash() ?>',
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({
+    //                 filename: uniqueFileId
+    //             })
+    //         })
+    //         .then(response => {
+    //             if (response.ok) {
+    //                 load();
+    //             } else {
+    //                 throw new Error('Failed to delete file');
+    //             }
+    //         })
+    //         .catch(err => {
+    //             console.error('Error:', err);
+    //             error('Network error occurred');
+    //         });
+    // };
+
+
+    // const pond = FilePond.create(document.querySelector('input[type="file"]'), pondConfig);
+
+   
+
+
+    // pond.on('error', error => {
+    //     console.error('FilePond error:', error);
+    // });
+
+    // pond.on('processfile', (error, file) => {
+    //     if (error) {
+    //         console.error('File processing error:', error);
+    //         return;
+    //     }
+    //     console.log('File processed successfully:', file.filename);
+    // }); */
 </script>
 <?= $this->endSection() ?>

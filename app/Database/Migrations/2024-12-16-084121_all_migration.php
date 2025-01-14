@@ -65,10 +65,6 @@ class AllMigration extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'nis'          => [
-                'type'           => 'VARCHAR',
-                'constraint'     => 12,
-            ],
             'user_id'      => [
                 'type'       => 'INT',
                 'constraint' => 11,
@@ -128,10 +124,6 @@ class AllMigration extends Migration
                 'type'       => 'INT',
                 'constraint' => 11,
                 'unsigned'   => true,
-            ],
-            'nis'          => [
-                'type'           => 'VARCHAR',
-                'constraint'     => 12,
             ],
             'fullname'        => [
                 'type'       => 'VARCHAR',
