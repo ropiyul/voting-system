@@ -10,17 +10,15 @@
 <?= $this->section('content') ?>
 <section class="section">
     <div class="section-header">
-        <h1>Grade Table</h1>
+        <h1>Kelas</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-            <div class="breadcrumb-item"><a href="#">Components</a></div>
-            <div class="breadcrumb-item">Grade</div>
+            <div class="breadcrumb-item active"><a href="<?= base_url('dashboard') ?>">Dashboard</a></div>
+            <div class="breadcrumb-item"><a href="<?= base_url('grade') ?>">Kelas</a></div>
+            <div class="breadcrumb-item">Tabel</div>
         </div>
     </div>
 
     <div class="section-body">
-        <h2 class="section-title">Grade List</h2>
-        <p class="section-lead">Manage your grades here.</p>
         <div class="row">
             <div class="col-12">
                 <!-- Message Block -->
@@ -29,7 +27,7 @@
                 <!-- Card Component -->
                 <div class="card">
                     <div class="card-header">
-                        <h4>Grade Data</h4>
+                        <h4>Form Kelas</h4>
                         <div class="card-header-form">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">
                                 Tambah Kategori
