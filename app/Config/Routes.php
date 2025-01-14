@@ -64,6 +64,15 @@ $routes->post('program/update/(:num)', 'Program::update/$1', ['filter' => 'role:
 $routes->delete('program/delete/(:num)', 'Program::delete/$1', ['filter' => 'role:admin']);
 
 
+$routes->group('api', ['namespace' => 'App\Controllers\Api'], function($routes) {
+    $routes->post('login', 'ApiAuth::login');
+
+    $routes->group('', ['filter' => 'jwt'], function($routes) {
+        $routes->get('user/details', 'Apiuser::details');
+        $routes->post('logout', 'Apiuser::logout');
+    });
+});
+
 
 
 // OVERRIDE AUTH ROUTES
