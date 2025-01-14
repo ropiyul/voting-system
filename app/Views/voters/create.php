@@ -22,6 +22,8 @@
         <!-- <div class="row"> -->
 
         <div class="card">
+        <?= $this->include('auth/_message_block.php') ?>
+
             <form Action="<?= base_url('voter/save') ?>" method="post">
                 <?php csrf_field() ?>
                 <div class="card-header">
