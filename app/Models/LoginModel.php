@@ -12,12 +12,16 @@ class LoginModel extends Model
     protected $returnType     = 'object';
     protected $useSoftDeletes = false;
     protected $allowedFields  = [
-        'ip_address', 'email', 'user_id', 'date', 'success',
+        'ip_address',
+        'email',
+        'user_id',
+        'date',
+        'success',
     ];
     protected $useTimestamps   = false;
     protected $validationRules = [
         'ip_address' => 'required',
-        // 'email'      => 'required',
+        'email'      => 'required',
         'user_id'    => 'permit_empty|integer',
         'date'       => 'required|valid_date',
     ];

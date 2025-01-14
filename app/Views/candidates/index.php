@@ -3,23 +3,22 @@
 <?= $this->section('content') ?>
 <section class="section">
     <div class="section-header">
-        <h1>Table</h1>
+        <h1>Kandidat</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-            <div class="breadcrumb-item"><a href="#">Components</a></div>
-            <div class="breadcrumb-item">Table</div>
+            <div class="breadcrumb-item active"><a href="<?= base_url('dashboard') ?>">Dashboard</a></div>
+            <div class="breadcrumb-item">kandidat</div>
+            <div class="breadcrumb-item">Tabel</div>
         </div>
     </div>
 
     <div class="section-body">
-        <h2 class="section-title">Table</h2>
-        <p class="section-lead">Example of some Bootstrap table components.</p>
+
         <div class="row">
             <div class="col-12">
                 <?= $this->include('auth/_message_block.php') ?>
                 <div class="card">
                     <div class="card-header">
-                        <h4>Advanced Table</h4>
+                        <h4>Tabel Kandidat</h4>
                         <div class="card-header-form">
                             <!-- <form>
                                 <div class="input-group">
@@ -55,7 +54,7 @@
                                                 <?= $i++ ?>
                                             </td>
                                             <td>
-                                                <img alt="image" src="<?= base_url('img/') . $candidate["image"] ?>" class="rounded-circle" width="35" height="35"  data-toggle="tooltip" title="<?= $candidate["fullname"] ?>">
+                                                <img alt="image" src="<?= base_url('img/') . $candidate["image"] ?>" class="rounded-circle" width="35" height="35" data-toggle="tooltip" title="<?= $candidate["fullname"] ?>">
                                             </td>
                                             <td>
                                                 <?= $candidate["fullname"] ?>
@@ -64,8 +63,8 @@
                                             <td class="text-truncate" style="max-width: 200px;"><?= $candidate["vision"] ?></td>
                                             <td class="text-truncate" style="max-width: 200px;"><?= $candidate["mission"] ?></td>
                                             <td>
-                                            <form action="<?= base_url('grade/delete/') ?>${id}" method="post" class="delete-form d-inline">
-                                                <a href="<?= base_url("candidate/edit/" . $candidate['id']) ?>" class="btn btn-warning">edit</a>
+                                                <form action="<?= base_url('grade/delete/') ?>${id}" method="post" class="delete-form d-inline">
+                                                    <a href="<?= base_url("candidate/edit/" . $candidate['id']) ?>" class="btn btn-warning">edit</a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

@@ -5,29 +5,26 @@
 
 <section class="section">
     <div class="section-header">
-        <h1>Form Validation</h1>
+        <h1>Tambah pemilih</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-            <div class="breadcrumb-item"><a href="#">Forms</a></div>
-            <div class="breadcrumb-item">Form Validation</div>
+            <div class="breadcrumb-item active"><a href="<?= base_url('dashboard') ?>">Dashboard</a></div>
+            <div class="breadcrumb-item"><a href="<?= base_url('voter') ?>">Pemilih</a></div>
+            <div class="breadcrumb-item">Tambah pemilih</div>
         </div>
     </div>
 
     <div class="section-body">
-        <h2 class="section-title">Form Validation</h2>
-        <p class="section-lead">
-            Form validation using default from Bootstrap 4
-        </p>
+
 
         <!-- <div class="row"> -->
 
         <div class="card">
-        <?= $this->include('auth/_message_block.php') ?>
+            <?= $this->include('auth/_message_block.php') ?>
 
             <form Action="<?= base_url('voter/save') ?>" method="post">
                 <?php csrf_field() ?>
                 <div class="card-header">
-                    <h4>Server-side Validation</h4>
+                    <h4>Foem Tambah pemilih</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -49,7 +46,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-6 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Password</label>
