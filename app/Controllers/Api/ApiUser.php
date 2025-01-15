@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Api;
 
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\API\ResponseTrait;
@@ -9,7 +9,7 @@ use Firebase\JWT\Key;
 use Myth\Auth\Models\UserModel;
 use Exception;
 
-class Apiuser extends ResourceController
+class ApiUser extends ResourceController
 {
     use ResponseTrait;
     
@@ -32,14 +32,14 @@ class Apiuser extends ResourceController
     public function login()
     {
         $rules = [
-            'email' => 'required|valid_email|min_length[6]',
+            'username' => 'required',
             'password' => 'required',
         ];
 
         $messages = [
-            'email' => [
-                'required' => 'Email required',
-                'valid_email' => 'Email address is not in format'
+            'username' => [
+                'required' => 'username required',
+                'valid_username' => 'username address is not in format'
             ],
             'password' => [
                 'required' => 'Password is required'
@@ -55,11 +55,11 @@ class Apiuser extends ResourceController
             ], 400);
         }
 
-        $email = $this->request->getVar('email');
+        $username = $this->request->getVar('username');
         $password = $this->request->getVar('password');
         
         // Cek user exists
-        $user = $this->userModel->where('email', $email)->first();
+        $user = $this->userModel->where('username', $username)->first();
         
         if (!$user) {
             return $this->respond([
@@ -71,7 +71,7 @@ class Apiuser extends ResourceController
         }
 
         // Attempt login
-        if ($this->auth->attempt(['email' => $email, 'password' => $password], false)) {
+        if ($this->auth->attempt(['username' => $username, 'password' => $password], false)) {
             // Generate JWT token
             $token = $this->generateJWT($user);
             
@@ -82,8 +82,8 @@ class Apiuser extends ResourceController
                 'data' => [
                     'user' => [
                         'id' => $user->id,
-                        'email' => $user->email,
                         'username' => $user->username,
+                   
                     ],
                     'access_token' => $token
                 ]
@@ -122,7 +122,6 @@ class Apiuser extends ResourceController
                 'data' => [
                     'user' => [
                         'id' => $user->id,
-                        'email' => $user->email,
                         'username' => $user->username,
                         // Add other needed user details
                     ]
@@ -162,8 +161,7 @@ class Apiuser extends ResourceController
             'exp' => $exp,
             'data' => [
                 'id' => $user->id,
-                'email' => $user->email,
-                'username' => $user->username
+                'username' => $user->username,
             ]
         ];
 

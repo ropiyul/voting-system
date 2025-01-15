@@ -6,74 +6,91 @@ use \Myth\Auth\Config\Auth as AuthConfig;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Vote::index', ['filter' => 'role:voter']);
+$routes->get('/', 'Vote::index', ['filter' => 'role:voter,admin']);
 $routes->post('vote/save', 'Vote::saveVote', ['filter' => 'role:admin,voter']);
 
-$routes->get('dashboard', 'Home::dashboard', ['filter' => 'role:admin,voter']);
-$routes->get('report', 'Report::index', ['filter' => 'role:admin,voter']);
-$routes->get('dashboard/getStatisticsByGrade/(:any)', 'Home::getStatisticsByGrade/$1');
-
-$routes->get('candidate', 'Candidate::index', ['filter' => 'role:admin']);
-$routes->get('candidate/create', 'Candidate::create', ['filter' => 'role:admin']);
-$routes->post('candidate/save', 'Candidate::save', ['filter' => 'role:admin']);
-$routes->post('candidate/upload', 'Candidate::upload', ['filter' => 'role:admin']);
-$routes->post('candidate/upload_temp', 'Candidate::upload_temp', ['filter' => 'role:admin']);
-$routes->delete('candidate/remove_temp', 'Candidate::remove_temp', ['filter' => 'role:admin']);
-$routes->post('candidate/remove_temp1', 'Candidate::remove_temp1', ['filter' => 'role:admin']);
-$routes->get('candidate/get_uploaded_image/(:num)', 'Candidate::get_uploaded_image/$1', ['filter' => 'role:admin']);
-$routes->get('candidate/edit/(:num)', 'Candidate::edit/$1', ['filter' => 'role:admin']);
-$routes->post('candidate/update/(:num)', 'Candidate::update/$1', ['filter' => 'role:admin']);
-$routes->delete('candidate/delete/(:num)', 'Candidate::delete/$1', ['filter' => 'role:admin']);
-$routes->get('candidate/export_excel', 'Candidate::export_excel', ['filter' => 'role:admin']);
-
-$routes->get('voter', 'voter::index', ['filter' => 'role:admin']);
-$routes->get('voter/create', 'voter::create', ['filter' => 'role:admin']);
-$routes->post('voter/save', 'voter::save', ['filter' => 'role:admin']);
-$routes->get('voter/edit/(:num)', 'voter::edit/$1', ['filter' => 'role:admin']);
-$routes->post('voter/update/(:num)', 'voter::update/$1', ['filter' => 'role:admin']);
-$routes->delete('voter/delete/(:num)', 'voter::delete/$1', ['filter' => 'role:admin']);
-$routes->get('voter/export_excel', 'voter::export_excel', ['filter' => 'role:admin']);
-
-$routes->get('admin', 'Admin::index', ['filter' => 'role:admin']);
-$routes->get('admin/create', 'Admin::create', ['filter' => 'role:admin']);
-$routes->post('admin/save', 'Admin::save', ['filter' => 'role:admin']);
-$routes->get('admin/edit/(:num)', 'Admin::edit/$1', ['filter' => 'role:admin']);
-$routes->post('admin/update/(:num)', 'Admin::update/$1', ['filter' => 'role:admin']);
-$routes->delete('admin/delete/(:num)', 'Admin::delete/$1', ['filter' => 'role:admin']);
-$routes->get('admin/export_excel', 'Admin::export_excel', ['filter' => 'role:admin']);
-
-$routes->get('period', 'Period::index', ['filter' => 'role:admin']);
-$routes->get('period/create', 'Period::create', ['filter' => 'role:admin']);
-$routes->post('period/save', 'Period::save', ['filter' => 'role:admin']);
-$routes->get('period/edit/(:num)', 'Period::edit/$1', ['filter' => 'role:admin']);
-$routes->post('period/update/(:num)', 'Period::update/$1', ['filter' => 'role:admin']);
-$routes->delete('period/delete/(:num)', 'Period::delete/$1', ['filter' => 'role:admin']);
-
-$routes->get('grade', 'Grade::index', ['filter' => 'role:admin']);
-$routes->get('grade/create', 'Grade::create', ['filter' => 'role:admin']);
-$routes->post('grade/save', 'Grade::save', ['filter' => 'role:admin']);
-$routes->get('grade/edit/(:num)', 'Grade::edit/$1', ['filter' => 'role:admin']);
-$routes->post('grade/update/(:num)', 'Grade::update/$1', ['filter' => 'role:admin']);
-$routes->delete('grade/delete/(:num)', 'Grade::delete/$1', ['filter' => 'role:admin']);
-
-$routes->get('program', 'Program::index', ['filter' => 'role:admin']);
-$routes->get('program/create', 'Program::create', ['filter' => 'role:admin']);
-$routes->post('program/save', 'Program::save', ['filter' => 'role:admin']);
-$routes->get('program/edit/(:num)', 'Program::edit/$1', ['filter' => 'role:admin']);
-$routes->post('program/update/(:num)', 'Program::update/$1', ['filter' => 'role:admin']);
-$routes->delete('program/delete/(:num)', 'Program::delete/$1', ['filter' => 'role:admin']);
-
-
-$routes->group('api', ['namespace' => 'App\Controllers\Api'], function($routes) {
-    $routes->post('login', 'ApiAuth::login');
-
-    $routes->group('', ['filter' => 'jwt'], function($routes) {
-        $routes->get('user/details', 'Apiuser::details');
-        $routes->post('logout', 'Apiuser::logout');
-    });
+// Dashboard & Reports
+$routes->group('', ['filter' => 'role:admin'], function ($routes) {
+    $routes->get('dashboard', 'Home::dashboard');
+    $routes->get('report', 'Report::index');
+    $routes->get('dashboard/getStatisticsByGrade/(:any)', 'Home::getStatisticsByGrade/$1');
 });
 
+// kandidat 
+$routes->group('candidate', ['filter' => 'role:admin'], function ($routes) {
+    $routes->get('', 'Candidate::index');
+    $routes->get('create', 'Candidate::create');
+    $routes->post('save', 'Candidate::save');
+    $routes->get('edit/(:num)', 'Candidate::edit/$1');
+    $routes->post('update/(:num)', 'Candidate::update/$1');
+    $routes->delete('delete/(:num)', 'Candidate::delete/$1');
+    $routes->get('export_excel', 'Candidate::export_excel');
+});
 
+// permilih 
+$routes->group('voter', ['filter' => 'role:admin'], function ($routes) {
+    $routes->get('', 'voter::index');
+    $routes->get('create', 'voter::create');
+    $routes->post('save', 'voter::save');
+    $routes->get('edit/(:num)', 'voter::edit/$1');
+    $routes->post('update/(:num)', 'voter::update/$1');
+    $routes->delete('delete/(:num)', 'voter::delete/$1');
+    $routes->get('export_excel', 'voter::export_excel');
+});
+
+// Admin 
+$routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
+    $routes->get('', 'Admin::index');
+    $routes->get('create', 'Admin::create');
+    $routes->post('save', 'Admin::save');
+    $routes->get('edit/(:num)', 'Admin::edit/$1');
+    $routes->post('update/(:num)', 'Admin::update/$1');
+    $routes->delete('delete/(:num)', 'Admin::delete/$1');
+    $routes->get('export_excel', 'Admin::export_excel');
+});
+
+// Period 
+$routes->group('period', ['filter' => 'role:admin'], function ($routes) {
+    $routes->get('', 'Period::index');
+    $routes->get('create', 'Period::create');
+    $routes->post('save', 'Period::save');
+    $routes->get('edit/(:num)', 'Period::edit/$1');
+    $routes->post('update/(:num)', 'Period::update/$1');
+    $routes->delete('delete/(:num)', 'Period::delete/$1');
+});
+
+// kelas 
+$routes->group('grade', ['filter' => 'role:admin'], function ($routes) {
+    $routes->get('', 'Grade::index');
+    $routes->get('create', 'Grade::create');
+    $routes->post('save', 'Grade::save');
+    $routes->get('edit/(:num)', 'Grade::edit/$1');
+    $routes->post('update/(:num)', 'Grade::update/$1');
+    $routes->delete('delete/(:num)', 'Grade::delete/$1');
+});
+
+// jurusan
+$routes->group('program', ['filter' => 'role:admin'], function ($routes) {
+    $routes->get('', 'Program::index');
+    $routes->get('create', 'Program::create');
+    $routes->post('save', 'Program::save');
+    $routes->get('edit/(:num)', 'Program::edit/$1');
+    $routes->post('update/(:num)', 'Program::update/$1');
+    $routes->delete('delete/(:num)', 'Program::delete/$1');
+});
+
+// API
+$routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
+    $routes->post('login', 'ApiUser::login');
+
+    $routes->group('', ['filter' => 'jwt'], function ($routes) {
+        $routes->get('user/details', 'ApiUser::details');
+        $routes->post('logout', 'ApiUser::logout');
+        $routes->get('voting/candidates', 'ApiVoting::getCandidates');
+        $routes->post('voting/submit', 'ApiVoting::submitVote');
+        $routes->get('voting/status/(:num)', 'ApiVoting::checkVoteStatus/$1');
+    });
+});
 
 // OVERRIDE AUTH ROUTES
 $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes) {
@@ -100,5 +117,3 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
     $routes->get($reservedRoutes['reset-password'], 'AuthController::resetPassword', ['as' => $reservedRoutes['reset-password']]);
     $routes->post($reservedRoutes['reset-password'], 'AuthController::attemptReset');
 });
-
-
