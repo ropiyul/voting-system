@@ -9,6 +9,7 @@
     <!-- General CSS Files -->
     <link rel="stylesheet" href="assets/modules/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/modules/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/modules/toastr/toastr.min.css">
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
@@ -102,7 +103,8 @@
 
             <!-- Main Content -->
             <div class="main-content">
-                <section class="section mt-3">
+                <?= $this->renderSection('content') ?>
+                <!-- <section class="section mt-3">
                     <div class="section-header">
                         <h1>Para Kandidat</h1>
                         <div class="section-header-breadcrumb">
@@ -134,64 +136,24 @@
                             </div>
                         </div>
                     </div>
-                </section>
+                </section> -->
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl modal-xl-custom">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Detail Kandidat</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-12 mb-4">
-                            <img src="assets/img/avatar/avatar-1.png" class="img-fluid rounded mx-auto d-block"
-                                alt="kandidat" style="max-height: 300px;">
-                        </div>
-                        <div class="col-lg-8 col-md-12">
-                            <h3 class="mb-4 text-center text-lg-left">Gustavo Fring</h3>
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="mb-4">
-                                        <h5><strong>Visi:</strong></h5>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                                    </div>
-                                    <div>
-                                        <h5><strong>Misi:</strong></h5>
-                                        <ul>
-                                            <li>1. ambasing</li>
-                                            <li>2. ambasing</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <!-- General JS Scripts -->
     <script src="assets/modules/jquery.min.js"></script>
     <script src="assets/modules/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/modules/nicescroll/jquery.nicescroll.min.js"></script>
     <script src="assets/js/stisla.js"></script>
+    <script src="assets/modules/toastr/toastr.min.js"></script>
 
     <!-- Template JS File -->
     <script src="assets/js/scripts.js"></script>
     <script src="assets/js/custom.js"></script>
+    <?= $this->renderSection('script') ?>
 </body>
 
 </html>

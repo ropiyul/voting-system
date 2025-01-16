@@ -64,7 +64,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-primary" id="voteButton" >Vote Sekarang</button>
+                <button type="button" class="btn btn-primary" id="voteButton">Vote Sekarang</button>
             </div>
         </div>
     </div>
@@ -96,14 +96,14 @@
 
 <?= $this->section('script') ?>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         let selectedCandidateId = null;
         const candidateModal = new bootstrap.Modal(document.getElementById('candidateModal'));
         const confirmationModal = new bootstrap.Modal(document.getElementById('konfirmasi'));
         const successToast = new bootstrap.Toast(document.getElementById('successToast'));
 
         document.querySelectorAll('.vote-button').forEach(button => {
-            button.addEventListener('click', function (e) {
+            button.addEventListener('click', function(e) {
                 selectedCandidateId = this.dataset.id;
                 document.getElementById('modalImage').src = this.dataset.image;
                 document.getElementById('modalName').textContent = this.dataset.name;
@@ -113,12 +113,12 @@
             });
         });
 
-        document.getElementById('voteButton').addEventListener('click', function () {
+        document.getElementById('voteButton').addEventListener('click', function() {
             candidateModal.hide();
             confirmationModal.show();
         });
 
-        document.getElementById('confirmVote').addEventListener('click', async function () {
+        document.getElementById('confirmVote').addEventListener('click', async function() {
             try {
                 const formData = new FormData();
                 formData.append('candidate_id', selectedCandidateId);

@@ -63,8 +63,11 @@
                                             <td class="text-truncate" style="max-width: 200px;"><?= $candidate["vision"] ?></td>
                                             <td class="text-truncate" style="max-width: 200px;"><?= $candidate["mission"] ?></td>
                                             <td>
-                                                <form action="<?= base_url('grade/delete/') ?>${id}" method="post" class="delete-form d-inline">
-                                                    <a href="<?= base_url("candidate/edit/" . $candidate['id']) ?>" class="btn btn-warning">edit</a>
+                                                <form action="<?= base_url('candidate/delete/') ?><?= $candidate['id'] ?>" method="post" class="d-inline">
+                                                    <input type="hidden" name="_method" value="DELETE">
+                                                    <button class="btn btn-danger" type="submit">hapus</button>
+                                                </form>
+                                                <a href="<?= base_url("candidate/edit/" . $candidate['id']) ?>" class="btn btn-warning">edit</a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
