@@ -35,6 +35,7 @@ $routes->group('voter', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('edit/(:num)', 'voter::edit/$1');
     $routes->post('update/(:num)', 'voter::update/$1');
     $routes->delete('delete/(:num)', 'voter::delete/$1');
+    $routes->post('updatePassword/(:num)', 'voter::updatePassword/$1');
     $routes->get('export_excel', 'voter::export_excel');
 });
 
