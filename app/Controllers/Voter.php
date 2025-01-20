@@ -291,46 +291,125 @@ class Voter extends BaseController
     }
 
     public function import_excel()
-    {
-        // Cek apakah ada file yang diupload
-        if (empty($_FILES['file_excel']['tmp_name'])) {
-            return redirect()->back()->with('error', 'Tidak ada file yang diupload!');
-        }
+{
+    $rules = [
+        'file_excel' => [
+            'label' => 'File Excel',
+            'rules' => 'uploaded[file_excel]|max_size[file_excel,10240]|mime_in[file_excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet]',
+            'errors' => [
+                'uploaded' => 'Harus upload {field} *',
+                'max_size' => 'File maksimal 10MB *',
+                'mime_in' => 'Harus berupa file Excel (xls atau xlsx) *',
+            ],
+        ],
+    ];
 
-        // Load library PhpSpreadsheet
-        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($_FILES['file_excel']['tmp_name']);
-        $sheet = $spreadsheet->getActiveSheet();
-
-        // Ambil data dari file Excel (misalnya mulai dari baris 2, karena baris pertama adalah header)
-        $data = [];
-        $highestRow = $sheet->getHighestRow();
-        for ($row = 2; $row <= $highestRow; $row++) {
-            // Ambil data dari setiap kolom sesuai dengan header Excel
-            $fullname = $sheet->getCell('C' . $row)->getValue();
-            $grade_id = $sheet->getCell('D' . $row)->getValue();
-            // $program_id = $sheet->getCell('E' . $row)->getValue();
-
-            // Pastikan data valid dan tidak kosong
-            if (empty($fullname) || empty($grade_id)) {
-                continue; // Lewati baris ini jika data tidak lengkap
-            }
-
-            $data[] = [
-                'fullname' => $fullname,
-                'grade_id' => $grade_id,
-                // 'program_id' => $program_id
-            ];
-        }
-
-        // Simpan data ke database (contoh menggunakan model)
-        if (!empty($data)) {
-            foreach ($data as $voter) {
-                $this->voterModel->insert($voter);
-            }
-            return redirect()->back()->with('success', 'Data berhasil diimpor!');
-        } else {
-            return redirect()->back()->with('error', 'Data tidak valid atau kosong!');
-        }
+    if (!$this->validate($rules)) {
+        session()->setFlashdata('warning', 'Periksa kembali, terdapat beberapa kesalahan yang perlu diperbaiki.');
+        session()->setFlashdata('modal_id', 'importExcelModal');
+        return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
     }
+
+    $file = $this->request->getFile('file_excel');
+    $extension = $file->getClientExtension();
+
+    $this->db->transStart();
+
+    $gradeModel = new GradeModel();
+    $grades = $gradeModel->findAll();
+    
+    $gradeNameToId = [];
+    foreach ($grades as $grade) {
+        $gradeNameToId[strtolower($grade['name'])] = $grade['id'];
+    }
+
+    $reader = ($extension == 'xls') 
+        ? new \PhpOffice\PhpSpreadsheet\Reader\Xls()
+        : new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+
+    $spreadsheet = $reader->load($file);
+    $voters = $spreadsheet->getActiveSheet()->toArray();
+
+    for ($i = 1; $i < count($voters); $i++) {
+        $row = $voters[$i];
+        
+        if (empty(array_filter($row))) {
+            continue;
+        }
+
+        $email = mt_rand(10000, 1000000) . '@gmail.com';
+        
+        $nis = trim($row[1] ?? ''); // c
+        $fullname = trim($row[2] ?? ''); // d
+        $gradeName = trim(strtolower($row[3] ?? '')); // e
+
+        // ambil pw
+        $firstName = ucfirst(strtolower(explode(' ', $fullname)[0])); // Ambil nama depan dan capitalize
+        $lastTwoDigits = substr($nis, -2); // Ambil 2 digit terakhir NIS
+        $password = $firstName . '@' . $lastTwoDigits;
+
+        // nis/ username
+        if (empty($nis)) {
+            $this->db->transRollback();
+            session()->setFlashdata('error', 'NIS tidak boleh kosong pada baris ' . ($i + 1));
+            return redirect()->back()->withInput();
+        }
+
+        // fullname
+        if (empty($fullname)) {
+            $this->db->transRollback();
+            session()->setFlashdata('error', 'Nama Lengkap tidak boleh kosong pada baris ' . ($i + 1));
+            return redirect()->back()->withInput();
+        }
+
+        // kelas
+        if (empty($gradeName)) {
+            $this->db->transRollback();
+            session()->setFlashdata('error', 'Kelas tidak boleh kosong pada baris ' . ($i + 1));
+            return redirect()->back()->withInput();
+        }
+
+        // kelas
+        if (!isset($gradeNameToId[$gradeName])) {
+            $this->db->transRollback();
+            session()->setFlashdata('error', 'Kelas "' . $row[4] . '" tidak ditemukan pada baris ' . ($i + 1));
+            return redirect()->back()->withInput();
+        }
+
+        $userData = [
+            'username' => $nis, 
+            'email' => $email,
+            'password_hash' => Password::hash($password),
+            'active' => 1
+        ];
+
+        if ($this->userModel->where('username', $userData['username'])->first()) {
+            $this->db->transRollback();
+            session()->setFlashdata('error', 'NIS ' . $userData['username'] . ' sudah terdaftar pada baris ' . ($i + 1));
+            return redirect()->back()->withInput();
+        }
+
+        $this->userModel->withGroup('voter')->save($userData);
+        $userId = $this->userModel->getInsertID();
+
+        $voterData = [
+            'user_id' => $userId,
+            'fullname' => $fullname,
+            'grade_id' => $gradeNameToId[$gradeName]
+        ];
+
+        $this->voterModel->save($voterData);
+    }
+
+    $this->db->transComplete();
+
+    if ($this->db->transStatus() === false) {
+        session()->setFlashdata('error', 'Gagal menyimpan data ke database');
+        return redirect()->back()->withInput();
+    }
+
+    session()->setFlashdata('message', 'Data pemilih berhasil diimport');
+    return redirect()->to('/voter');
+}
 
 }
