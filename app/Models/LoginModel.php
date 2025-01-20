@@ -17,7 +17,7 @@ class LoginModel extends Model
     protected $useTimestamps   = false;
     protected $validationRules = [
         'ip_address' => 'required',
-        // 'email'      => 'required',
+        'email'      => 'required',
         'user_id'    => 'permit_empty|integer',
         'date'       => 'required|valid_date',
     ];

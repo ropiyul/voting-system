@@ -208,48 +208,92 @@ class Voter extends BaseController
     }
 
     public function export_excel()
-{
+    {
 
-    $voters = $this->voterModel->getVoter();
+        $voters = $this->voterModel->getVoter();
 
 
-    // $user = $this->userModel->('candidate')->findAll();
+        // $user = $this->userModel->('candidate')->findAll();
 
-    
+        
 
-    if (!$voters) {
-        return redirect()->back()->with('error', 'Data tidak ditemukan!');
+        if (!$voters) {
+            return redirect()->back()->with('error', 'Data tidak ditemukan!');
+        }
+
+        // Load library PhpSpreadsheet
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Header kolom
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('C1', 'Nama');
+        $sheet->setCellValue('D1', 'Kelas');
+        // $sheet->setCellValue('E1', 'Jurusan');
+
+        // Isi data kandidat
+        $rowNumber = 2; // Dimulai dari baris kedua
+        foreach ($voters as $index => $voter);
+            $sheet->setCellValue('A' . $rowNumber, $index + 1);
+            $sheet->setCellValue('C' . $rowNumber, $voter['fullname']);
+            $sheet->setCellValue('D' . $rowNumber, $voter['grade_id']);
+            // $sheet->setCellValue('E' . $rowNumber, $voter['program_id']);
+            $rowNumber++;
+
+        // Nama file
+        $filename = 'All_Pemilih_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        // Download file
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+        exit;
     }
 
-    // Load library PhpSpreadsheet
-    $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-    $sheet = $spreadsheet->getActiveSheet();
+    public function import_excel()
+    {
+        // Cek apakah ada file yang diupload
+        if (empty($_FILES['file_excel']['tmp_name'])) {
+            return redirect()->back()->with('error', 'Tidak ada file yang diupload!');
+        }
 
-    // Header kolom
-    $sheet->setCellValue('A1', 'No');
-    $sheet->setCellValue('C1', 'Nama');
-    $sheet->setCellValue('D1', 'Kelas');
-    // $sheet->setCellValue('E1', 'Jurusan');
+        // Load library PhpSpreadsheet
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($_FILES['file_excel']['tmp_name']);
+        $sheet = $spreadsheet->getActiveSheet();
 
-    // Isi data kandidat
-    $rowNumber = 2; // Dimulai dari baris kedua
-    foreach ($voters as $index => $voter);
-        $sheet->setCellValue('A' . $rowNumber, $index + 1);
-        $sheet->setCellValue('C' . $rowNumber, $voter['fullname']);
-        $sheet->setCellValue('D' . $rowNumber, $voter['grade_id']);
-        // $sheet->setCellValue('E' . $rowNumber, $voter['program_id']);
-        $rowNumber++;
+        // Ambil data dari file Excel (misalnya mulai dari baris 2, karena baris pertama adalah header)
+        $data = [];
+        $highestRow = $sheet->getHighestRow();
+        for ($row = 2; $row <= $highestRow; $row++) {
+            // Ambil data dari setiap kolom sesuai dengan header Excel
+            $fullname = $sheet->getCell('C' . $row)->getValue();
+            $grade_id = $sheet->getCell('D' . $row)->getValue();
+            // $program_id = $sheet->getCell('E' . $row)->getValue();
 
-    // Nama file
-    $filename = 'All_Pemilih_' . date('Y-m-d_H-i-s') . '.xlsx';
+            // Pastikan data valid dan tidak kosong
+            if (empty($fullname) || empty($grade_id)) {
+                continue; // Lewati baris ini jika data tidak lengkap
+            }
 
-    // Download file
-    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="' . $filename . '"');
-    header('Cache-Control: max-age=0');
+            $data[] = [
+                'fullname' => $fullname,
+                'grade_id' => $grade_id,
+                // 'program_id' => $program_id
+            ];
+        }
 
-    $writer->save('php://output');
-    exit;
-}
+        // Simpan data ke database (contoh menggunakan model)
+        if (!empty($data)) {
+            foreach ($data as $voter) {
+                $this->voterModel->insert($voter);
+            }
+            return redirect()->back()->with('success', 'Data berhasil diimpor!');
+        } else {
+            return redirect()->back()->with('error', 'Data tidak valid atau kosong!');
+        }
+    }
+
 }

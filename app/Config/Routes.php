@@ -25,6 +25,7 @@ $routes->get('candidate/edit/(:num)', 'Candidate::edit/$1', ['filter' => 'role:a
 $routes->post('candidate/update/(:num)', 'Candidate::update/$1', ['filter' => 'role:admin']);
 $routes->delete('candidate/delete/(:num)', 'Candidate::delete/$1', ['filter' => 'role:admin']);
 $routes->get('candidate/export_excel', 'Candidate::export_excel', ['filter' => 'role:admin']);
+$routes->post('candidate/import_excel', 'Candidate::import_excel', ['filter' => 'role:admin']);
 
 $routes->get('voter', 'voter::index', ['filter' => 'role:admin']);
 $routes->get('voter/create', 'voter::create', ['filter' => 'role:admin']);
@@ -33,6 +34,7 @@ $routes->get('voter/edit/(:num)', 'voter::edit/$1', ['filter' => 'role:admin']);
 $routes->post('voter/update/(:num)', 'voter::update/$1', ['filter' => 'role:admin']);
 $routes->delete('voter/delete/(:num)', 'voter::delete/$1', ['filter' => 'role:admin']);
 $routes->get('voter/export_excel', 'voter::export_excel', ['filter' => 'role:admin']);
+$routes->post('voter/import_excel', 'voter::import_excel', ['filter' => 'role:admin']);
 
 $routes->get('admin', 'Admin::index', ['filter' => 'role:admin']);
 $routes->get('admin/create', 'Admin::create', ['filter' => 'role:admin']);
@@ -55,6 +57,8 @@ $routes->post('grade/save', 'Grade::save', ['filter' => 'role:admin']);
 $routes->get('grade/edit/(:num)', 'Grade::edit/$1', ['filter' => 'role:admin']);
 $routes->post('grade/update/(:num)', 'Grade::update/$1', ['filter' => 'role:admin']);
 $routes->delete('grade/delete/(:num)', 'Grade::delete/$1', ['filter' => 'role:admin']);
+$routes->post('grade/import_excel', 'Grade::import_excel', ['filter' => 'role:admin']);
+
 
 $routes->get('program', 'Program::index', ['filter' => 'role:admin']);
 $routes->get('program/create', 'Program::create', ['filter' => 'role:admin']);

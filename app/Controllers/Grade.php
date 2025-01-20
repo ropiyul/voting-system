@@ -71,4 +71,65 @@ public function delete($id)
     
     return $this->response->setJSON($response);
 }
+
+public function import_excel()
+    {
+        $rules = [
+            'file_exel' => [
+                'label' => 'File Exel',
+                'rules' => 'uploaded[file_exel]|max_size[file_exel,10240]|mime_in[file_exel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet]',
+                'errors' => [
+                    'uploaded' => 'Harus upload {field} *',
+                    'max_size' => 'File maksimal 10MB *',
+                    'mime_in' => 'Harus berupa file Excel (xls atau xlsx) *',
+                ],
+            ],
+        ];
+    
+        if (!$this->validate($rules)) {
+            session()->setFlashdata('warning', 'Periksa kembali, terdapat beberapa kesalahan yang perlu diperbaiki.');
+            session()->setFlashdata('modal_id', 'importExelModal');
+    
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+    
+        $file = $this->request->getFile('file_exel');
+        $extension = $file->getClientExtension();
+        try {
+            if ($extension == 'xls') {
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+            } else {
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+            }
+    
+            $spreadsheet = $reader->load($file);
+            $candidates = $spreadsheet->getActiveSheet()->toArray();
+    
+            foreach ($candidates as $key => $value) {
+                if ($key == 0) {
+                    continue; // skip header row
+                }
+    
+                // Validate data before saving to database
+                $data = [
+                    'name'    => $value[0] ?? '',
+                ];
+    
+                if ($data['Nama'])  {
+                    $this->candidate->save($data);
+                } else {
+                    // Handle case where data is incomplete
+                    session()->setFlashdata('error', 'Data tidak lengkap pada baris ' . ($key + 1));
+                    return redirect()->back()->withInput();
+                }
+            }
+    
+            session()->setFlashdata('pesan', 'Kandidat berhasil ditambahkan!');
+            return redirect()->to('/grade');
+        } catch (\Exception $e) {
+            session()->setFlashdata('warning', 'Terjadi kesalahan saat memproses file: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
+    }
+
 }

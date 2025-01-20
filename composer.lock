@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "70085399067b0cd47d0afe96409c3d24",
+    "content-hash": "81bed4f5dc553e7c5ab516d2044fd81c",
     "packages": [
         {
             "name": "codeigniter4/framework",
-            "version": "v4.5.5",
+            "version": "v4.5.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeigniter4/framework.git",
-                "reference": "2849e7ff36b4c4aa1376d990a9a1e3f0c393b8d0"
+                "reference": "f253839c071abbef5262cbb8f49a6077dc5dd568"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeigniter4/framework/zipball/2849e7ff36b4c4aa1376d990a9a1e3f0c393b8d0",
-                "reference": "2849e7ff36b4c4aa1376d990a9a1e3f0c393b8d0",
+                "url": "https://api.github.com/repos/codeigniter4/framework/zipball/f253839c071abbef5262cbb8f49a6077dc5dd568",
+                "reference": "f253839c071abbef5262cbb8f49a6077dc5dd568",
                 "shasum": ""
             },
             "require": {
@@ -78,7 +78,7 @@
                 "slack": "https://codeigniterchat.slack.com",
                 "source": "https://github.com/codeigniter4/CodeIgniter4"
             },
-            "time": "2024-09-07T08:49:38+00:00"
+            "time": "2024-12-31T12:13:44+00:00"
         },
         {
             "name": "laminas/laminas-escaper",
@@ -402,16 +402,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "3.7.0",
+            "version": "3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "2fc12fdc58d39297c7b8c72d65b37a1a25d65ab5"
+                "reference": "949c799c3538f3158bcf6c5f4d8a403027be0fbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/2fc12fdc58d39297c7b8c72d65b37a1a25d65ab5",
-                "reference": "2fc12fdc58d39297c7b8c72d65b37a1a25d65ab5",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/949c799c3538f3158bcf6c5f4d8a403027be0fbd",
+                "reference": "949c799c3538f3158bcf6c5f4d8a403027be0fbd",
                 "shasum": ""
             },
             "require": {
@@ -500,9 +500,9 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
-                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/3.7.0"
+                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/3.8.0"
             },
-            "time": "2024-12-27T05:34:47+00:00"
+            "time": "2025-01-12T03:48:58+00:00"
         },
         {
             "name": "psr/http-client",
@@ -944,16 +944,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v5.3.1",
+            "version": "v5.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "8eea230464783aa9671db8eea6f8c6ac5285794b"
+                "reference": "447a020a1f875a434d62f2a401f53b82a396e494"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/8eea230464783aa9671db8eea6f8c6ac5285794b",
-                "reference": "8eea230464783aa9671db8eea6f8c6ac5285794b",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/447a020a1f875a434d62f2a401f53b82a396e494",
+                "reference": "447a020a1f875a434d62f2a401f53b82a396e494",
                 "shasum": ""
             },
             "require": {
@@ -996,9 +996,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.3.1"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.4.0"
             },
-            "time": "2024-10-08T18:51:32+00:00"
+            "time": "2024-12-30T11:07:19+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -1441,16 +1441,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.39",
+            "version": "10.5.41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "4e89eff200b801db58f3d580ad7426431949eaa9"
+                "reference": "e76586fa3d49714f230221734b44892e384109d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4e89eff200b801db58f3d580ad7426431949eaa9",
-                "reference": "4e89eff200b801db58f3d580ad7426431949eaa9",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e76586fa3d49714f230221734b44892e384109d7",
+                "reference": "e76586fa3d49714f230221734b44892e384109d7",
                 "shasum": ""
             },
             "require": {
@@ -1522,7 +1522,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.39"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.41"
             },
             "funding": [
                 {
@@ -1538,7 +1538,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-11T10:51:07+00:00"
+            "time": "2025-01-13T09:33:05+00:00"
         },
         {
             "name": "psr/container",
@@ -2528,12 +2528,12 @@
             },
             "type": "library",
             "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/contracts",
+                    "name": "symfony/contracts"
+                },
                 "branch-alias": {
                     "dev-main": "3.5-dev"
-                },
-                "thanks": {
-                    "name": "symfony/contracts",
-                    "url": "https://github.com/symfony/contracts"
                 }
             },
             "autoload": {
