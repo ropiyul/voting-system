@@ -61,10 +61,10 @@
         </form>
     </div>
 
-    <!-- Password Change Form -->
+    <!-- ganti pw -->
     <div class="card">
         <div class="card-header">
-            <h4>Ubah Password (Opsional)</h4>
+            <h4>Ganti Password</h4>
             <div class="card-header-action">
                 <a data-collapse="#password-form" class="btn btn-icon btn-info" href="#"><i class="fas fa-plus"></i></a>
             </div>

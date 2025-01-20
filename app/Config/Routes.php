@@ -50,6 +50,7 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('edit/(:num)', 'Admin::edit/$1');
     $routes->post('update/(:num)', 'Admin::update/$1');
     $routes->delete('delete/(:num)', 'Admin::delete/$1');
+    $routes->post('updatePassword/(:num)', 'Admin::updatePassword/$1');
     $routes->get('export_excel', 'Admin::export_excel');
 });
 

@@ -54,6 +54,47 @@
         </div>
 
 
+            <!-- ganti pw -->
+    <div class="card">
+        <div class="card-header">
+            <h4>Ganti Password</h4>
+            <div class="card-header-action">
+                <a data-collapse="#password-form" class="btn btn-icon btn-info" href="#"><i class="fas fa-plus"></i></a>
+            </div>
+        </div>
+        <div class="collapse" id="password-form">
+            <form action="<?= base_url('admin/updatePassword/' . $admin['id']) ?>" method="post">
+                <?= csrf_field() ?>
+                <input type="hidden" name="user_id" value="<?= $admin['user_id'] ?>" hidden>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label>Password Baru</label>
+                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['password']) ? 'is-invalid' : ''; ?>" name="password">
+                                <div class="invalid-feedback">
+                                    <?= session('errors')['password'] ?? null ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label>Konfirmasi Password</label>
+                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['password_confirm']) ? 'is-invalid' : ''; ?>" name="password_confirm">
+                                <div class="invalid-feedback">
+                                    <?= session('errors')['password_confirm'] ?? null ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-right">
+                    <button type="submit" class="btn btn-warning">Ubah Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     </div>
 </section>
 

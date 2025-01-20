@@ -191,6 +191,44 @@ class Admin extends BaseController
         return redirect()->to('admin');
     }
 
+
+    public function updatePassword($adminId)
+    {
+        $validation = \Config\Services::validation();
+    
+        $validation->setRules([
+            'password' => [
+                'label' => 'Password',
+                'rules' => 'required|min_length[8]',
+                'errors' => [
+                    'required' => 'Password baru harus diisi.',
+                    'min_length' => 'Password minimal 8 karakter.'
+                ]
+            ],
+            'password_confirm' => [
+                'label' => 'Konfirmasi Password',
+                'rules' => 'required|matches[password]',
+                'errors' => [
+                    'required' => 'Konfirmasi password harus diisi.',
+                    'matches' => 'Konfirmasi password tidak cocok.'
+                ]
+            ],
+        ]);
+    
+        if (!$validation->withRequest($this->request)->run()) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
+    
+            $admin = $this->adminModel->find($adminId);
+    
+            $this->userModel->update($admin['user_id'], [
+                'password_hash' => Password::hash($this->request->getPost('password')),
+                'force_pass_reset' => 0,
+            ]);
+    
+            return redirect()->to('admin')->with('message', 'Password berhasil diubah.');
+    }
+
     public function export_excel()
 {
 
