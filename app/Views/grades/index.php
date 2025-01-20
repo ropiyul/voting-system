@@ -26,11 +26,16 @@
 
                 <!-- Card Component -->
                 <div class="card">
-                    <div class="card-header">
-                        <h4>Form Kelas</h4>
-                        <div class="card-header-form">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">
-                                Tambah Kategori
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">Form Kelas</h4>
+                        <div class="card-header-form d-flex align-items-center">
+                            <form action="<?= base_url('grade/import_excel') ?>" method="post" enctype="multipart/form-data" class="d-inline">
+                                <?= csrf_field() ?>
+                                <label for="file_excel" class="btn btn-success mb-0" style="cursor: pointer;">Import Excel</label>
+                                <input type="file" name="file_excel" id="file_excel" accept=".xlsx" style="display: none;" onchange="this.form.submit()">
+                            </form>
+                            <button type="button" class="btn btn-primary ml-2 mb-0" data-toggle="modal" data-target="#modal-default">
+                                Tambah Kelas
                             </button>
                         </div>
                     </div>
@@ -84,7 +89,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Tambah Grade</h4>
+                <h4 class="modal-title">Tambah Kelas</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

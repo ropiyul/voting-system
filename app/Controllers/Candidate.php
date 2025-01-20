@@ -349,9 +349,9 @@ class Candidate extends BaseController
     public function import_excel()
     {
         $rules = [
-            'file_exel' => [
-                'label' => 'File Exel',
-                'rules' => 'uploaded[file_exel]|max_size[file_exel,10240]|mime_in[file_exel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet]',
+            'file_excel' => [
+                'label' => 'File Excel',
+                'rules' => 'uploaded[file_excel]|max_size[file_excel,10240]|mime_in[file_excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet]',
                 'errors' => [
                     'uploaded' => 'Harus upload {field} *',
                     'max_size' => 'File maksimal 10MB *',
@@ -362,56 +362,114 @@ class Candidate extends BaseController
     
         if (!$this->validate($rules)) {
             session()->setFlashdata('warning', 'Periksa kembali, terdapat beberapa kesalahan yang perlu diperbaiki.');
-            session()->setFlashdata('modal_id', 'importExelModal');
-    
+            session()->setFlashdata('modal_id', 'importExcelModal');
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
     
-        $file = $this->request->getFile('file_exel');
+        $file = $this->request->getFile('file_excel');
         $extension = $file->getClientExtension();
-        try {
-            if ($extension == 'xls') {
-                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
-            } else {
-                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+    
+        $this->db->transStart();
+    
+        $gradeModel = new GradeModel();
+        $grades = $gradeModel->findAll();
+        
+        $gradeNameToId = [];
+        foreach ($grades as $grade) {
+            $gradeNameToId[strtolower($grade['name'])] = $grade['id'];
+        }
+    
+        $reader = ($extension == 'xls') 
+            ? new \PhpOffice\PhpSpreadsheet\Reader\Xls()
+            : new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+    
+        $spreadsheet = $reader->load($file);
+        $candidates = $spreadsheet->getActiveSheet()->toArray();
+    
+        for ($i = 1; $i < count($candidates); $i++) {
+            $row = $candidates[$i];
+            
+            if (empty(array_filter($row))) {
+                continue;
             }
     
-            $spreadsheet = $reader->load($file);
-            $candidates = $spreadsheet->getActiveSheet()->toArray();
+            $email = mt_rand(10000, 1000000) . '@gmail.com';
+            
+            // Get data from Excel
+            $nis = trim($row[2] ?? ''); // nis/username
+            $fullname = trim($row[3] ?? ''); // nama lengkap
+            $gradeName = trim(strtolower($row[6] ?? '')); // kelas
     
-            foreach ($candidates as $key => $value) {
-                if ($key == 0) {
-                    continue; // skip header row
-                }
+            $firstName = ucfirst(strtolower(explode(' ', $fullname)[0])); 
+            $lastNis = substr($nis, -2); 
+            $password = $firstName . '@' . $lastNis;
     
-                // Validate data before saving to database
-                $data = [
-                    'Image'   => $value[0] ?? '',
-                    'Nama'    => $value[2] ?? '',
-                    'Username'=> $value[3] ?? '',
-                    'Visi'    => $value[4] ?? '',
-                    'Misi'    => $value[5] ?? '',
-                ];
-    
-                if ($data['NO'] && $data['Nama'] && $data['Username']) {
-                    $this->candidate->save($data);
-                } else {
-                    // Handle case where data is incomplete
-                    session()->setFlashdata('error', 'Data tidak lengkap pada baris ' . ($key + 1));
-                    return redirect()->back()->withInput();
-                }
+            // username/ nis
+            if (empty($nis)) {
+                $this->db->transRollback();
+                session()->setFlashdata('error', 'username tidak boleh kosong pada baris ' . ($i + 1));
+                return redirect()->back()->withInput();
             }
     
-            session()->setFlashdata('pesan', 'Kandidat berhasil ditambahkan!');
-            return redirect()->to('/candidate');
-        } catch (\Exception $e) {
-            session()->setFlashdata('warning', 'Terjadi kesalahan saat memproses file: ' . $e->getMessage());
+            // fullname
+            if (empty($fullname)) {
+                $this->db->transRollback();
+                session()->setFlashdata('error', 'Nama Lengkap tidak boleh kosong pada baris ' . ($i + 1));
+                return redirect()->back()->withInput();
+            }
+    
+            // kelas
+            if (empty($gradeName)) {
+                $this->db->transRollback();
+                session()->setFlashdata('error', 'Kelas tidak boleh kosong pada baris ' . ($i + 1));
+                return redirect()->back()->withInput();
+            }
+    
+            // kelas
+            if (!isset($gradeNameToId[$gradeName])) {
+                $this->db->transRollback();
+                session()->setFlashdata('error', 'Kelas "' . $row[7] . '" tidak ditemukan pada baris ' . ($i + 1));
+                return redirect()->back()->withInput();
+            }
+    
+            $userData = [
+                'username' => $nis, 
+                'email' => $email,
+                'password_hash' => Password::hash($password),
+                'active' => 1
+            ];
+    
+            if ($this->userModel->where('username', $userData['username'])->first()) {
+                $this->db->transRollback();
+                session()->setFlashdata('error', 'NIS ' . $userData['username'] . ' sudah terdaftar pada baris ' . ($i + 1));
+                return redirect()->back()->withInput();
+            }
+    
+            $this->userModel->withGroup('candidate')->save($userData);
+            $userId = $this->userModel->getInsertID();
+    
+            $candidateData = [
+                'user_id' => $userId,
+                'fullname' => $fullname,
+                'vision' => $row[4] ?? '', // f
+                'mission' => $row[5] ?? '', // g
+                'image' => 'default.png',
+                'grade_id' => $gradeNameToId[$gradeName]   
+            ];
+            // return dd([$candidateData, $userData]);
+    
+            $this->candidateModel->save($candidateData);
+        }
+    
+        $this->db->transComplete();
+    
+        if ($this->db->transStatus() === false) {
+            session()->setFlashdata('error', 'Gagal menyimpan data ke database');
             return redirect()->back()->withInput();
         }
+    
+        session()->setFlashdata('message', 'Data kandidat berhasil diimport');
+        return redirect()->to('/candidate');
     }
     
-
-
-
-
 }

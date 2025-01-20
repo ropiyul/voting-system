@@ -20,20 +20,12 @@
                     <div class="card-header">
                         <h4>Tabel Kandidat</h4>
                         <div class="card-header-form">
-                            <!-- <form>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-primary"><i class="fas fa-search"></i></button>
-                                    </div>
-                                </div>
-                            </form> -->
-                            <form action="<?= base_url('grade/import_excel') ?>" method="post" enctype="multipart/form-data" style="display: inline;">
+                            <form action="<?= base_url('candidate/import_excel') ?>" method="post" enctype="multipart/form-data" class="d-inline">
                                 <?= csrf_field() ?>
-                                <label for="file_exel" class="btn btn-success mr-2" style="cursor: pointer;">Import Excel</label>
-                                <input type="file" name="file_exel" id="file_exel" accept=".xlsx" style="display: none;" required onchange="this.form.submit()">
+                                <label for="file_excel" class="btn btn-success mb-0 mr-1" style="cursor: pointer;">Import Excel</label>
+                                <input type="file" name="file_excel" id="file_excel" accept=".xlsx" style="display: none;" onchange="this.form.submit()">
                             </form>
-                            <a href="<?= base_url('candidate/export_excel') ?>" class="btn btn-success mr-2">Export Excel</a>
+                            <a href="<?= base_url('candidate/export_excel') ?>" class="btn btn-success mr-1">Export Excel</a>
                             <a href="<?= base_url('candidate/create') ?>" class="btn btn-primary">Tambah Data</a>
                         </div>
                     </div>

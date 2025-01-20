@@ -25,6 +25,7 @@ $routes->group('candidate', ['filter' => 'role:admin'], function ($routes) {
     $routes->post('update/(:num)', 'Candidate::update/$1');
     $routes->delete('delete/(:num)', 'Candidate::delete/$1');
     $routes->get('export_excel', 'Candidate::export_excel');
+    $routes->post('import_excel', 'Candidate::import_excel');
 });
 
 // permilih 
@@ -37,6 +38,8 @@ $routes->group('voter', ['filter' => 'role:admin'], function ($routes) {
     $routes->delete('delete/(:num)', 'voter::delete/$1');
     $routes->post('updatePassword/(:num)', 'voter::updatePassword/$1');
     $routes->get('export_excel', 'voter::export_excel');
+    $routes->post('import_excel', 'Voter::import_excel');
+
 });
 
 // Admin 
@@ -68,6 +71,7 @@ $routes->group('grade', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('edit/(:num)', 'Grade::edit/$1');
     $routes->post('update/(:num)', 'Grade::update/$1');
     $routes->delete('delete/(:num)', 'Grade::delete/$1');
+    $routes->post('import_excel', 'Grade::import_excel');
 });
 
 // jurusan
