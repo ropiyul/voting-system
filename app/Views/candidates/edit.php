@@ -125,6 +125,47 @@
                 </div>
             </form>
         </div>
+
+                    <!-- ganti pw -->
+    <div class="card">
+        <div class="card-header">
+            <h4>Ganti Password</h4>
+            <div class="card-header-action">
+                <a data-collapse="#password-form" class="btn btn-icon btn-info" href="#"><i class="fas fa-plus"></i></a>
+            </div>
+        </div>
+        <div class="collapse" id="password-form">
+            <form action="<?= base_url('candidate/updatePassword/' . $candidate['id']) ?>" method="post">
+                <?= csrf_field() ?>
+                <input type="hidden" name="user_id" value="<?= $candidate['user_id'] ?>" hidden>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label>Password Baru</label>
+                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['password']) ? 'is-invalid' : ''; ?>" name="password">
+                                <div class="invalid-feedback">
+                                    <?= session('errors')['password'] ?? null ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label>Konfirmasi Password</label>
+                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['password_confirm']) ? 'is-invalid' : ''; ?>" name="password_confirm">
+                                <div class="invalid-feedback">
+                                    <?= session('errors')['password_confirm'] ?? null ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-right">
+                    <button type="submit" class="btn btn-warning">Ubah Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
     </div>
 </section>
 
@@ -212,60 +253,5 @@
     });
     $("#vision-summernote").summernote("code", '<?= htmlspecialchars_decode(old('vision', $candidate['vision'])) ?>');
     $("#mission-summernote").summernote("code", "<?= htmlspecialchars_decode(old('mission', $candidate['mission'])) ?>");
-
-
-
-    /*     //     server: {
-        //         // Load endpoint untuk mengambil gambar
-        //         load: (source, load, error, progress, abort, headers) => {
-        //             fetch(source)
-        //                 .then(response => response.blob())
-        //                 .then(load)
-        //                 .catch(error);
-        //         },
-        //         process: '<?= base_url('candidate/upload_temp') ?>',
-        //         revert: (uniqueFileId, load, error) => {
-        //             fetch('<?= base_url('candidate/remove_temp') ?>', {
-        //                     method: 'DELETE',
-        //                     headers: {
-        //                         'X-CSRF-TOKEN': '<?= csrf_hash() ?>',
-        //                         'Content-Type': 'application/json'
-        //                     },
-        //                     body: JSON.stringify({
-        //                         filename: uniqueFileId
-        //                     })
-        //                 })
-        //                 .then(response => {
-        //                     if (response.ok) {
-        //                         load();
-        //                     } else {
-        //                         error('Failed to delete file');
-        //                     }
-        //                 })
-        //                 .catch(() => {
-        //                     error('Network error');
-        //                 });
-        //         },
-
-        //         headers: {
-        //             'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
-        //         }
-        //     }
-        // });
-
-        // // Initialize Summernote with minimal toolbar
-
-
-        // pond.on('init', () => {
-        //     console.log('FilePond initialized');
-        // });
-
-        // pond.on('addfile', (error, file) => {
-        //     if (error) {
-        //         console.error('Error adding file:', error);
-        //         return;
-        //     }
-        //     console.log('File added:', file);
-        // }); */
 </script>
 <?= $this->endSection() ?>
