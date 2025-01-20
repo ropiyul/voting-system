@@ -12,7 +12,11 @@ class LoginModel extends Model
     protected $returnType     = 'object';
     protected $useSoftDeletes = false;
     protected $allowedFields  = [
-        'ip_address', 'email', 'user_id', 'date', 'success',
+        'ip_address',
+        'email',
+        'user_id',
+        'date',
+        'success',
     ];
     protected $useTimestamps   = false;
     protected $validationRules = [

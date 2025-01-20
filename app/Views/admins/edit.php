@@ -5,28 +5,25 @@
 
 <section class="section">
     <div class="section-header">
-        <h1>Form Validation</h1>
+        <h1>Edit Admin</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-            <div class="breadcrumb-item"><a href="#">Forms</a></div>
-            <div class="breadcrumb-item">Form Validation</div>
+            <div class="breadcrumb-item active"><a href="<?= base_url('dashboard') ?>">Dashboard</a></div>
+            <div class="breadcrumb-item"><a href="<?= base_url('admin') ?>">Admin</a></div>
+            <div class="breadcrumb-item">Edit Admin</div>
         </div>
     </div>
 
     <div class="section-body">
-        <h2 class="section-title">Form Validation</h2>
-        <p class="section-lead">
-            Form validation using default from Bootstrap 4
-        </p>
+
 
         <!-- <div class="row"> -->
 
         <div class="card">
-            <form Action="<?= base_url('admin/update/'.$admin['id']) ?>" method="post">
-            <?php csrf_field() ?>
+            <form Action="<?= base_url('admin/update/' . $admin['id']) ?>" method="post">
+                <?php csrf_field() ?>
                 <input type="hidden" name="user_id" value="<?= $admin['user_id'] ?>" hidden>
                 <div class="card-header">
-                    <h4>Server-side Validation</h4>
+                    <h4>Form Edit Admin</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">

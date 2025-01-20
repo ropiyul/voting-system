@@ -122,10 +122,7 @@ class Candidate extends BaseController
             ],
         ]);
         $tes = $this->request->getFile('image');
-        return dd($tes->getClientName());
-
         if (!$validation->withRequest($this->request)->run()) {
-
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
@@ -161,53 +158,6 @@ class Candidate extends BaseController
         return redirect()->to('candidate')->with('message', 'Data berhasil disimpan.');
     }
 
-    public function upload_temp()
-    {
-        $file = $this->request->getFile('image');
-
-        if ($file->isValid() && !$file->hasMoved()) {
-            $fileName = $file->getRandomName();
-            $file->move(WRITEPATH . 'uploads/temp', $fileName);
-
-            return $this->response
-                ->setHeader('Content-Type', 'text/plain')
-                ->setBody($fileName);
-        }
-
-        return $this->response->setJSON([
-            'success' => false,
-            'error' => 'Failed to upload file'
-        ]);
-    }
-    public function remove_temp()
-    {
-        $request = $this->request->getJSON();
-        $fileName = $request->filename;
-
-        $filePath = WRITEPATH . 'uploads/temp/' . $fileName;
-        if (file_exists($filePath)) {
-            unlink(filename: $filePath); // Hapus file dari server
-            return $this->response->setJSON(['success' => true]);
-        }
-
-        return $this->response->setJSON(['success' => false, 'error' => 'File not found']);
-    }
-    public function remove_temp1()
-    {
-        $json = $this->request->getJSON();
-        $filename = $json->filename;
-
-        $tempPath = WRITEPATH . 'uploads/temp/';
-        $filePath = $tempPath . $filename;
-
-        if (file_exists($filePath)) {
-            unlink($filePath);
-            return $this->response->setJSON(['success' => true]);
-        }
-
-        return $this->response->setJSON(['success' => false]);
-    }
-
 
 
     public function edit($id)
@@ -228,8 +178,8 @@ class Candidate extends BaseController
     {
         $validation = \Config\Services::validation();
 
-        // Menentukan aturan validasi
-        $validation->setRules([
+
+        $data = [
             'fullname' => [
                 'label' => 'fullname',
                 'rules' => 'required',
@@ -243,14 +193,6 @@ class Candidate extends BaseController
             //     'errors' => [
             //         'required' => 'Username harus diisi.',
             //         'is_unique' => 'Username sudah terdaftar.'
-            //     ]
-            // ],
-            // 'email' => [
-            //     'label' => 'email',
-            //     'rules' => "required|is_unique[users.email,users.id,{id}]",
-            //     'errors' => [
-            //         'required' => 'email harus diisi.',
-            //         'is_unique' => 'email sudah terdaftar.'
             //     ]
             // ],
             'vision' => [
@@ -267,16 +209,21 @@ class Candidate extends BaseController
                     'required' => 'Misi harus di isi',
                 ]
             ],
-            'image' => [
-                'label' => 'image',
-                'rules' => 'max_size[image,5108]|is_image[image]|mime_in[image,image/png,image/jpg,image/jpeg]',
-                'errors' => [
-                    'max_size' => 'Ukuran {field} terlalu besar, max 5MB.',
-                    'is_image' => '{field} harus berupa gambar',
-                    'mime_in' =>  '{field} harus berformat png, jpg, atau jpeg.'
-                ]
-            ],
-        ]);
+        ];
+        if (!$this->request->getPost('image') && $this->request->getFile('image')):
+            $data['image'] = [
+                    'label' => 'image',
+                    'rules' => 'uploaded[image]|max_size[image,5108]|is_image[image]|mime_in[image,image/png,image/jpg,image/jpeg]',
+                    'errors' => [
+                        'uploaded' => '{field} harus diisi.',
+                        'max_size' => 'Ukuran {field} terlalu besar, max 5MB.',
+                        'is_image' => '{field} harus berupa gambar',
+                        'mime_in' =>  '{field} harus berformat png, jpg, atau jpeg.'
+                    ]
+            ];
+        endif;
+        // Menentukan aturan validasi
+        $validation->setRules($data);
 
 
         // Menjalankan validasi
@@ -288,33 +235,19 @@ class Candidate extends BaseController
 
         $oldImage = $this->request->getPost('oldImage');
         $image = $this->request->getFile('image');
-        if ($image):
+        if ($image && $image->isValid()):
             $this->db->transStart();
-            if ($image->isValid()) {
+            if (!$image->hasMoved()) {
                 $filename = $image->getRandomName();
                 $image->move('img/', $filename);
+            }        
+
+            if (!empty($oldImage) && file_exists('img/' . $oldImage)) {
+                unlink('img/' . $oldImage);
             }
-
-           if(file_exists('img/' .$oldImage)) unlink('img/' . $oldImage);
+        
 
             $email = mt_rand(10000, 1000000) . '@gmail.com';
-            $this->userModel->save([
-                'id' => $this->request->getPost('user_id'),
-                'username' => $this->request->getPost('username'),
-                'email' => $email,
-            ]);
-
-            $this->candidateModel->save([
-                'id' => $id,
-                'fullname' => $this->request->getPost('fullname'),
-                'vision' => $this->request->getPost('vision'),
-                'mission' => $this->request->getPost('mission'),
-                'image' => $filename,
-            ]);
-            $this->db->transComplete();
-        else:
-            $email = mt_rand(10000, 1000000) . '@gmail.com';
-            $this->db->transStart();
             $this->userModel->save([
                 'id' => $this->request->getPost('user_id'),
                 'username' => $this->request->getPost('username'),
@@ -327,9 +260,24 @@ class Candidate extends BaseController
                 'fullname' => $this->request->getPost('fullname'),
                 'vision' => $this->request->getPost('vision'),
                 'mission' => $this->request->getPost('mission'),
+                'image' => $filename,
             ]);
             $this->db->transComplete();
+        else:
+            $this->db->transStart();
+            $this->userModel->save([
+                'id' => $this->request->getPost('user_id'),
+                'username' => $this->request->getPost('username'),
+            ]);
 
+            $this->candidateModel->save([
+                'id' => $id,
+                'grade_id' => $this->request->getPost('grade_id'),
+                'fullname' => $this->request->getPost('fullname'),
+                'vision' => $this->request->getPost('vision'),
+                'mission' => $this->request->getPost('mission'),
+            ]);
+            $this->db->transComplete();
         endif;
 
         if ($this->db->transStatus() === false) {

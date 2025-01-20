@@ -18,25 +18,22 @@
 <?= $this->section('content') ?>
 <section class="section">
     <div class="section-header">
-        <h1>Form Validation</h1>
+        <h1>Tambah kandidat</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-            <div class="breadcrumb-item"><a href="#">Forms</a></div>
-            <div class="breadcrumb-item">Form Validation</div>
+            <div class="breadcrumb-item active"><a href="<?= base_url('dashboard') ?>">Dashboard</a></div>
+            <div class="breadcrumb-item"><a href="<?= base_url('candidate') ?>">kandidat</a></div>
+            <div class="breadcrumb-item">Tambah kandidat</div>
         </div>
     </div>
 
     <div class="section-body">
-        <h2 class="section-title">Form Validation</h2>
-        <p class="section-lead">
-            Form validation using default from Bootstrap 4
-        </p>
+
         <?= $this->include('auth/_message_block.php') ?>
         <div class="card">
             <form action="<?= base_url('candidate/save') ?>" method="post" enctype="multipart/form-data">
                 <?= csrf_field() ?>
                 <div class="card-header">
-                    <h4>Server-side Validation</h4>
+                    <h4>Form Tambah kandidat</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -160,22 +157,22 @@
     );
 
 
-     // Filepond:
-     FilePond.create(document.querySelector(".image"), {
-            credits: null,
-            allowImagePreview: true,
-            allowMultiple: false,
-            allowFileEncode: false,
-            required: false,
-            acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg", "application/pdf"],
-            fileValidateTypeDetectType: (source, type) =>
-                new Promise((resolve, reject) => {
-                    // Do custom type detection here and return with promise
-                    resolve(type)
-                }),
-            storeAsFile: true,
-        })
-         // Initialize Summernote with minimal toolbar
+    // Filepond:
+    FilePond.create(document.querySelector(".image"), {
+        credits: null,
+        allowImagePreview: true,
+        allowMultiple: false,
+        allowFileEncode: false,
+        required: false,
+        acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg", "application/pdf"],
+        fileValidateTypeDetectType: (source, type) =>
+            new Promise((resolve, reject) => {
+                // Do custom type detection here and return with promise
+                resolve(type)
+            }),
+        storeAsFile: true,
+    })
+    // Initialize Summernote with minimal toolbar
     $('.summernote').summernote({
         toolbar: [
             ['para', ['ul', 'ol']]
@@ -225,7 +222,7 @@
 
     // const pond = FilePond.create(document.querySelector('input[type="file"]'), pondConfig);
 
-   
+
 
 
     // pond.on('error', error => {

@@ -2,7 +2,7 @@
 
 <?= $this->section('content') ?>
 <!-- chart  -->
-<?php 
+<?php
 
 ?>
 
@@ -16,7 +16,7 @@
                         <div class="dropdown">
                             <a class="font-weight-600 dropdown-toggle" data-toggle="dropdown" href="#" id="selected-class">
                                 <?= session()->get('selected_grade') === 'all' ? 'Semua Kelas' : (isset($grades[session()->get('selected_grade') - 1]) ?
-                                        $grades[session()->get(key: 'selected_grade') - 1]['name'] : 'Pilih Kelas') ?>
+                                    $grades[session()->get(key: 'selected_grade') - 1]['name'] : 'Pilih Kelas') ?>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class="dropdown-title">Pilih Kelas</div>
@@ -62,67 +62,66 @@
             </div>
         </div>
 
-        <div class="col-lg-4 col-md-4 col-sm-12">
-            <div class="card card-statistic-2">
-                <div class="card-chart">
-                    <div class="chartjs-size-monitor"
-                        style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
-                        <div class="chartjs-size-monitor-expand"
-                            style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                            <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div>
-                        </div>
-                        <div class="chartjs-size-monitor-shrink"
-                            style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                            <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
-                        </div>
-                    </div>
-                    <canvas id="balance-chart" height="128" width="540"
-                        style="display: block; height: 64px; width: 270px;" class="chartjs-render-monitor"></canvas>
+       <!-- Card Kedua (Statistik Kandidat) -->
+<div class="col-lg-4 col-md-4 col-sm-12">
+    <div class="card card-statistic-2">
+        <div class="card-stats">
+            <div class="card-stats-title">Statistik Kandidat</div>
+            <div class="card-stats-items d-flex justify-content-around">
+                <div class="card-stats-item text-center">
+                    <div class="card-stats-item-count">3</div>
+                    <div class="card-stats-item-label">Total Kandidat</div>
                 </div>
-                <div class="card-icon shadow-primary bg-primary">
-                    <i class="fas fa-dollar-sign"></i>
-                </div>
-                <div class="card-wrap">
-                    <div class="card-header">
-                        <h4>Balance</h4>
-                    </div>
-                    <div class="card-body">
-                        $187,13
-                    </div>
+                <div class="card-stats-item text-center">
+                    <div class="card-stats-item-count">150</div>
+                    <div class="card-stats-item-label">Vote Tertinggi</div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
-            <div class="card card-statistic-2">
-                <div class="card-chart">
-                    <div class="chartjs-size-monitor"
-                        style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
-                        <div class="chartjs-size-monitor-expand"
-                            style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                            <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div>
-                        </div>
-                        <div class="chartjs-size-monitor-shrink"
-                            style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                            <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
-                        </div>
-                    </div>
-                    <canvas id="sales-chart" height="128" width="540"
-                        style="display: block; height: 64px; width: 270px;" class="chartjs-render-monitor"></canvas>
+        <div class="card-icon shadow bg-primary">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="card-wrap">
+            <div class="card-header bg-transparent border-0">
+                <h4 class="mb-0">Total Suara Masuk</h4>
+            </div>
+            <div class="card-body pt-0">
+                450
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Card Ketiga (Persentase Partisipasi) -->
+<div class="col-lg-4 col-md-4 col-sm-12">
+    <div class="card card-statistic-2">
+        <div class="card-stats">
+            <div class="card-stats-title">Persentase Partisipasi</div>
+            <div class="card-stats-items d-flex justify-content-around">
+                <div class="card-stats-item text-center">
+                    <div class="card-stats-item-count text-success">75%</div>
+                    <div class="card-stats-item-label">Tingkat Partisipasi</div>
                 </div>
-                <div class="card-icon shadow-primary bg-primary">
-                    <i class="fas fa-shopping-bag"></i>
-                </div>
-                <div class="card-wrap">
-                    <div class="card-header">
-                        <h4>Sales</h4>
-                    </div>
-                    <div class="card-body">
-                        4,732
-                    </div>
+                <div class="card-stats-item text-center">
+                    <div class="card-stats-item-count text-danger">25%</div>
+                    <div class="card-stats-item-label">Belum Berpartisipasi</div>
                 </div>
             </div>
         </div>
-        >
+        <div class="card-icon shadow bg-primary">
+            <i class="fas fa-chart-pie"></i>
+        </div>
+        <div class="card-wrap">
+            <div class="card-header bg-transparent border-0">
+                <h4 class="mb-0">Target Partisipasi</h4>
+            </div>
+            <div class="card-body pt-0">
+                100%
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
 </section>
 <section class="section">
     <div class="section-body">
@@ -147,7 +146,7 @@
             </div>
             <div class="col-12 col-md-6 col-lg-6">
                 <div class="card">
-                <div class="card-header">
+                    <div class="card-header">
                         <h4>Statistik kandidat</h4>
                         <div class="card-header-action">
                             <a href="#" class="btn active">PPLG</a>
@@ -294,54 +293,54 @@
 
 <!-- Page Specific JS File -->
 <script>
-$(document).ready(function() {
-    console.log('Document ready - script initialized.');
+    $(document).ready(function() {
+        console.log('Document ready - script initialized.');
 
-    // Inisialisasi chart
-    let kandidatChart = null;
+        // Inisialisasi chart
+        let kandidatChart = null;
 
-    function initializeKandidatChart() {
-        console.log('Initializing chart...');
-        const ctx = document.getElementById('kandidatChart').getContext('2d');
-        kandidatChart = new Chart(ctx, {
-            type: 'bar',
-            labels: [],
-            data: {
-                datasets: [{
-                    label: "Kandidat",
-                    data: [],
-                    backgroundColor: 'rgba(63,82,227,.8)',
-                    borderWidth: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
+        function initializeKandidatChart() {
+            console.log('Initializing chart...');
+            const ctx = document.getElementById('kandidatChart').getContext('2d');
+            kandidatChart = new Chart(ctx, {
+                type: 'bar',
+                labels: [],
+                data: {
+                    datasets: [{
+                        label: "Kandidat",
+                        data: [],
+                        backgroundColor: 'rgba(63,82,227,.8)',
+                        borderWidth: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
-        console.log('Chart initialized.');
-    }
-
-    // Fungsi untuk update statistik kandidat
-    function updateCandidateStats(candidates) {
-        console.log('Updating candidate stats with data:', candidates);
-
-        // Update chart
-        if (kandidatChart) {
-            console.log('Updating chart with candidates:', candidates);
-            kandidatChart.data.labels = candidates.map(c => c.name);
-            kandidatChart.data.datasets[0].data = candidates.map(c => c.vote_count);
-            kandidatChart.update();
+            });
+            console.log('Chart initialized.');
         }
 
-        // Update detail statistik
-        let html = '';
-        candidates.forEach(candidate => {
-            html += `
+        // Fungsi untuk update statistik kandidat
+        function updateCandidateStats(candidates) {
+            console.log('Updating candidate stats with data:', candidates);
+
+            // Update chart
+            if (kandidatChart) {
+                console.log('Updating chart with candidates:', candidates);
+                kandidatChart.data.labels = candidates.map(c => c.name);
+                kandidatChart.data.datasets[0].data = candidates.map(c => c.vote_count);
+                kandidatChart.update();
+            }
+
+            // Update detail statistik
+            let html = '';
+            candidates.forEach(candidate => {
+                html += `
                 <div class="statistic-details-item">
                     <div class="text-small text-muted">
                         ${candidate.percentage || 0}% <!-- Default to 0 if undefined -->
@@ -350,67 +349,67 @@ $(document).ready(function() {
                     <div class="detail-name">${candidate.name}</div>
                 </div>
             `;
-        });
-        $('#candidate-stats').html(html);
-        console.log('Candidate stats updated in the DOM.');
-    }
+            });
+            $('#candidate-stats').html(html);
+            console.log('Candidate stats updated in the DOM.');
+        }
 
-    // Handle dropdown kelas
-    $('.dropdown-item').click(function(e) {
-        e.preventDefault();
-        console.log('Dropdown item clicked.');
+        // Handle dropdown kelas
+        $('.dropdown-item').click(function(e) {
+            e.preventDefault();
+            console.log('Dropdown item clicked.');
 
-        $('#selected-class').text($(this).text());
-        $('.dropdown-item').removeClass('active');
-        $(this).addClass('active');
-        
-        let gradeId = $(this).data('grade');
-        console.log('Selected grade ID:', gradeId);
-        
-        // Tambahkan loading state
-        $('#not-voted-count, #voted-count, #total-users').html('<i class="fas fa-spinner fa-spin"></i>');
-        $('#candidate-stats').html('<i class="fas fa-spinner fa-spin"></i>');
-        
-        // Ajax request
-        $.ajax({
-            url: '<?= base_url('dashboard/getStatisticsByGrade') ?>/' + gradeId,
-            method: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                console.log('Response received:', response);
-                
-                // Update statistik umum
-                $('#not-voted-count').text(response.statistics.not_voted || 0);
-                $('#voted-count').text(response.statistics.voted || 0);
-                $('#total-users').text(response.statistics.total_users || 0);
-                
-                // Update statistik kandidat
-                updateCandidateStats(response.candidates);
-            },
-            error: function(xhr, status, error) {
-                console.error('Ajax Error:', {
-                    status: status,
-                    error: error,
-                    response: xhr.responseText
-                });
-                
-                // Reset nilai
-                $('#not-voted-count, #voted-count, #total-users').text('0');
-                $('#candidate-stats').html('');
-                if (kandidatChart) {
-                    kandidatChart.data.labels = [];
-                    kandidatChart.data.datasets[0].data = [];
-                    kandidatChart.update();
+            $('#selected-class').text($(this).text());
+            $('.dropdown-item').removeClass('active');
+            $(this).addClass('active');
+
+            let gradeId = $(this).data('grade');
+            console.log('Selected grade ID:', gradeId);
+
+            // Tambahkan loading state
+            $('#not-voted-count, #voted-count, #total-users').html('<i class="fas fa-spinner fa-spin"></i>');
+            $('#candidate-stats').html('<i class="fas fa-spinner fa-spin"></i>');
+
+            // Ajax request
+            $.ajax({
+                url: '<?= base_url('dashboard/getStatisticsByGrade') ?>/' + gradeId,
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    console.log('Response received:', response);
+
+                    // Update statistik umum
+                    $('#not-voted-count').text(response.statistics.not_voted || 0);
+                    $('#voted-count').text(response.statistics.voted || 0);
+                    $('#total-users').text(response.statistics.total_users || 0);
+
+                    // Update statistik kandidat
+                    updateCandidateStats(response.candidates);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ajax Error:', {
+                        status: status,
+                        error: error,
+                        response: xhr.responseText
+                    });
+
+                    // Reset nilai
+                    $('#not-voted-count, #voted-count, #total-users').text('0');
+                    $('#candidate-stats').html('');
+                    if (kandidatChart) {
+                        kandidatChart.data.labels = [];
+                        kandidatChart.data.datasets[0].data = [];
+                        kandidatChart.update();
+                    }
+
+                    alert('Terjadi kesalahan saat mengambil data');
                 }
-                
-                alert('Terjadi kesalahan saat mengambil data');
-            }
+            });
         });
-    });
 
-    // Inisialisasi chart saat halaman dimuat
-    initializeKandidatChart();
-});
+        // Inisialisasi chart saat halaman dimuat
+        initializeKandidatChart();
+    });
 </script>
 
 <?= $this->endSection() ?>

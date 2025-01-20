@@ -1,0 +1,204 @@
+<?= $this->extend('votes/main') ?>
+
+<?= $this->section('content') ?>
+
+<section class="section mt-3">
+    <div class="section-header">
+        <h1>Para Kandidat</h1>
+        <div class="section-header-breadcrumb">
+            <div class="breadcrumb-item"><a href="#">Para Kandidat</a></div>
+            <div class="breadcrumb-item"><a href="#">Voting</a></div>
+        </div>
+    </div>
+
+    <div class="section-body">
+        <div class="row justify-content-center">
+            <?php foreach ($candidates as $candidate): ?>
+                <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                    <article class="article">
+                        <div class="article-header rounded">
+                            <div class="article-image bg-secondary img-fluid"
+                                style="background-image: url('<?= base_url() . "img/" . $candidate["image"] ?>');">
+                            </div>
+                        </div>
+                        <div class="article-details">
+                            <h3 class="text-center font-weight-bold"><?= $candidate["fullname"] ?></h3>
+                            <p class="text-center text-muted">Kandidat <?= $candidate['id'] ?></p>
+                            <div class="article-cta">
+                                <button class="btn btn-primary btn-custom vote-button"
+                                    data-toggle="modal"
+                                    data-target="#candidateModal"
+                                    data-id="<?= $candidate['id'] ?>"
+                                    data-image="<?= base_url() . "img/" . $candidate["image"] ?>"
+                                    data-name="<?= $candidate["fullname"] ?>"
+                                    data-vision="<?= htmlspecialchars($candidate["vision"]) ?>"
+                                    data-mission="<?= htmlspecialchars($candidate["mission"]) ?>">
+                                    Visi & Misi
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="candidateModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-xl-custom">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail Kandidat</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-4 col-md-12 mb-4">
+                        <img id="modalImage" class="img-fluid rounded mx-auto d-block"
+                            alt="kandidat" style="max-height: 300px;">
+                    </div>
+                    <div class="col-lg-8 col-md-12">
+                        <h3 class="mb-4 text-center text-lg-left" id="modalName"></h3>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="mb-4">
+                                    <h5><strong>Visi:</strong></h5>
+                                    <div id="modalVision"></div>
+                                </div>
+                                <div>
+                                    <h5><strong>Misi:</strong></h5>
+                                    <div id="modalMission"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="voteButton" data-dismiss="modal">Voting sekarang</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="konfirmasi" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-4">
+                <h5 class="fw-bold mb-3">Apakah yakin dengan pilihan Anda?</h5>
+                <div class="d-flex justify-content-center gap-2">
+                    <button class="btn btn-danger" data-bs-dismiss="modal">Tidak</button>
+                    <button class="btn btn-primary" id="confirmVote">Ya</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?= $this->endSection() ?>
+
+
+<?= $this->section('script') ?>
+<script>
+// Toastr Configuration
+const initToastr = () => {
+    toastr.options = {
+        closeButton: true,
+        newestOnTop: false,
+        progressBar: true,
+        positionClass: "toast-top-right",
+        preventDuplicates: true,
+        onclick: null,
+        showDuration: "300",
+        hideDuration: "1000",
+        timeOut: "5000",
+        extendedTimeOut: "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut"
+    };
+};
+
+// Vote Handler Class
+class VoteHandler {
+    constructor() {
+        this.selectedCandidateId = null;
+        this.initializeEventListeners();
+        initToastr();
+    }
+
+    initializeEventListeners() {
+        // Vote buttons
+        document.querySelectorAll('.vote-button').forEach(button => {
+            button.addEventListener('click', (e) => this.handleVoteButtonClick(e));
+        });
+
+        // Vote action button
+        document.getElementById('voteButton').addEventListener('click', () => this.handleVoteAction());
+
+        // Confirm vote button
+        document.getElementById('confirmVote').addEventListener('click', () => this.handleConfirmVote());
+    }
+
+    handleVoteButtonClick(e) {
+        const button = e.currentTarget;
+        this.selectedCandidateId = button.dataset.id;
+        
+        // Update modal content
+        document.getElementById('modalImage').src = button.dataset.image;
+        document.getElementById('modalName').textContent = button.dataset.name;
+        document.getElementById('modalVision').innerHTML = button.dataset.vision;
+        document.getElementById('modalMission').innerHTML = button.dataset.mission;
+        
+        $('#candidateModal').modal('show');
+    }
+
+    handleVoteAction() {
+        $('#candidateModal').modal('hide');
+        $('#konfirmasi').modal('show');
+    }
+
+    async handleConfirmVote() {
+        try {
+            const formData = new FormData();
+            formData.append('candidate_id', this.selectedCandidateId);
+
+            const response = await fetch('<?= base_url('vote/save') ?>', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            $('#konfirmasi').modal('hide');
+
+            if (result.success) {
+                toastr.success(result.message, 'Sukses');
+                this.disableVoteButtons();
+            } else {
+                toastr.error(result.message, 'Error');
+            }
+        } catch (error) {
+            console.error('Vote error:', error);
+            toastr.error('Terjadi kesalahan sistem', 'Error');
+        }
+    }
+
+    disableVoteButtons() {
+        document.querySelectorAll('.vote-button').forEach(btn => {
+            btn.disabled = true;
+            btn.classList.add('disabled');
+        });
+    }
+}
+
+// Initialize voting system when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    new VoteHandler();
+});
+</script>
+<?= $this->endSection() ?>

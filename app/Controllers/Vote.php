@@ -24,17 +24,25 @@ class Vote extends BaseController
         $data = [
             'candidates' => $this->candidateModel->findAll()
         ];
-        return view('poll/index', $data);
+        return view('votes/index', $data);
     }
 
     public function saveVote()
     {
+        $authorize = $auth = service('authorization');
         try {
-            // Check if user already voted
+            $group = $authorize->inGroup('voter', user_id());
+            if ($group == false) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Anda tidak memiliki hak memilih'
+                ]);
+            }
+
+            // cek jika user sudah vote
             $voter = $this->voterModel->where('user_id', user_id())->first();
 
             $existingVote = $this->voteModel->where('voter_id', $voter["id"])->first();
-            
             if ($existingVote) {
                 return $this->response->setJSON([
                     'success' => false,
