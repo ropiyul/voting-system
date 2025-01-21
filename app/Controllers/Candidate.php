@@ -336,52 +336,89 @@ class Candidate extends BaseController
 
     public function export_excel()
     {
+    $candidates = $this->candidateModel->getCandidate();
 
-        $candidates = $this->candidateModel->getCandidate();
-
-
-        // $user = $this->userModel->('candidate')->findAll();
-
-
-
-        if (!$candidates) {
-            return redirect()->back()->with('error', 'Data tidak ditemukan!');
-        }
-
-        // Load library PhpSpreadsheet
-        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-
-        // Header kolom
-        $sheet->setCellValue('A1', 'No');
-        $sheet->setCellValue('B1', 'Nama');
-        $sheet->setCellValue('C1', 'Username');
-        $sheet->setCellValue('D1', 'Visi');
-        $sheet->setCellValue('E1', 'Misi');
-
-        // Isi data kandidat
-        $rowNumber = 2; // Dimulai dari baris kedua
-        foreach ($candidates as $index => $candidate) {
-            $sheet->setCellValue('A' . $rowNumber, $index + 1);
-            $sheet->setCellValue('B' . $rowNumber, $candidate['fullname']);
-            $sheet->setCellValue('C' . $rowNumber, $candidate['username']);
-            $sheet->setCellValue('D' . $rowNumber, $candidate['vision']);
-            $sheet->setCellValue('E' . $rowNumber, $candidate['mission']);
-            $rowNumber++;
-        }
-
-        // Nama file
-        $filename = 'All_Candidates_' . date('Y-m-d_H-i-s') . '.xlsx';
-
-        // Download file
-        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="' . $filename . '"');
-        header('Cache-Control: max-age=0');
-
-        $writer->save('php://output');
-        exit;
+    if (!$candidates) {
+        return redirect()->back()->with('error', 'Data tidak ditemukan!');
     }
+
+    // Load library PhpSpreadsheet
+    $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    // Header kolom
+    $sheet->setCellValue('A1', 'No');
+    $sheet->setCellValue('B1', 'Nama');
+    $sheet->setCellValue('C1', 'Username');
+    $sheet->setCellValue('D1', 'Visi');
+    $sheet->setCellValue('E1', 'Misi');
+
+    // Styling header
+    $headerStyle = [
+        'font' => [
+            'bold' => true,
+            'color' => ['rgb' => 'FFFFFF']
+        ],
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => ['rgb' => '4CAF50']
+        ],
+        'borders' => [
+            'allBorders' => [
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'color' => ['rgb' => '000000']
+            ]
+        ]
+    ];
+
+    $sheet->getStyle('A1:E1')->applyFromArray($headerStyle);
+
+    // Styling data
+    $dataStyle = [
+        'borders' => [
+            'allBorders' => [
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'color' => ['rgb' => '000000']
+            ]
+        ]
+    ];
+
+    // Isi data kandidat
+    $rowNumber = 2; // Dimulai dari baris kedua
+    foreach ($candidates as $index => $candidate) {
+        $sheet->setCellValue('A' . $rowNumber, $index + 1);
+        $sheet->setCellValue('B' . $rowNumber, $candidate['fullname']);
+
+        // Set 'username' as text to preserve original formatting
+        $sheet->setCellValueExplicit('C' . $rowNumber, $candidate['username'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+
+        $sheet->setCellValue('D' . $rowNumber, $candidate['vision']);
+        $sheet->setCellValue('E' . $rowNumber, $candidate['mission']);
+        $rowNumber++;
+    }
+
+    // Apply styling to data rows
+    $sheet->getStyle('A2:E' . ($rowNumber - 1))->applyFromArray($dataStyle);
+
+    // Auto-size columns
+    foreach (range('A', 'E') as $columnID) {
+        $sheet->getColumnDimension($columnID)->setAutoSize(true);
+    }
+
+    // Nama file
+    $filename = 'All_Candidates_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+    // Download file
+    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="' . $filename . '"');
+    header('Cache-Control: max-age=0');
+
+    $writer->save('php://output');
+    exit;
+    }
+
+
 
     public function import_excel()
     {
@@ -433,9 +470,9 @@ class Candidate extends BaseController
             $email = mt_rand(10000, 1000000) . '@gmail.com';
             
             // Get data from Excel
-            $nis = trim($row[2] ?? ''); // nis/username
-            $fullname = trim($row[3] ?? ''); // nama lengkap
-            $gradeName = trim(strtolower($row[6] ?? '')); // kelas
+            $nis = trim($row[1] ?? ''); // nis/username
+            $fullname = trim($row[2] ?? ''); // nama lengkap
+            $gradeName = trim(strtolower($row[3] ?? '')); // kelas
     
             $firstName = ucfirst(strtolower(explode(' ', $fullname)[0])); 
             $lastNis = substr($nis, -2); 
@@ -465,7 +502,7 @@ class Candidate extends BaseController
             // kelas
             if (!isset($gradeNameToId[$gradeName])) {
                 $this->db->transRollback();
-                session()->setFlashdata('error', 'Kelas "' . $row[7] . '" tidak ditemukan pada baris ' . ($i + 1));
+                session()->setFlashdata('error', 'Kelas "' . $row[3] . '" tidak ditemukan pada baris ' . ($i + 1));
                 return redirect()->back()->withInput();
             }
     
@@ -508,5 +545,77 @@ class Candidate extends BaseController
         session()->setFlashdata('message', 'Data kandidat berhasil diimport');
         return redirect()->to('/candidate');
     }
+
+    public function template()
+    {
+        // Load library PhpSpreadsheet
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+    
+        // Header kolom
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Username');
+        $sheet->setCellValue('C1', 'Nama Lengkap');
+        $sheet->setCellValue('D1', 'Kelas');
+        $sheet->setCellValue('E1', 'Visi');
+        $sheet->setCellValue('F1', 'Misi');
+    
+        // Styling header
+        $headerStyle = [
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF']
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '4CAF50']
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['rgb' => '000000']
+                ]
+            ]
+        ];
+    
+        $sheet->getStyle('A1:F1')->applyFromArray($headerStyle);
+    
+        // Set predefined column widths
+        $sheet->getColumnDimension('A')->setWidth(5);
+        $sheet->getColumnDimension('B')->setWidth(25);
+        $sheet->getColumnDimension('C')->setWidth(25);
+        $sheet->getColumnDimension('D')->setWidth(15);
+        $sheet->getColumnDimension('E')->setWidth(40);
+        $sheet->getColumnDimension('F')->setWidth(40);
+
+        // Align the numbers in column A to the center
+        $sheet->getStyle('A2:A23')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+    
+        // Styling data (empty rows for template)
+        $dataStyle = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['rgb' => '000000']
+                ]
+            ]
+        ];
+    
+        // Apply styling to data rows (2 empty rows as template)
+        $sheet->getStyle('A2:F23')->applyFromArray($dataStyle);
+    
+        // Nama file template
+        $filename = 'Template_Candidates_' . date('Y-m-d_H-i-s') . '.xlsx';
+    
+        // Download file
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+    
+        $writer->save('php://output');
+        exit;
+    }    
+
     
 }

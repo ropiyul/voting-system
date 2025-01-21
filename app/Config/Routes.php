@@ -27,6 +27,7 @@ $routes->group('candidate', ['filter' => 'role:admin'], function ($routes) {
     $routes->post('updatePassword/(:num)', 'Candidate::updatePassword/$1');
     $routes->get('export_excel', 'Candidate::export_excel');
     $routes->post('import_excel', 'Candidate::import_excel');
+    $routes->get('template', 'Candidate::template');
 });
 
 // permilih 
@@ -40,6 +41,7 @@ $routes->group('voter', ['filter' => 'role:admin'], function ($routes) {
     $routes->post('updatePassword/(:num)', 'voter::updatePassword/$1');
     $routes->get('export_excel', 'voter::export_excel');
     $routes->post('import_excel', 'Voter::import_excel');
+    $routes->get('template', 'Voter::template');
 
 });
 
