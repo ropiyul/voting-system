@@ -29,7 +29,7 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-6 col-md-6 col-lg-6">
+                <div class="col-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <label>Nama</label>
                         <input type="text" class="form-control <?= session('errors') && isset(session('errors')['fullname']) ? 'is-invalid' : ''; ?>" name="fullname" value="<?= old('fullname') ?>">
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-6 col-lg-6">
+                <div class="col-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <label>Username</label>
                         <input type="text" class="form-control <?= session('errors') && isset(session('errors')['username']) ? 'is-invalid' : ''; ?>" name="username" value="<?= old('username') ?>">
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-6 col-lg-6">
+                <div class="col-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <label>Password</label>
                         <input type="password" class="form-control <?= session('errors') && isset(session('errors')['password']) ? 'is-invalid' : ''; ?>" name="password" value="<?= old('mision') ?>">
@@ -56,7 +56,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-6 col-lg-6">
+                <div class="col-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <label>Ulang Password</label>
                         <input type="password" class="form-control <?= session('errors') && isset(session('errors')['pass_confirm']) ? 'is-invalid' : ''; ?>" name="pass_confirm" value="<?= old('mision') ?>">
