@@ -159,4 +159,67 @@ public function import_excel()
     }
 }
 
+public function template()
+    {
+        // Load library PhpSpreadsheet
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+    
+        // Header kolom
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Kelas');
+    
+        // Styling header
+        $headerStyle = [
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF']
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '4CAF50']
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['rgb' => '000000']
+                ]
+            ]
+        ];
+    
+        $sheet->getStyle('A1:B1')->applyFromArray($headerStyle);
+    
+        // Set predefined column widths
+        $sheet->getColumnDimension('A')->setWidth(5);
+        $sheet->getColumnDimension('B')->setWidth(15);
+
+        // Align the numbers in column A to the center
+        $sheet->getStyle('A2:A23')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+    
+        // Styling data (empty rows for template)
+        $dataStyle = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['rgb' => '000000']
+                ]
+            ]
+        ];
+    
+        // Apply styling to data rows (2 empty rows as template)
+        $sheet->getStyle('A2:B15')->applyFromArray($dataStyle);
+    
+        // Nama file template
+        $filename = 'Template_Kelas_' . date('Y-m-d_H-i-s') . '.xlsx';
+    
+        // Download file
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+    
+        $writer->save('php://output');
+        exit;
+    }
+
 }

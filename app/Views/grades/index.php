@@ -29,6 +29,7 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">Form Kelas</h4>
                         <div class="card-header-form d-flex align-items-center">
+                        <a href="<?= base_url('grade/template') ?>" class="btn btn-primary mr-1">download template</a>
                             <form action="<?= base_url('grade/import_excel') ?>" method="post" enctype="multipart/form-data" class="d-inline">
                                 <?= csrf_field() ?>
                                 <label for="file_excel" class="btn btn-success mb-0" style="cursor: pointer;">Import Excel</label>
