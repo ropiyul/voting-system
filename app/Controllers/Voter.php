@@ -467,7 +467,7 @@ public function template()
         $sheet->getStyle('A2:D23')->applyFromArray($dataStyle);
     
         // Nama file template
-        $filename = 'Template_Candidates_' . date('Y-m-d_H-i-s') . '.xlsx';
+        $filename = 'Template_Pemilih_' . date('Y-m-d_H-i-s') . '.xlsx';
     
         // Download file
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
