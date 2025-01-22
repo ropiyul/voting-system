@@ -18,7 +18,7 @@
                                 <?= session()->get('selected_grade') === 'all' ? 'Semua Kelas' : (isset($grades[session()->get('selected_grade') - 1]) ?
                                     $grades[session()->get(key: 'selected_grade') - 1]['name'] : 'Pilih Kelas') ?>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right">
+                            <div class="dropdown-menu dropdown-menu-right" style="max-height: 300px; overflow-y: auto; position: absolute !important;">
                                 <div class="dropdown-title">Pilih Kelas</div>
                                 <a href="javascript:void(0)"
                                     class="dropdown-item <?= session()->get('selected_grade') == 'all' ? 'active' : '' ?>"
@@ -62,65 +62,65 @@
             </div>
         </div>
 
-       <!-- Card Kedua (Statistik Kandidat) -->
-<div class="col-lg-4 col-md-4 col-sm-12">
-    <div class="card card-statistic-2">
-        <div class="card-stats">
-            <div class="card-stats-title">Statistik Kandidat</div>
-            <div class="card-stats-items d-flex justify-content-around">
-                <div class="card-stats-item text-center">
-                    <div class="card-stats-item-count">3</div>
-                    <div class="card-stats-item-label">Total Kandidat</div>
+        <!-- Card Kedua (Statistik Kandidat) -->
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="card card-statistic-2">
+                <div class="card-stats">
+                    <div class="card-stats-title">Statistik Kandidat</div>
+                    <div class="card-stats-items d-flex justify-content-around">
+                        <div class="card-stats-item text-center">
+                            <div class="card-stats-item-count">3</div>
+                            <div class="card-stats-item-label">Total Kandidat</div>
+                        </div>
+                        <div class="card-stats-item text-center">
+                            <div class="card-stats-item-count">150</div>
+                            <div class="card-stats-item-label">Vote Tertinggi</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-stats-item text-center">
-                    <div class="card-stats-item-count">150</div>
-                    <div class="card-stats-item-label">Vote Tertinggi</div>
+                <div class="card-icon shadow bg-primary">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="card-wrap">
+                    <div class="card-header bg-transparent border-0">
+                        <h4 class="mb-0">Total Suara Masuk</h4>
+                    </div>
+                    <div class="card-body pt-0">
+                        450
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="card-icon shadow bg-primary">
-            <i class="fas fa-users"></i>
-        </div>
-        <div class="card-wrap">
-            <div class="card-header bg-transparent border-0">
-                <h4 class="mb-0">Total Suara Masuk</h4>
-            </div>
-            <div class="card-body pt-0">
-                450
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Card Ketiga (Persentase Partisipasi) -->
-<div class="col-lg-4 col-md-4 col-sm-12">
-    <div class="card card-statistic-2">
-        <div class="card-stats">
-            <div class="card-stats-title">Persentase Partisipasi</div>
-            <div class="card-stats-items d-flex justify-content-around">
-                <div class="card-stats-item text-center">
-                    <div class="card-stats-item-count text-success">75%</div>
-                    <div class="card-stats-item-label">Tingkat Partisipasi</div>
+        <!-- Card Ketiga (Persentase Partisipasi) -->
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="card card-statistic-2">
+                <div class="card-stats">
+                    <div class="card-stats-title">Persentase Partisipasi</div>
+                    <div class="card-stats-items d-flex justify-content-around">
+                        <div class="card-stats-item text-center">
+                            <div class="card-stats-item-count text-success"><?= $statistics['voted_percentage'] ?>%</div>
+                            <div class="card-stats-item-label">Tingkat Partisipasi</div>
+                        </div>
+                        <div class="card-stats-item text-center">
+                            <div class="card-stats-item-count text-danger"><?= $statistics['not_voted_percentage'] ?>%</div>
+                            <div class="card-stats-item-label">Belum Berpartisipasi</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-stats-item text-center">
-                    <div class="card-stats-item-count text-danger">25%</div>
-                    <div class="card-stats-item-label">Belum Berpartisipasi</div>
+                <div class="card-icon shadow bg-primary">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <div class="card-wrap">
+                    <div class="card-header bg-transparent border-0">
+                        <h4 class="mb-0">Target Partisipasi</h4>
+                    </div>
+                    <div class="card-body pt-0">
+                        100%
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="card-icon shadow bg-primary">
-            <i class="fas fa-chart-pie"></i>
-        </div>
-        <div class="card-wrap">
-            <div class="card-header bg-transparent border-0">
-                <h4 class="mb-0">Target Partisipasi</h4>
-            </div>
-            <div class="card-body pt-0">
-                100%
-            </div>
-        </div>
-    </div>
-</div>
     </div>
 </section>
 <section class="section">
@@ -132,19 +132,7 @@
         </p>
 
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Line Chart</h4>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="myChart" width="710" height="354"
-                            style="display: block; height: 177px; width: 355px;"
-                            class="chartjs-render-monitor"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-6">
+            <div class="col-12 col-md-6 col-lg-8">
                 <div class="card">
                     <div class="card-header">
                         <h4>Statistik kandidat</h4>
@@ -162,6 +150,56 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-4">
+              <div class="card gradient-bottom">
+                <div class="card-header">
+                  <h4>Top 5 Products</h4>
+                  <div class="card-header-action dropdown">
+                    <a href="#" data-toggle="dropdown" class="btn btn-danger dropdown-toggle">Month</a>
+                    <ul class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                      <li class="dropdown-title">Select Period</li>
+                      <li><a href="#" class="dropdown-item">Today</a></li>
+                      <li><a href="#" class="dropdown-item">Week</a></li>
+                      <li><a href="#" class="dropdown-item active">Month</a></li>
+                      <li><a href="#" class="dropdown-item">This Year</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="card-body" id="top-5-scroll">
+                  <ul class="list-unstyled list-unstyled-border">
+                    <?php foreach($candidates as $candidate): ?>
+                    <li class="media">
+                      <img class="mr-3 rounded" width="55" src="<?= base_url('img/'). $candidate['image'] ?>" alt="product">
+                      <div class="media-body">
+                        <div class="float-right"><div class="font-weight-600 text-muted text-small">86 Sales</div></div>
+                        <div class="media-title"><?= $candidate['fullname'] ?></div>
+                        <div class="mt-1">
+                          <div class="budget-price">
+                            <div class="budget-price-square bg-primary" data-width="64%"></div>
+                            <div class="budget-price-label">$68,714</div>
+                          </div>
+                          <div class="budget-price">
+                            <div class="budget-price-square bg-danger" data-width="43%"></div>
+                            <div class="budget-price-label">$38,700</div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <?php endforeach; ?>
+                  </ul>
+                </div>
+                <div class="card-footer pt-3 d-flex justify-content-center">
+                  <div class="budget-price justify-content-center">
+                    <div class="budget-price-square bg-primary" data-width="20"></div>
+                    <div class="budget-price-label">Selling Price</div>
+                  </div>
+                  <div class="budget-price justify-content-center">
+                    <div class="budget-price-square bg-danger" data-width="20"></div>
+                    <div class="budget-price-label">Budget Price</div>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-12 col-md-6 col-lg-6">
@@ -170,7 +208,7 @@
                         <h4>Doughnut Chart</h4>
                     </div>
                     <div class="card-body">
-                        <canvas id="myChart3"></canvas>
+                        <canvas id="bulat"></canvas>
                     </div>
                 </div>
             </div>
@@ -180,97 +218,12 @@
                         <h4>Pie Chart</h4>
                     </div>
                     <div class="card-body">
-                        <canvas id="myChart4"></canvas>
+                        <canvas id="donat"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <!-- Statistik -->
-            <div class="col-12 col-sm-12 col-lg-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Statistik kandidat</h4>
-                        <div class="card-header-action">
-                            <a href="#" class="btn active">PPLG</a>
-                            <a href="#" class="btn">AKL</a>
-                            <a href="#" class="btn">TJKT</a>
-                            <a href="#" class="btn">MPLB</a>
-                            <a href="#" class="btn">ULP</a>
-                            <a href="#" class="btn">PM</a>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="myChart2" height="180"></canvas>
-                        <div class="statistic-details mt-1">
-                            <div class="statistic-details-item">
-                                <div class="text-small text-muted"><span class="text-primary"><i class="fas fa-caret-up"></i></span> 7%</div>
-                                <div class="detail-value">Ujaaa</div>
-                                <div class="detail-name">bang uja</div>
-                            </div>
-                            <div class="statistic-details-item">
-                                <div class="text-small text-muted"><span class="text-danger"><i class="fas fa-caret-down"></i></span> 23%</div>
-                                <div class="detail-value">Djawa</div>
-                                <div class="detail-name">el jawir</div>
-                            </div>
-                            <div class="statistic-details-item">
-                                <div class="text-small text-muted"><span class="text-primary"><i class="fas fa-caret-up"></i></span> 9%</div>
-                                <div class="detail-value">Kandidut</div>
-                                <div class="detail-name">kandiduted</div>
-                            </div>
-                            <div class="statistic-details-item">
-                                <div class="text-small text-muted"><span class="text-primary"><i class="fas fa-caret-up"></i></span> 19%</div>
-                                <div class="detail-value">Kandadat</div>
-                                <div class="detail-name">kandadatss</div>
-                            </div>
-                            <div class="statistic-details-item">
-                                <div class="text-small text-muted"><span class="text-primary"><i class="fas fa-caret-up"></i></span> 19%</div>
-                                <div class="detail-value">Kandudut</div>
-                                <div class="detail-name">kandudutss</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Kandidat Paling Populer -->
-            <div class="col-12 mt-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Kandidat Paling Populer</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col mb-4 mb-lg-0 text-center">
-                                <img alt="image" src="<?= base_url() ?>assets/img/avatar/avatar-1.png" class="rounded-circle" style="width: 75px; height: 75px;">
-                                <div class="mt-2 font-weight-bold">ujaa</div>
-                                <div class="text-small text-muted"><span class="text-primary"><i class="fas fa-caret-up"></i></span> 48%</div>
-                            </div>
-                            <div class="col mb-4 mb-lg-0 text-center">
-                                <img alt="image" src="<?= base_url() ?>assets/img/avatar/avatar-2.png" class="rounded-circle" style="width: 75px; height: 75px;">
-                                <div class="mt-2 font-weight-bold">Kandadats</div>
-                                <div class="text-small text-muted"><span class="text-primary"><i class="fas fa-caret-up"></i></span> 26%</div>
-                            </div>
-                            <div class="col mb-4 mb-lg-0 text-center">
-                                <img alt="image" src="<?= base_url() ?>assets/img/avatar/avatar-3.png" class="rounded-circle" style="width: 75px; height: 75px;">
-                                <div class="mt-2 font-weight-bold">Djawa</div>
-                                <div class="text-small text-muted"><span class="text-danger"><i class="fas fa-caret-down"></i></span> 14%</div>
-                            </div>
-                            <div class="col mb-4 mb-lg-0 text-center">
-                                <img alt="image" src="<?= base_url() ?>assets/img/avatar/avatar-4.png" class="rounded-circle" style="width: 75px; height: 75px;">
-                                <div class="mt-2 font-weight-bold">Opera</div>
-                                <div class="text-small text-muted">7%</div>
-                            </div>
-                            <div class="col mb-4 mb-lg-0 text-center">
-                                <img alt="image" src="<?= base_url() ?>assets/img/avatar/avatar-5.png" class="rounded-circle" style="width: 75px; height: 75px;">
-                                <div class="mt-2 font-weight-bold">IE</div>
-                                <div class="text-small text-muted"><span class="text-primary"><i class="fas fa-caret-up"></i></span> 5%</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </section>
 </div>
@@ -304,22 +257,43 @@
             const ctx = document.getElementById('kandidatChart').getContext('2d');
             kandidatChart = new Chart(ctx, {
                 type: 'bar',
-                labels: [],
                 data: {
+                    labels: [],
                     datasets: [{
-                        label: "Kandidat",
+                        label: 'Statistics',
                         data: [],
-                        backgroundColor: 'rgba(63,82,227,.8)',
-                        borderWidth: 10
+                        borderWidth: 2,
+                        backgroundColor: '#6777ef',
+                        borderColor: '#6777ef',
+                        borderWidth: 2.5,
+                        pointBackgroundColor: '#ffffff',
+                        pointRadius: 4
                     }]
                 },
                 options: {
-                    responsive: true,
+                    legend: {
+                        display: false
+                    },
                     scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
+                        yAxes: [{
+                            gridLines: {
+                                drawBorder: false,
+                                color: '#f2f2f2',
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                stepSize: 1
+                            }
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                display: false
+                            },
+                            gridLines: {
+                                display: false
+                            }
+                        }]
+                    },
                 }
             });
             console.log('Chart initialized.');
@@ -409,11 +383,109 @@
 
         // Inisialisasi chart saat halaman dimuat
         initializeKandidatChart();
+
+
+        var ctx = document.getElementById("bulat").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [
+                        <?= $statistics['voted_percentage'] ?>,
+                        <?= $statistics['not_voted_percentage'] ?>,
+
+                    ],
+                    backgroundColor: [
+                        '#ffa426',
+                        '#fc544b',
+
+                    ],
+                    label: 'Dataset 1'
+                }],
+                labels: [
+                    'Sudah vote',
+                    'Belum vote',
+                ],
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'bottom',
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            var label = data.labels[tooltipItem.index];
+                            var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                            return label + ': ' + value + '%';
+                        }
+                    }
+                }
+            }
+        });
+    });
+
+
+    var ctx = document.getElementById("donat").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [
+                    80,
+                    50,
+                    40,
+                    30,
+                    20,
+                ],
+                backgroundColor: [
+                    '#191d21',
+                    '#63ed7a',
+                    '#ffa426',
+                    '#fc544b',
+                    '#6777ef',
+                ],
+                label: 'Dataset 1'
+            }],
+            labels: [
+                'Black',
+                'Green',
+                'Yellow',
+                'Red',
+                'Blue'
+            ],
+        },
+        options: {
+            responsive: true,
+            legend: {
+                position: 'bottom',
+            },
+        }
     });
 </script>
 
 <?= $this->endSection() ?>
 
 <?= $this->section('style') ?>
+<style>
+    .dropdown-menu {
+        max-height: 250px;
+        overflow-y: auto;
+        min-width: 180px;
+    }
 
+    .dropdown-item {
+        padding: 0.5rem 1.25rem;
+        white-space: nowrap;
+    }
+
+    .dropdown-menu::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .dropdown-menu::-webkit-scrollbar-thumb {
+        background: #6777ef;
+        border-radius: 4px;
+    }
+</style>
 <?= $this->endSection() ?>
