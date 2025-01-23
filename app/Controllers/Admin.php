@@ -343,7 +343,7 @@ public function import_excel()
         }
 
         $userData = [
-            'username' => $name, 
+            'username' => $username, 
             'email' => $email,
             'password_hash' => Password::hash($password),
             'active' => 1
@@ -360,8 +360,9 @@ public function import_excel()
 
         $adminData = [
             'user_id' => $userId,
-            'fullname' => $fullname,
-        ];
+            'fullname' => $name,
+            'username' => $username,
+        ]; 
 
         $this->adminModel->save($adminData);
     }
