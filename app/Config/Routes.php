@@ -17,6 +17,12 @@ $routes->group('', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('dashboard/getDataCandidatesByGrade/(:any)', 'Home::getDataCandidatesByGrade/$1');
 });
 
+// Config/Routes.php
+$routes->group('configuration', ['filter' => 'role:admin'], function($routes) {
+    $routes->get('', 'Configuration::index');
+    $routes->post('update', 'Configuration::update');
+});
+
 // kandidat 
 $routes->group('candidate', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('', 'Candidate::index');
