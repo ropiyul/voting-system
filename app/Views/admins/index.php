@@ -28,6 +28,12 @@
                                     </div>
                                 </div>
                             </form> -->
+                        <a href="<?= base_url('admin/template') ?>" class="btn btn-primary mr-1">download template</a>
+                            <form action="<?= base_url('admin/import_excel') ?>" method="post" enctype="multipart/form-data" class="d-inline">
+                                <?= csrf_field() ?>
+                                <label for="file_excel" class="btn btn-warning mb-0 mr-1" style="cursor: pointer;">Import Excel</label>
+                                <input type="file" name="file_excel" id="file_excel" accept=".xlsx" style="display: none;" onchange="this.form.submit()">
+                            </form>
                             <a href="<?= base_url('admin/export_excel') ?>" class="btn btn-success mr-2">Export Excel</a>
                             <a href="<?= base_url('admin/create') ?>" class="btn btn-primary">Tambah Data</a>
                         </div>

@@ -27,6 +27,7 @@ $routes->group('candidate', ['filter' => 'role:admin'], function ($routes) {
     $routes->post('updatePassword/(:num)', 'Candidate::updatePassword/$1');
     $routes->get('export_excel', 'Candidate::export_excel');
     $routes->post('import_excel', 'Candidate::import_excel');
+    $routes->get('template', 'Candidate::template');
 });
 
 // permilih 
@@ -40,6 +41,7 @@ $routes->group('voter', ['filter' => 'role:admin'], function ($routes) {
     $routes->post('updatePassword/(:num)', 'voter::updatePassword/$1');
     $routes->get('export_excel', 'voter::export_excel');
     $routes->post('import_excel', 'Voter::import_excel');
+    $routes->get('template', 'Voter::template');
 
 });
 
@@ -53,6 +55,8 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
     $routes->delete('delete/(:num)', 'Admin::delete/$1');
     $routes->post('updatePassword/(:num)', 'Admin::updatePassword/$1');
     $routes->get('export_excel', 'Admin::export_excel');
+    $routes->post('import_excel', 'Admin::import_excel');
+    $routes->get('template', 'Admin::template');
 });
 
 // Period 
@@ -74,6 +78,7 @@ $routes->group('grade', ['filter' => 'role:admin'], function ($routes) {
     $routes->post('update/(:num)', 'Grade::update/$1');
     $routes->delete('delete/(:num)', 'Grade::delete/$1');
     $routes->post('import_excel', 'Grade::import_excel');
+    $routes->get('template', 'Grade::template');
 });
 
 // jurusan

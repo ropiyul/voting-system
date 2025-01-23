@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\CandidateModel;
 use App\Models\GradeModel;
 use App\Models\VoteModel;
 
@@ -27,6 +28,7 @@ class Home extends BaseController
     {
         $gradeModel = new GradeModel();
         $voteModel = new VoteModel();
+        $candidates = new CandidateModel();
 
         // Pastikan statistik memiliki semua key yang diperlukan
         $statistics = $voteModel->getVotingStatisticsByGrade('all');
@@ -35,7 +37,9 @@ class Home extends BaseController
         $data = [
             'title' => 'Dashboard',
             'grades' => $gradeModel->findAll(),
+            'candidates' => $candidates->findAll(),
             'allCount' => $allCount,
+            'statistics' => $voteModel->getVotingStatistics(),
             'statisticByGrade' => [
                 'total_users' => $statistics['total_users'] ?? 0,
                 'voted' => $statistics['voted'] ?? 0,

@@ -22,9 +22,11 @@
                         <h4>Form pemilih</h4>
                         <div class="card-header-form">
 
+                            <a href="<?= base_url('voter/template') ?>" class="btn btn-primary mr-1">download template</a>
+
                             <form action="<?= base_url('voter/import_excel') ?>" method="post" enctype="multipart/form-data" class="d-inline">
                                 <?= csrf_field() ?>
-                                <label for="file_excel" class="btn btn-success mb-0 mr-1" style="cursor: pointer;">Import Excel</label>
+                                <label for="file_excel" class="btn btn-warning mb-0 mr-1" style="cursor: pointer;">Import Excel</label>
                                 <input type="file" name="file_excel" id="file_excel" accept=".xlsx" style="display: none;" onchange="this.form.submit()">
                             </form>
 
