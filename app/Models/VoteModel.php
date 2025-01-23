@@ -9,7 +9,8 @@ class VoteModel extends Model
     protected $table = 'votes';
     protected $allowedFields = ['candidate_id', 'voter_id', 'voted_at'];
 
-    public function getVoteCountByCandidate($gradeId = 'all')
+    // menampilkan kandidat yang sudah di vote
+    public function getVoteCountByCandidate1($gradeId = 'all')
     {
         try {
             $builder = $this->db->table('votes')
@@ -34,6 +35,30 @@ class VoteModel extends Model
             log_message('error', 'Error in getVoteCountByCandidate: ' . $e->getMessage());
             throw $e;
         }
+    }
+
+    // menampilkan semua kandidat
+    public function getVoteCountByCandidate($gradeId = 'all')
+    {
+        // Base query untuk mendapatkan semua kandidat
+        $builder = $this->db->table('candidates')
+            ->select([
+                'candidates.id',
+                'candidates.fullname as name',
+                'candidates.image',
+                'COALESCE((
+                    SELECT COUNT(v2.id) 
+                    FROM votes v2 
+                    LEFT JOIN voters vt2 ON v2.voter_id = vt2.id
+                    WHERE v2.candidate_id = candidates.id
+                    ' . ($gradeId !== 'all' ? 'AND vt2.grade_id = ' . $this->db->escape($gradeId) : '') . '
+                ), 0) as vote_count'
+            ]);
+
+        return $builder
+            // ->orderBy('vote_count', 'DESC')
+            ->get()
+            ->getResultArray();
     }
 
     public function getVotingStatistics()
