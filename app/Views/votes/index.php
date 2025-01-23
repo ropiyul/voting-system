@@ -46,7 +46,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="candidateModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-xl modal-xl-custom">
+    <div class="modal-dialog modal-dialog-centered modal-full modal-xl-custom">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Detail Kandidat</h5>

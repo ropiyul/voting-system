@@ -21,11 +21,11 @@
                             <div class="dropdown-menu dropdown-menu-right" style="max-height: 300px; overflow-y: auto; position: absolute !important;">
                                 <div class="dropdown-title">Pilih Kelas</div>
                                 <a href="javascript:void(0)"
-                                    class="dropdown-item <?= session()->get('selected_grade') == 'all' ? 'active' : '' ?>"
+                                    class="dropdown-item dropdown-grade <?= session()->get('selected_grade') == 'all' ? 'active' : '' ?>"
                                     data-grade="all">Semua Kelas</a>
                                 <?php foreach ($grades as $grade): ?>
                                     <a href="javascript:void(0)"
-                                        class="dropdown-item <?= session()->get('selected_grade') == $grade['id'] ? 'active' : '' ?>"
+                                        class="dropdown-item dropdown-grade <?= session()->get('selected_grade') == $grade['id'] ? 'active' : '' ?>"
                                         data-grade="<?= $grade['id'] ?>">
                                         <?= $grade['name'] ?>
                                     </a>
@@ -125,24 +125,35 @@
 </section>
 <section class="section">
     <div class="section-body">
-        <h2 class="section-title">Chart.js</h2>
+        <!-- <h2 class="section-title">Chart.js</h2>
         <p class="section-lead">
             We use 'Chart.JS' made by @chartjs. You can check the full documentation <a
                 href="http://www.chartjs.org/">here</a>.
-        </p>
+        </p> -->
 
         <div class="row">
             <div class="col-12 col-md-6 col-lg-8">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between">
                         <h4>Statistik kandidat</h4>
-                        <div class="card-header-action">
-                            <a href="#" class="btn active">PPLG</a>
-                            <a href="#" class="btn">AKL</a>
-                            <a href="#" class="btn">TJKT</a>
-                            <a href="#" class="btn">MPLB</a>
-                            <a href="#" class="btn">ULP</a>
-                            <a href="#" class="btn">PM</a>
+                        <div class="dropdown">
+                            <a class="font-weight-600 dropdown-toggle" data-toggle="dropdown" href="#" id="selected-class">
+                                <?= session()->get('selected_grade') === 'all' ? 'Semua Kelas' : (isset($grades[session()->get('selected_grade') - 1]) ?
+                                    $grades[session()->get(key: 'selected_grade') - 1]['name'] : 'Pilih Kelas') ?>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" style="max-height: 300px; overflow-y: auto; position: absolute !important;">
+                                <div class="dropdown-title">Pilih Kelas</div>
+                                <a href="javascript:void(0)"
+                                    class="dropdown-candidate dropdown-item <?= session()->get('selected_grade') == 'all' ? 'active' : '' ?>"
+                                    data-grade="all">Semua Kelas</a>
+                                <?php foreach ($grades as $grade): ?>
+                                    <a href="javascript:void(0)"
+                                        class="dropdown-candidate dropdown-item <?= session()->get('selected_grade') == $grade['id'] ? 'active' : '' ?>"
+                                        data-grade="<?= $grade['id'] ?>">
+                                        <?= $grade['name'] ?>
+                                    </a>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -151,54 +162,56 @@
                 </div>
             </div>
             <div class="col-lg-4">
-              <div class="card gradient-bottom">
-                <div class="card-header">
-                  <h4>Top 5 Products</h4>
-                  <div class="card-header-action dropdown">
-                    <a href="#" data-toggle="dropdown" class="btn btn-danger dropdown-toggle">Month</a>
-                    <ul class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                      <li class="dropdown-title">Select Period</li>
-                      <li><a href="#" class="dropdown-item">Today</a></li>
-                      <li><a href="#" class="dropdown-item">Week</a></li>
-                      <li><a href="#" class="dropdown-item active">Month</a></li>
-                      <li><a href="#" class="dropdown-item">This Year</a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="card-body" id="top-5-scroll">
-                  <ul class="list-unstyled list-unstyled-border">
-                    <?php foreach($candidates as $candidate): ?>
-                    <li class="media">
-                      <img class="mr-3 rounded" width="55" src="<?= base_url('img/'). $candidate['image'] ?>" alt="product">
-                      <div class="media-body">
-                        <div class="float-right"><div class="font-weight-600 text-muted text-small">86 Sales</div></div>
-                        <div class="media-title"><?= $candidate['fullname'] ?></div>
-                        <div class="mt-1">
-                          <div class="budget-price">
-                            <div class="budget-price-square bg-primary" data-width="64%"></div>
-                            <div class="budget-price-label">$68,714</div>
-                          </div>
-                          <div class="budget-price">
-                            <div class="budget-price-square bg-danger" data-width="43%"></div>
-                            <div class="budget-price-label">$38,700</div>
-                          </div>
+                <div class="card gradient-bottom">
+                    <div class="card-header">
+                        <h4>Top 5 Products</h4>
+                        <div class="card-header-action dropdown">
+                            <a href="#" data-toggle="dropdown" class="btn btn-danger dropdown-toggle">Month</a>
+                            <ul class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                                <li class="dropdown-title">Select Period</li>
+                                <li><a href="#" class="dropdown-item">Today</a></li>
+                                <li><a href="#" class="dropdown-item">Week</a></li>
+                                <li><a href="#" class="dropdown-item active">Month</a></li>
+                                <li><a href="#" class="dropdown-item">This Year</a></li>
+                            </ul>
                         </div>
-                      </div>
-                    </li>
-                    <?php endforeach; ?>
-                  </ul>
+                    </div>
+                    <div class="card-body" id="top-5-scroll">
+                        <ul class="list-unstyled list-unstyled-border">
+                            <?php foreach ($candidates as $candidate): ?>
+                                <li class="media">
+                                    <img class="mr-3 rounded" width="55" src="<?= base_url('img/') . $candidate['image'] ?>" alt="product">
+                                    <div class="media-body">
+                                        <div class="float-right">
+                                            <div class="font-weight-600 text-muted text-small">86 Sales</div>
+                                        </div>
+                                        <div class="media-title"><?= $candidate['fullname'] ?></div>
+                                        <div class="mt-1">
+                                            <div class="budget-price">
+                                                <div class="budget-price-square bg-primary" data-width="64%"></div>
+                                                <div class="budget-price-label">$68,714</div>
+                                            </div>
+                                            <div class="budget-price">
+                                                <div class="budget-price-square bg-danger" data-width="43%"></div>
+                                                <div class="budget-price-label">$38,700</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    <div class="card-footer pt-3 d-flex justify-content-center">
+                        <div class="budget-price justify-content-center">
+                            <div class="budget-price-square bg-primary" data-width="20"></div>
+                            <div class="budget-price-label">Selling Price</div>
+                        </div>
+                        <div class="budget-price justify-content-center">
+                            <div class="budget-price-square bg-danger" data-width="20"></div>
+                            <div class="budget-price-label">Budget Price</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-footer pt-3 d-flex justify-content-center">
-                  <div class="budget-price justify-content-center">
-                    <div class="budget-price-square bg-primary" data-width="20"></div>
-                    <div class="budget-price-label">Selling Price</div>
-                  </div>
-                  <div class="budget-price justify-content-center">
-                    <div class="budget-price-square bg-danger" data-width="20"></div>
-                    <div class="budget-price-label">Budget Price</div>
-                  </div>
-                </div>
-              </div>
             </div>
         </div>
         <div class="row">
@@ -312,33 +325,32 @@
             }
 
             // Update detail statistik
-            let html = '';
-            candidates.forEach(candidate => {
-                html += `
-                <div class="statistic-details-item">
-                    <div class="text-small text-muted">
-                        ${candidate.percentage || 0}% <!-- Default to 0 if undefined -->
-                    </div>
-                    <div class="detail-value">${candidate.vote_count}</div>
-                    <div class="detail-name">${candidate.name}</div>
-                </div>
-            `;
-            });
-            $('#candidate-stats').html(html);
-            console.log('Candidate stats updated in the DOM.');
+            // let html = '';
+            // candidates.forEach(candidate => {
+            //     html += `
+            //     <div class="statistic-details-item">
+            //         <div class="text-small text-muted">
+            //             ${candidate.percentage || 0}% <!-- Default to 0 if undefined -->
+            //         </div>
+            //         <div class="detail-value">${candidate.vote_count}</div>
+            //         <div class="detail-name">${candidate.name}</div>
+            //     </div>
+            // `;
+            // });
+            // $('#candidate-stats').html(html);
+            // console.log('Candidate stats updated in the DOM.');
         }
 
         // Handle dropdown kelas
-        $('.dropdown-item').click(function(e) {
+        $('.dropdown-grade').click(function(e) {
             e.preventDefault();
-            console.log('Dropdown item clicked.');
+            console.log('Dropdown grade clicked.');
 
             $('#selected-class').text($(this).text());
-            $('.dropdown-item').removeClass('active');
+            $('.dropdown-grade').removeClass('active');
             $(this).addClass('active');
 
             let gradeId = $(this).data('grade');
-            console.log('Selected grade ID:', gradeId);
 
             // Tambahkan loading state
             $('#not-voted-count, #voted-count, #total-users').html('<i class="fas fa-spinner fa-spin"></i>');
@@ -358,7 +370,7 @@
                     $('#total-users').text(response.statistics.total_users || 0);
 
                     // Update statistik kandidat
-                    updateCandidateStats(response.candidates);
+                  
                 },
                 error: function(xhr, status, error) {
                     console.error('Ajax Error:', {
@@ -383,6 +395,7 @@
 
         // Inisialisasi chart saat halaman dimuat
         initializeKandidatChart();
+        updateCandidateStats(<?= json_encode($allCount)?>);
 
 
         var ctx = document.getElementById("bulat").getContext('2d');
@@ -423,6 +436,46 @@
                 }
             }
         });
+
+
+        $('.dropdown-candidate').click(function(e) {
+            e.preventDefault();
+
+            $('#selected-class2').text($(this).text());
+            $('.dropdown-candidate').removeClass('active');
+            $(this).addClass('active');
+
+            let gradeId = $(this).data('grade');
+
+            // Ajax request
+            $.ajax({
+                url: '<?= base_url('dashboard/getStatisticsByGrade') ?>/' + gradeId,
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    updateCandidateStats(response.candidates);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ajax Error:', {
+                        status: status,
+                        error: error,
+                        response: xhr.responseText
+                    });
+
+                    // Reset nilai
+                    $('#not-voted-count, #voted-count, #total-users').text('0');
+                    $('#candidate-stats').html('');
+                    if (kandidatChart) {
+                        kandidatChart.data.labels = [];
+                        kandidatChart.data.datasets[0].data = [];
+                        kandidatChart.update();
+                    }
+
+                    alert('Terjadi kesalahan saat mengambil data');
+                }
+            });
+        });
+
     });
 
 
