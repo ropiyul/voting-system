@@ -81,6 +81,7 @@
                     </div>
                 </div>
                 <div class="card-footer text-right">
+                <a class="btn btn-danger" href="<?=base_url('voter')?>">Kembali</a>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>

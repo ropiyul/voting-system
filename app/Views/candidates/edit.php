@@ -10,9 +10,7 @@
 <link rel="stylesheet" href="<?= base_url() ?>assets/modules/toastify/toastify.css">
 <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
 <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
-<link
-    href="https://unpkg.com/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css"
-    rel="stylesheet" />
+<link href="https://unpkg.com/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css" rel="stylesheet" />
 
 <style>
     .dropzone {
@@ -44,7 +42,8 @@
     <div class="section-body">
         <?= $this->include('auth/_message_block.php') ?>
         <div class="card">
-            <form action="<?= base_url('candidate/update/' . $candidate['id']) ?>" method="post" enctype="multipart/form-data">
+            <form action="<?= base_url('candidate/update/' . $candidate['id']) ?>" method="post"
+                enctype="multipart/form-data">
                 <?= csrf_field() ?>
                 <input type="hidden" name="oldImage" value="<?= $candidate['image'] ?>">
                 <div class="card-header">
@@ -53,10 +52,12 @@
                 <div class="card-body">
                     <div class="row">
                         <!-- Full Name Field -->
-                        <div class="col-6 col-md-6 col-lg-6">
+                        <div class="col-12 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['fullname']) ? 'is-invalid' : ''; ?>" name="fullname" value="<?= old('fullname', $candidate['fullname']) ?>">
+                                <input type="text"
+                                    class="form-control <?= session('errors') && isset(session('errors')['fullname']) ? 'is-invalid' : ''; ?>"
+                                    name="fullname" value="<?= old('fullname', $candidate['fullname']) ?>">
                                 <div class="invalid-feedback">
                                     <?= (session('errors')['fullname']) ?? null ?>
                                 </div>
@@ -64,42 +65,49 @@
                         </div>
 
                         <!-- Username Field -->
-                        <div class="col-6 col-md-6 col-lg-6">
+                        <div class="col-12 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Username</label>
-                                <input type="text" class="form-control <?= session('errors') && isset(session('errors')['username']) ? 'is-invalid' : ''; ?>" name="username" value="<?= old('username', $candidate['username']) ?>">
+                                <input type="text"
+                                    class="form-control <?= session('errors') && isset(session('errors')['username']) ? 'is-invalid' : ''; ?>"
+                                    name="username" value="<?= old('username', $candidate['username']) ?>">
                                 <div class="invalid-feedback">
                                     <?= (session('errors')['username']) ?? null ?>
                                 </div>
                             </div>
                         </div>
                         <!--  visi -->
-                        <div class="col-6 col-md-6 col-lg-6">
+                        <div class="col-12 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label for="vision">Visi</label>
-                                <textarea class="form-control summernote" id="vision-summernote" name="vision" required><?= old('vision') ?></textarea>
+                                <textarea class="form-control summernote" id="vision-summernote" name="vision"
+                                    required><?= old('vision') ?></textarea>
                                 <div class="invalid-feedback">
                                     <?= (session('errors')['vision']) ?? null ?>
                                 </div>
                             </div>
                         </div>
                         <!-- misi -->
-                        <div class="col-6 col-md-6 col-lg-6">
+                        <div class="col-12 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label for="mission">Misi</label>
-                                <textarea class="form-control summernote" id="mission-summernote" name="mission" value="alalal" required><?= old('mission') ?></textarea>
+                                <textarea class="form-control summernote" id="mission-summernote" name="mission"
+                                    value="alalal" required><?= old('mission') ?></textarea>
                                 <div class="invalid-feedback">
                                     <?= (session('errors')['mission']) ?? null ?>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-6 col-md-6 col-lg-6">
+                        <div class="col-12 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Kelas</label>
-                                <select class="form-control <?= session('errors') && isset(session('errors')['grade_id']) ? 'is-invalid' : ''; ?>" name="grade_id" value="<?= old('grade_id', $candidate['grade_id']) ?>">
+                                <select
+                                    class="form-control <?= session('errors') && isset(session('errors')['grade_id']) ? 'is-invalid' : ''; ?>"
+                                    name="grade_id" value="<?= old('grade_id', $candidate['grade_id']) ?>">
                                     <?php foreach ($grades as $grade): ?>
-                                        <option <?= $candidate['grade_id'] == $grade['id']  ? 'selected' : '' ?> value="<?= $grade['id'] ?>"><?= $grade['name'] ?></option>
+                                        <option <?= $candidate['grade_id'] == $grade['id'] ? 'selected' : '' ?>
+                                            value="<?= $grade['id'] ?>"><?= $grade['name'] ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                 <div class="invalid-feedback">
@@ -109,10 +117,11 @@
                         </div>
 
                         <!-- Upload Image -->
-                        <div class="col-6 col-md-6 col-lg-6">
+                        <div class="col-12 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Upload Gambar</label>
-                                <input type="file" name="image" id="image" class="image-preview-filepond is-invalid image">
+                                <input type="file" name="image" id="image"
+                                    class="image-preview-filepond is-invalid image">
                                 <div class="invalid-feedback">
                                     <?= "rararara" ?>
                                 </div>
@@ -121,51 +130,57 @@
                     </div>
                 </div>
                 <div class="card-footer text-right">
+                    <a class="btn btn-danger" href="<?= base_url('candidate') ?>">Kembali</a>
                     <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
         </div>
 
-                    <!-- ganti pw -->
-    <div class="card">
-        <div class="card-header">
-            <h4>Ganti Password</h4>
-            <div class="card-header-action">
-                <a data-collapse="#password-form" class="btn btn-icon btn-info" href="#"><i class="fas fa-plus"></i></a>
+        <!-- ganti pw -->
+        <div class="card">
+            <div class="card-header">
+                <h4>Ganti Password</h4>
+                <div class="card-header-action">
+                    <a data-collapse="#password-form" class="btn btn-icon btn-info" href="#"><i
+                            class="fas fa-plus"></i></a>
+                </div>
             </div>
-        </div>
-        <div class="collapse" id="password-form">
-            <form action="<?= base_url('candidate/updatePassword/' . $candidate['id']) ?>" method="post">
-                <?= csrf_field() ?>
-                <input type="hidden" name="user_id" value="<?= $candidate['user_id'] ?>" hidden>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-6 col-md-6 col-lg-6">
-                            <div class="form-group">
-                                <label>Password Baru</label>
-                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['password']) ? 'is-invalid' : ''; ?>" name="password">
-                                <div class="invalid-feedback">
-                                    <?= session('errors')['password'] ?? null ?>
+            <div class="collapse" id="password-form">
+                <form action="<?= base_url('candidate/updatePassword/' . $candidate['id']) ?>" method="post">
+                    <?= csrf_field() ?>
+                    <input type="hidden" name="user_id" value="<?= $candidate['user_id'] ?>" hidden>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label>Password Baru</label>
+                                    <input type="password"
+                                        class="form-control <?= session('errors') && isset(session('errors')['password']) ? 'is-invalid' : ''; ?>"
+                                        name="password">
+                                    <div class="invalid-feedback">
+                                        <?= session('errors')['password'] ?? null ?>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-6 col-md-6 col-lg-6">
-                            <div class="form-group">
-                                <label>Konfirmasi Password</label>
-                                <input type="password" class="form-control <?= session('errors') && isset(session('errors')['password_confirm']) ? 'is-invalid' : ''; ?>" name="password_confirm">
-                                <div class="invalid-feedback">
-                                    <?= session('errors')['password_confirm'] ?? null ?>
+                            <div class="col-6 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label>Konfirmasi Password</label>
+                                    <input type="password"
+                                        class="form-control <?= session('errors') && isset(session('errors')['password_confirm']) ? 'is-invalid' : ''; ?>"
+                                        name="password_confirm">
+                                    <div class="invalid-feedback">
+                                        <?= session('errors')['password_confirm'] ?? null ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer text-right">
-                    <button type="submit" class="btn btn-warning">Ubah Password</button>
-                </div>
-            </form>
+                    <div class="card-footer text-right">
+                        <button type="submit" class="btn btn-warning">Ubah Password</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
     </div>
 </section>
 
@@ -183,7 +198,8 @@
 <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
 
 <!-- image editor -->
-<script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
+<script
+    src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
 <script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.js"></script>
 <script src="https://unpkg.com/filepond-plugin-image-filter/dist/filepond-plugin-image-filter.js"></script>
 <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>

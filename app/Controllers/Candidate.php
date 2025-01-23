@@ -465,7 +465,7 @@ class Candidate extends BaseController
             // kelas
             if (!isset($gradeNameToId[$gradeName])) {
                 $this->db->transRollback();
-                session()->setFlashdata('error', 'Kelas "' . $row[7] . '" tidak ditemukan pada baris ' . ($i + 1));
+                session()->setFlashdata('error', 'Kelas "' . $row[6] . '" tidak ditemukan pada baris ' . ($i + 1));
                 return redirect()->back()->withInput();
             }
     
