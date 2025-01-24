@@ -31,7 +31,7 @@
 
 <section class="section mt-3">
     <div class="section-header">
-        <h1>Para Kandidat</h1>
+        <h1>Voting</h1>
         <div class="section-header-breadcrumb">
             <div class="breadcrumb-item"><a href="#">Para Kandidat</a></div>
             <div class="breadcrumb-item"><a href="#">Voting</a></div>
@@ -53,13 +53,13 @@
                             <p class="text-center text-muted">Kandidat <?= $candidate['id'] ?></p>
                             <div class="article-cta">
                                 <button class="btn btn-primary btn-custom vote-button" data-toggle="modal"
-                                    data-target="#candidateModal" data-id="<?= $candidate['id'] ?>"
+                                    data-target="#konfirmasi" data-id="<?= $candidate['id'] ?>"
                                     data-image="<?= base_url() . "img/" . $candidate["image"] ?>"
                                     data-name="<?= $candidate["fullname"] ?>"
                                     data-vision="<?= htmlspecialchars($candidate["vision"]) ?>"
                                     data-mission="<?= htmlspecialchars($candidate["mission"]) ?>">
-                                    Visi & Misi
-                                </button>
+                                    Voting
+                                    sekarang</button>
                             </div>
                         </div>
                     </article>
@@ -69,47 +69,7 @@
     </div>
 </section>
 
-<!-- Modal -->
-<div class="modal fade" id="candidateModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-fullscreen">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Detail Kandidat</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-4 col-md-12 mb-4">
-                        <img id="modalImage" class="img-fluid rounded mx-auto d-block" alt="kandidat"
-                            style="max-height: 300px;">
-                    </div>
-                    <div class="col-lg-8 col-md-12">
-                        <h3 class="mb-4 text-center text-lg-left" id="modalName"></h3>
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="mb-4">
-                                    <h5><strong>Visi:</strong></h5>
-                                    <div id="modalVision"></div>
-                                </div>
-                                <div>
-                                    <h5><strong>Misi:</strong></h5>
-                                    <div id="modalMission"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="voteButton" data-dismiss="modal">Voting
-                    sekarang</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 
 <div class="modal fade" id="konfirmasi" tabindex="-1" role="dialog">
@@ -117,8 +77,8 @@
         <div class="modal-content">
             <div class="modal-body text-center p-4">
                 <h5 class="fw-bold mb-3">Apakah yakin dengan pilihan Anda?</h5>
-                <div class="d-flex justify-content-center gap-2">
-                    <button class="btn btn-danger" data-bs-dismiss="modal">Tidak</button>
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-danger mr-2" data-dismiss="modal">Tidak</button>
                     <button class="btn btn-primary" id="confirmVote">Ya</button>
                 </div>
             </div>

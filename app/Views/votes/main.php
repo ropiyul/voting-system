@@ -82,17 +82,11 @@
             <nav class="navbar navbar-secondary navbar-expand-lg">
                 <div class="container">
                     <ul class="navbar-nav">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="index.html"><i class="fas fa-fire"></i> <span>Dashboard</span></a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?=base_url()?>"><i class="fas fa-users"></i> <span>Para Kandidat</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-users"></i> <span>Para Kandidat</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-poll"></i> <span>Voting</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-cogs"></i> <span>Pengaturan</span></a>
+                            <a class="nav-link" href="<?=base_url('voting')?>"><i class="fas fa-poll"></i> <span>Voting</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-danger" href="#"><i class="fas fa-sign-out-alt"></i>
@@ -113,7 +107,6 @@
                             <div class="breadcrumb-item"><a href="#">Voting</a></div>
                         </div>
                     </div>
-
                     <div class="section-body">
                         <div class="row justify-content-center">
                             <div class="col-12 col-sm-6 col-md-6 col-lg-4">
