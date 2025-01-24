@@ -25,4 +25,20 @@ class CandidateModel extends Model
                 ->findAll();
         }
     }
+
+    public function getCandidatesByGrade($gradeId = 'all')
+    {
+        $builder = $this->select('candidates.*, users.username, users.email, grades.name as grade, 
+                              (SELECT COUNT(*) FROM votes WHERE votes.candidate_id = candidates.id) as vote_count')
+            ->join('users', 'candidates.user_id = users.id')
+            ->join('grades', 'candidates.grade_id = grades.id');
+
+        if ($gradeId !== 'all') {
+            $builder->where('candidates.grade_id', $gradeId);
+        }
+
+        $builder->orderBy('vote_count', 'DESC');
+
+        return $builder->findAll();
+    }
 }

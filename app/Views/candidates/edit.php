@@ -246,7 +246,6 @@
                 metadata: {
                     poster: imageUrl
                 },
-
                 file: {
                     name: '<?= $candidate['image'] ?>',
                     size: 0,
@@ -257,7 +256,6 @@
         acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg", "application/pdf"],
         fileValidateTypeDetectType: (source, type) =>
             new Promise((resolve, reject) => {
-                // Do custom type detection here and return with promise
                 resolve(type)
             }),
         storeAsFile: true,

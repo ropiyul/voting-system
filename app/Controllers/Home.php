@@ -28,16 +28,17 @@ class Home extends BaseController
     {
         $gradeModel = new GradeModel();
         $voteModel = new VoteModel();
-        $candidates = new CandidateModel();
+        $candidateModel = new CandidateModel();
 
         // Pastikan statistik memiliki semua key yang diperlukan
-        $statistics = $voteModel->getVotingStatisticsByGrade('all');
-        $allCount =$voteModel->getVoteCountByCandidate('all');
+        $statistics = $voteModel->getVotingStatisticsByGrade();
+        $allCount =$voteModel->getVoteCountByCandidate();
+        $allCandidates = $candidateModel->getCandidatesByGrade();
         session()->set('selected_grade', 'all');
         $data = [
             'title' => 'Dashboard',
             'grades' => $gradeModel->findAll(),
-            'candidates' => $candidates->findAll(),
+            'candidates' => $allCandidates,
             'allCount' => $allCount,
             'statistics' => $voteModel->getVotingStatistics(),
             'statisticByGrade' => [
@@ -50,7 +51,6 @@ class Home extends BaseController
         return view('dashboard/index', $data);
     }
 
-
     public function getStatisticsByGrade($gradeId = null)
     {
         try {
@@ -61,6 +61,24 @@ class Home extends BaseController
                 'success' => true,
                 'statistics' => $statistics,
                 'candidates' => $candidateStats
+            ]);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ])->setStatusCode(500);
+        }
+    }
+
+    public function getDataCandidatesByGrade($gradeId = null)
+    {
+        $candidateModel = new CandidateModel();
+        try {
+            $allCandidates = $candidateModel->getCandidatesByGrade();
+
+            return $this->response->setJSON([
+                'success' => true,
+                'candidates' => $allCandidates
             ]);
         } catch (\Exception $e) {
             return $this->response->setJSON([

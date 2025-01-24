@@ -26,9 +26,7 @@ class ApiVoting extends ResourceController
         $this->userModel = new UserModel();
     }
 
-    /**
-     * Get list of candidates for voting
-     */
+
     public function getCandidates()
     {
         try {
@@ -61,9 +59,6 @@ class ApiVoting extends ResourceController
         }
     }
 
-    /**
-     * Submit a vote
-     */
     public function submitVote()
     {
         try {
@@ -84,7 +79,7 @@ class ApiVoting extends ResourceController
             $userId = $this->request->getPost('user_id');
             $candidateId = $this->request->getPost('candidate_id');
 
-            // Check if user exists
+            // user ada
             $user = $this->userModel->find($userId);
             if (!$user) {
                 return $this->respond([
@@ -94,7 +89,7 @@ class ApiVoting extends ResourceController
                 ], 404);
             }
 
-            // Check if candidate exists
+            // apakah ada kandidatat
             $candidate = $this->candidateModel->find($candidateId);
             if (!$candidate) {
                 return $this->respond([
@@ -104,7 +99,7 @@ class ApiVoting extends ResourceController
                 ], 404);
             }
 
-            // Check if user has already voted
+            // ccek kandidat sudah login atau belum
             $existingVote = $this->voteModel->where('user_id', $userId)->first();
             if ($existingVote) {
                 return $this->respond([
@@ -116,7 +111,6 @@ class ApiVoting extends ResourceController
 
             $this->db->transStart();
 
-            // Record the vote
             $this->voteModel->insert([
                 'user_id' => $userId,
                 'candidate_id' => $candidateId,
@@ -151,9 +145,6 @@ class ApiVoting extends ResourceController
         }
     }
 
-    /**
-     * Check if user has voted
-     */
     public function checkVoteStatus($userId)
     {
         try {

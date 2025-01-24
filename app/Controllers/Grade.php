@@ -120,23 +120,28 @@ public function import_excel()
             if ($key == 0) {
                 continue; // skip header row
             }
-
+        
+            // Cek apakah seluruh kolom dalam baris kosong
+            if (empty(array_filter($value, fn($cell) => !empty($cell)))) {
+                continue; // Skip baris kosong
+            }
+        
             // Validate and sanitize data
             $data = [
-                'name' => trim($value[0] ?? ''),
+                'name' => trim($value[1] ?? ''), // Kolom pertama
             ];
-
+        
             if (empty($data['name'])) {
-                $errors[] = "Baris " . ($key + 1) . ": Nama tidak boleh kosong";
+                $errors[] = "Baris " . ($key + 1) . ": Nama kelas tidak boleh kosong";
                 continue;
             }
-
+        
             try {
                 $this->gradeModel->save($data);
                 $successCount++;
             } catch (\Exception $e) {
                 $errors[] = "Baris " . ($key + 1) . ": " . $e->getMessage();
-            }
+            }        
         }
 
         if (empty($errors)) {

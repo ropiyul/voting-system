@@ -15,6 +15,13 @@ $routes->group('', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('dashboard', 'Home::dashboard');
     $routes->get('report', 'Report::index');
     $routes->get('dashboard/getStatisticsByGrade/(:any)', 'Home::getStatisticsByGrade/$1');
+    $routes->get('dashboard/getDataCandidatesByGrade/(:any)', 'Home::getDataCandidatesByGrade/$1');
+});
+
+// Config/Routes.php
+$routes->group('configuration', ['filter' => 'role:admin'], function($routes) {
+    $routes->get('', 'Configuration::index');
+    $routes->post('update', 'Configuration::update');
 });
 
 // kandidat 

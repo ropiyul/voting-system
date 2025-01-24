@@ -21,11 +21,11 @@
                             <div class="dropdown-menu dropdown-menu-right" style="max-height: 300px; overflow-y: auto; position: absolute !important;">
                                 <div class="dropdown-title">Pilih Kelas</div>
                                 <a href="javascript:void(0)"
-                                    class="dropdown-item <?= session()->get('selected_grade') == 'all' ? 'active' : '' ?>"
+                                    class="dropdown-item dropdown-grade <?= session()->get('selected_grade') == 'all' ? 'active' : '' ?>"
                                     data-grade="all">Semua Kelas</a>
                                 <?php foreach ($grades as $grade): ?>
                                     <a href="javascript:void(0)"
-                                        class="dropdown-item <?= session()->get('selected_grade') == $grade['id'] ? 'active' : '' ?>"
+                                        class="dropdown-item dropdown-grade <?= session()->get('selected_grade') == $grade['id'] ? 'active' : '' ?>"
                                         data-grade="<?= $grade['id'] ?>">
                                         <?= $grade['name'] ?>
                                     </a>
@@ -125,80 +125,99 @@
 </section>
 <section class="section">
     <div class="section-body">
-        <h2 class="section-title">Chart.js</h2>
+        <!-- <h2 class="section-title">Chart.js</h2>
         <p class="section-lead">
             We use 'Chart.JS' made by @chartjs. You can check the full documentation <a
                 href="http://www.chartjs.org/">here</a>.
-        </p>
+        </p> -->
 
         <div class="row">
             <div class="col-12 col-md-6 col-lg-8">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between">
                         <h4>Statistik kandidat</h4>
-                        <div class="card-header-action">
-                            <a href="#" class="btn active">PPLG</a>
-                            <a href="#" class="btn">AKL</a>
-                            <a href="#" class="btn">TJKT</a>
-                            <a href="#" class="btn">MPLB</a>
-                            <a href="#" class="btn">ULP</a>
-                            <a href="#" class="btn">PM</a>
+                        <div class="dropdown">
+                            <a class="font-weight-600 dropdown-toggle" data-toggle="dropdown" href="#" id="selected-class2">
+                                <?= session()->get('selected_grade') === 'all' ? 'Semua Kelas' : (isset($grades[session()->get('selected_grade') - 1]) ?
+                                    $grades[session()->get(key: 'selected_grade') - 1]['name'] : 'Pilih Kelas') ?>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" style="max-height: 300px; overflow-y: auto; position: absolute !important;">
+                                <div class="dropdown-title">Pilih Kelas</div>
+                                <a href="javascript:void(0)"
+                                    class="dropdown-candidate dropdown-item <?= session()->get('selected_grade') == 'all' ? 'active' : '' ?>"
+                                    data-grade="all">Semua Kelas</a>
+                                <?php foreach ($grades as $grade): ?>
+                                    <a href="javascript:void(0)"
+                                        class="dropdown-candidate dropdown-item <?= session()->get('selected_grade') == $grade['id'] ? 'active' : '' ?>"
+                                        data-grade="<?= $grade['id'] ?>">
+                                        <?= $grade['name'] ?>
+                                    </a>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <canvas id="kandidatChart"></canvas>
+                        <canvas id="kandidatBarChart"></canvas>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4">
-              <div class="card gradient-bottom">
-                <div class="card-header">
-                  <h4>Top 5 Products</h4>
-                  <div class="card-header-action dropdown">
-                    <a href="#" data-toggle="dropdown" class="btn btn-danger dropdown-toggle">Month</a>
-                    <ul class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                      <li class="dropdown-title">Select Period</li>
-                      <li><a href="#" class="dropdown-item">Today</a></li>
-                      <li><a href="#" class="dropdown-item">Week</a></li>
-                      <li><a href="#" class="dropdown-item active">Month</a></li>
-                      <li><a href="#" class="dropdown-item">This Year</a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="card-body" id="top-5-scroll">
-                  <ul class="list-unstyled list-unstyled-border">
-                    <?php foreach($candidates as $candidate): ?>
-                    <li class="media">
-                      <img class="mr-3 rounded" width="55" src="<?= base_url('img/'). $candidate['image'] ?>" alt="product">
-                      <div class="media-body">
-                        <div class="float-right"><div class="font-weight-600 text-muted text-small">86 Sales</div></div>
-                        <div class="media-title"><?= $candidate['fullname'] ?></div>
-                        <div class="mt-1">
-                          <div class="budget-price">
-                            <div class="budget-price-square bg-primary" data-width="64%"></div>
-                            <div class="budget-price-label">$68,714</div>
-                          </div>
-                          <div class="budget-price">
-                            <div class="budget-price-square bg-danger" data-width="43%"></div>
-                            <div class="budget-price-label">$38,700</div>
-                          </div>
+                <div class="card gradient-bottom">
+                    <div class="card-header">
+                        <h4>Top 5 Kandidat</h4>
+                        <div class="card-header-action dropdown">
+                            <a href="#" data-toggle="dropdown" class="btn btn-danger dropdown-toggle" id="selected-grade-label">Semua Kelas</a>
+                            <ul class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                                <li class="dropdown-title">Pilih Kelas</li>
+                                <li><a href="#" class="dropdown-item active grade-selector" data-grade="all">Semua Kelas</a></li>
+                                <?php foreach ($grades as $grade): ?>
+                                    <li>
+                                        <a href="#" class="dropdown-item grade-selector" data-grade="<?= $grade['id'] ?>">
+                                            <?= $grade['name'] ?>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
                         </div>
-                      </div>
-                    </li>
-                    <?php endforeach; ?>
-                  </ul>
+                    </div>
+                    <div class="card-body" id="top-5-scroll">
+                        <ul class="list-unstyled list-unstyled-border" id="kandidat-list">
+                            <?php foreach ($candidates as $candidate): ?>
+                                <li class="media">
+                                    <img class="mr-3 rounded" width="55"
+                                        src="<?= base_url('img/') . $candidate['image'] ?>"
+                                        alt="<?= $candidate['fullname'] ?>">
+                                    <div class="media-body">
+                                        <div class="float-right">
+                                            <div class="font-weight-600 text-muted text-small">
+                                                <?= $candidate['vote_count'] ?? 0 ?> Suara
+                                            </div>
+                                        </div>
+                                        <div class="media-title"><?= $candidate['fullname'] ?></div>
+                                        <div class="mt-1">
+                                            <div class="budget-price">
+                                                <div class="budget-price-square bg-primary"
+                                                    data-width="<?= $candidate['vote_count'] > 0 ?
+                                                                    min(100, ($candidate['vote_count'] / max(array_column($candidates, 'vote_count')) * 100)) : 0 ?>%"></div>
+                                                <div class="budget-price-label">
+                                                    <?= $candidate['vote_count'] > 0 ?
+                                                        round(($candidate['vote_count'] / array_sum(array_column($candidates, 'vote_count'))) * 100, 2) : 0 ?>%
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    <div class="card-footer pt-3 d-flex justify-content-center">
+                        <div class="budget-price justify-content-center">
+                            <div class="budget-price-square bg-primary" data-width="20"></div>
+                            <div class="budget-price-label">Persentase</div>
+                        </div>
+
+                    </div>
                 </div>
-                <div class="card-footer pt-3 d-flex justify-content-center">
-                  <div class="budget-price justify-content-center">
-                    <div class="budget-price-square bg-primary" data-width="20"></div>
-                    <div class="budget-price-label">Selling Price</div>
-                  </div>
-                  <div class="budget-price justify-content-center">
-                    <div class="budget-price-square bg-danger" data-width="20"></div>
-                    <div class="budget-price-label">Budget Price</div>
-                  </div>
-                </div>
-              </div>
             </div>
         </div>
         <div class="row">
@@ -214,8 +233,27 @@
             </div>
             <div class="col-12 col-md-6 col-lg-6">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between">
                         <h4>Pie Chart</h4>
+                        <div class="dropdown">
+                            <a class="font-weight-600 dropdown-toggle" data-toggle="dropdown" href="#" id="selected-doughnut-class">
+                                <?= session()->get('selected_grade') === 'all' ? 'Semua Kelas' : (isset($grades[session()->get('selected_grade') - 1]) ?
+                                    $grades[session()->get(key: 'selected_grade') - 1]['name'] : 'Pilih Kelas') ?>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" style="max-height: 300px; overflow-y: auto; position: absolute !important;">
+                                <div class="dropdown-title">Pilih Kelas</div>
+                                <a href="javascript:void(0)"
+                                    class="dropdown-doughnut dropdown-item <?= session()->get('selected_grade') == 'all' ? 'active' : '' ?>"
+                                    data-grade="all">Semua Kelas</a>
+                                <?php foreach ($grades as $grade): ?>
+                                    <a href="javascript:void(0)"
+                                        class="dropdown-doughnut dropdown-item <?= session()->get('selected_grade') == $grade['id'] ? 'active' : '' ?>"
+                                        data-grade="<?= $grade['id'] ?>">
+                                        <?= $grade['name'] ?>
+                                    </a>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <canvas id="donat"></canvas>
@@ -250,12 +288,12 @@
         console.log('Document ready - script initialized.');
 
         // Inisialisasi chart
-        let kandidatChart = null;
+        let kandidatBarChart = null;
 
-        function initializeKandidatChart() {
+        function initializeKandidatBarChart() {
             console.log('Initializing chart...');
-            const ctx = document.getElementById('kandidatChart').getContext('2d');
-            kandidatChart = new Chart(ctx, {
+            const ctx = document.getElementById('kandidatBarChart').getContext('2d');
+            kandidatBarChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: [],
@@ -304,41 +342,24 @@
             console.log('Updating candidate stats with data:', candidates);
 
             // Update chart
-            if (kandidatChart) {
+            if (kandidatBarChart) {
                 console.log('Updating chart with candidates:', candidates);
-                kandidatChart.data.labels = candidates.map(c => c.name);
-                kandidatChart.data.datasets[0].data = candidates.map(c => c.vote_count);
-                kandidatChart.update();
+                kandidatBarChart.data.labels = candidates.map(c => c.name);
+                kandidatBarChart.data.datasets[0].data = candidates.map(c => c.vote_count);
+                kandidatBarChart.update();
             }
-
-            // Update detail statistik
-            let html = '';
-            candidates.forEach(candidate => {
-                html += `
-                <div class="statistic-details-item">
-                    <div class="text-small text-muted">
-                        ${candidate.percentage || 0}% <!-- Default to 0 if undefined -->
-                    </div>
-                    <div class="detail-value">${candidate.vote_count}</div>
-                    <div class="detail-name">${candidate.name}</div>
-                </div>
-            `;
-            });
-            $('#candidate-stats').html(html);
-            console.log('Candidate stats updated in the DOM.');
         }
 
         // Handle dropdown kelas
-        $('.dropdown-item').click(function(e) {
+        $('.dropdown-grade').click(function(e) {
             e.preventDefault();
-            console.log('Dropdown item clicked.');
+            console.log('Dropdown grade clicked.');
 
             $('#selected-class').text($(this).text());
-            $('.dropdown-item').removeClass('active');
+            $('.dropdown-grade').removeClass('active');
             $(this).addClass('active');
 
             let gradeId = $(this).data('grade');
-            console.log('Selected grade ID:', gradeId);
 
             // Tambahkan loading state
             $('#not-voted-count, #voted-count, #total-users').html('<i class="fas fa-spinner fa-spin"></i>');
@@ -358,7 +379,7 @@
                     $('#total-users').text(response.statistics.total_users || 0);
 
                     // Update statistik kandidat
-                    updateCandidateStats(response.candidates);
+
                 },
                 error: function(xhr, status, error) {
                     console.error('Ajax Error:', {
@@ -370,10 +391,10 @@
                     // Reset nilai
                     $('#not-voted-count, #voted-count, #total-users').text('0');
                     $('#candidate-stats').html('');
-                    if (kandidatChart) {
-                        kandidatChart.data.labels = [];
-                        kandidatChart.data.datasets[0].data = [];
-                        kandidatChart.update();
+                    if (kandidatBarChart) {
+                        kandidatBarChart.data.labels = [];
+                        kandidatBarChart.data.datasets[0].data = [];
+                        kandidatBarChart.update();
                     }
 
                     alert('Terjadi kesalahan saat mengambil data');
@@ -382,12 +403,13 @@
         });
 
         // Inisialisasi chart saat halaman dimuat
-        initializeKandidatChart();
+        initializeKandidatBarChart();
+        updateCandidateStats(<?= json_encode($allCount) ?>);
 
 
         var ctx = document.getElementById("bulat").getContext('2d');
         var myChart = new Chart(ctx, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
                 datasets: [{
                     data: [
@@ -423,43 +445,225 @@
                 }
             }
         });
+
+
+        $('.dropdown-candidate').click(function(e) {
+            e.preventDefault();
+
+            $('#selected-class2').text($(this).text());
+            $('.dropdown-candidate').removeClass('active');
+            $(this).addClass('active');
+
+            let gradeId = $(this).data('grade');
+
+            // Ajax request
+            $.ajax({
+                url: '<?= base_url('dashboard/getStatisticsByGrade') ?>/' + gradeId,
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    updateCandidateStats(response.candidates);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ajax Error:', {
+                        status: status,
+                        error: error,
+                        response: xhr.responseText
+                    });
+
+                    // Reset nilai
+                    $('#not-voted-count, #voted-count, #total-users').text('0');
+                    $('#candidate-stats').html('');
+                    if (kandidatBarChart) {
+                        kandidatBarChart.data.labels = [];
+                        kandidatBarChart.data.datasets[0].data = [];
+                        kandidatBarChart.update();
+                    }
+
+                    alert('Terjadi kesalahan saat mengambil data');
+                }
+            });
+        });
+
+        let kandidatDoughnutChart = null;
+
+        function initializeKandidatDoughnutChart() {
+            const ctx = document.getElementById("donat").getContext('2d');
+            kandidatDoughnutChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [
+                            '#ffa426',
+                            '#fc544b',
+                            '#6777ef',
+                            '#191d21',
+                            '#a3a3a3', // Gray
+                            '#ffc107', // Yellow
+                            '#e83e8c', // Pink
+                            '#20c997', // Teal
+                            '#17a2b8', // Cyan
+                            '#dc3545',
+                            '#3abaf4',
+                        ],
+                        label: 'Dataset 1'
+                    }],
+                    labels: [],
+                },
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                const label = data.labels[tooltipItem.index];
+                                const value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                                return label + ': ' + value + ' suara';
+                            }
+                        }
+                    }
+                }
+            });
+            return kandidatDoughnutChart;
+        }
+
+        function updateCandidateDoughnutStats(candidates) {
+            if (kandidatDoughnutChart) {
+                kandidatDoughnutChart.data.labels = candidates.map(c => c.name);
+                kandidatDoughnutChart.data.datasets[0].data = candidates.map(c => c.vote_count);
+                kandidatDoughnutChart.update();
+            }
+        }
+
+        $('.dropdown-doughnut').click(function(e) {
+            e.preventDefault();
+            console.log('Dropdown grade clicked.');
+
+            $('#selected-class').text($(this).text());
+            $('.dropdown-doughnut').removeClass('active');
+            $(this).addClass('active');
+
+            let gradeId = $(this).data('grade');
+
+            // Tambahkan loading state
+            $('#not-voted-count, #voted-count, #total-users').html('<i class="fas fa-spinner fa-spin"></i>');
+            $('#candidate-stats').html('<i class="fas fa-spinner fa-spin"></i>');
+
+            // Ajax request
+            $.ajax({
+                url: '<?= base_url('dashboard/getStatisticsByGrade') ?>/' + gradeId,
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    console.log('Response received:', response);
+
+                    // Update statistik umum
+                    $('#not-voted-count').text(response.statistics.not_voted || 0);
+                    $('#voted-count').text(response.statistics.voted || 0);
+                    $('#total-users').text(response.statistics.total_users || 0);
+
+                    // Update statistik kandidat
+                    updateCandidateDoughnutStats(response.candidates);
+
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ajax Error:', {
+                        status: status,
+                        error: error,
+                        response: xhr.responseText
+                    });
+
+                    // Reset nilai
+                    $('#not-voted-count, #voted-count, #total-users').text('0');
+                    $('#candidate-stats').html('');
+                    if (kandidatDoughnutChart) {
+                        kandidatDoughnutChart.data.labels = [];
+                        kandidatDoughnutChart.data.datasets[0].data = [];
+                        kandidatDoughnutChart.update();
+                    }
+
+                    alert('Terjadi kesalahan saat mengambil data');
+                }
+            });
+        });
+
+        initializeKandidatDoughnutChart();
+        updateCandidateDoughnutStats(<?= json_encode($allCount) ?>);
+
     });
+</script>
 
 
-    var ctx = document.getElementById("donat").getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                data: [
-                    80,
-                    50,
-                    40,
-                    30,
-                    20,
-                ],
-                backgroundColor: [
-                    '#191d21',
-                    '#63ed7a',
-                    '#ffa426',
-                    '#fc544b',
-                    '#6777ef',
-                ],
-                label: 'Dataset 1'
-            }],
-            labels: [
-                'Black',
-                'Green',
-                'Yellow',
-                'Red',
-                'Blue'
-            ],
-        },
-        options: {
-            responsive: true,
-            legend: {
-                position: 'bottom',
-            },
+<script>
+    $(document).ready(function() {
+        $('.grade-selector').on('click', function(e) {
+            e.preventDefault();
+            const gradeId = $(this).data('grade');
+            const gradeName = $(this).text();
+
+            $('#selected-grade-label').text(gradeName);
+            $('.grade-selector').removeClass('active');
+            $(this).addClass('active');
+
+            $.ajax({
+                url: '<?= base_url('dashboard/getStatisticsByGrade/') ?>' + gradeId,
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        updateKandidatList(response.candidates);
+                    }
+                },
+                error: function() {
+                    alert('Gagal memuat data kandidat');
+                }
+            });
+        });
+
+        function updateKandidatList(candidates) {
+            const $list = $('#kandidat-list');
+            $list.empty();
+
+            const totalVotes = candidates.reduce((sum, candidate) => sum + candidate.vote_count, 0);
+
+            candidates.forEach(function(candidate) {
+                const votePercentage = totalVotes > 0 ?
+                    ((candidate.vote_count / totalVotes) * 100).toFixed(2) :
+                    0;
+
+                const voteWidth = totalVotes > 0 ?
+                    Math.min(100, (candidate.vote_count / candidates[0].vote_count) * 100) :
+                    0;
+
+                const listItem = `
+               <li class="media">
+                   <img class="mr-3 rounded" width="55" 
+                        src="<?= base_url('img/') ?>${candidate.image}" 
+                        alt="${candidate.name}">
+                   <div class="media-body">
+                       <div class="float-right">
+                           <div class="font-weight-600 text-muted text-small">
+                               ${candidate.vote_count} Suara
+                           </div>
+                       </div>
+                       <div class="media-title">${candidate.name}</div>
+                       <div class="mt-1">
+                           <div class="budget-price">
+                               <div class="budget-price-square bg-primary" data-width="${voteWidth}%"></div>
+                               <div class="budget-price-label">
+                                   Persentase: ${votePercentage}%
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </li>
+           `;
+                $list.append(listItem);
+            });
         }
     });
 </script>
