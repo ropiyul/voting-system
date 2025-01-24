@@ -22,16 +22,4 @@ class PermissionSeeder extends Seeder
         $authorize->createPermission('updateProfile', 'Memperbarui profil kandidat');
     }
 
-    public function up()
-    {
-        $authorize = service('authorization');
-        $authorize->addPermissionToRole('manageUsers', 'admin');
-        $authorize->addPermissionToRole('manageCandidates', 'admin');
-        $authorize->addPermissionToRole('manageVotes', 'admin');
-        $authorize->addPermissionToRole('viewReports', 'admin');
-
-        $authorize->addPermissionToRole('vote', 'voter');
-        $authorize->addPermissionToRole('viewCandidates', 'voter');
-        $authorize->addPermissionToRole('viewVoteStatus', 'voter');
-    }
 }

@@ -40,7 +40,7 @@ class ConfigurationModel extends Model
             }
             
             // Move new logo
-            $logo->move(FCPATH . 'img', $newName);
+            $logo->move(FCPATH . 'img/config', $newName);
             $data['logo'] = $newName;
         }
 
@@ -53,7 +53,7 @@ class ConfigurationModel extends Model
 
     private function deleteLogo($filename)
     {
-        $path = FCPATH . 'img/' . $filename;
+        $path = FCPATH . 'img/config/' . $filename;
         if (file_exists($path)) {
             unlink($path);
         }
