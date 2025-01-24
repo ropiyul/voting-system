@@ -264,18 +264,60 @@ class Voter extends BaseController
 
         // Header kolom
         $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Username');
         $sheet->setCellValue('C1', 'Nama');
         $sheet->setCellValue('D1', 'Kelas');
-        // $sheet->setCellValue('E1', 'Jurusan');
+
+        // Styling header
+        $headerStyle = [
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF']
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '4CAF50']
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['rgb' => '000000']
+                ]
+            ]
+        ];
+
+        $sheet->getStyle('A1:D1')->applyFromArray($headerStyle);
+
+        // Styling data
+        $dataStyle = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['rgb' => '000000']
+                ]
+            ]
+        ];
 
         // Isi data kandidat
         $rowNumber = 2; // Dimulai dari baris kedua
-        foreach ($voters as $index => $voter);
+        foreach ($voters as $index => $voter) {
             $sheet->setCellValue('A' . $rowNumber, $index + 1);
+            $sheet->setCellValueExplicit('B' . $rowNumber, $voter['username'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
             $sheet->setCellValue('C' . $rowNumber, $voter['fullname']);
-            $sheet->setCellValue('D' . $rowNumber, $voter['grade_id']);
-            // $sheet->setCellValue('E' . $rowNumber, $voter['program_id']);
+            $sheet->setCellValue('D' . $rowNumber, $voter['grade']);
+            // Set 'username' as text to preserve original formatting
+            
             $rowNumber++;
+        }
+
+        // Apply styling to data rows
+        $sheet->getStyle('A2:D1' . ($rowNumber - 1))->applyFromArray($dataStyle);
+
+        // Set predefined column widths
+        $sheet->getColumnDimension('A')->setWidth(5);
+        $sheet->getColumnDimension('B')->setWidth(25);
+        $sheet->getColumnDimension('C')->setWidth(25);
+        $sheet->getColumnDimension('D')->setWidth(15);
 
         // Nama file
         $filename = 'All_Pemilih_' . date('Y-m-d_H-i-s') . '.xlsx';
