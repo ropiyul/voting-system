@@ -235,7 +235,7 @@ class Admin extends BaseController
     $admins = $this->adminModel->getAdmin();
 
 
-    // $user = $this->userModel->('candidate')->findAll();
+    // $user = $this->userModel->('admin')->findAll();
 
     
 
@@ -252,14 +252,54 @@ class Admin extends BaseController
     $sheet->setCellValue('B1', 'Nama');
     $sheet->setCellValue('C1', 'Username');
 
+    // Styling header
+    $headerStyle = [
+        'font' => [
+            'bold' => true,
+            'color' => ['rgb' => 'FFFFFF']
+        ],
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => ['rgb' => '4CAF50']
+        ],
+        'borders' => [
+            'allBorders' => [
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'color' => ['rgb' => '000000']
+            ]
+        ]
+    ];
+
+    $sheet->getStyle('A1:C1')->applyFromArray($headerStyle);
+
+    // Styling data
+    $dataStyle = [
+        'borders' => [
+            'allBorders' => [
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'color' => ['rgb' => '000000']
+            ]
+        ]
+    ];
+
     // Isi data kandidat
     $rowNumber = 2; // Dimulai dari baris kedua
     foreach ($admins as $index => $admin) {
         $sheet->setCellValue('A' . $rowNumber, $index + 1);
         $sheet->setCellValue('B' . $rowNumber, $admin['fullname']);
-        $sheet->setCellValue('C' . $rowNumber, $admin['username']);
+
+        // Set 'username' as text to preserve original formatting
+        $sheet->setCellValueExplicit('C' . $rowNumber, $admin['username'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
         $rowNumber++;
     }
+
+    // Apply styling to data rows
+    $sheet->getStyle('A2:C1' . ($rowNumber - 1))->applyFromArray($dataStyle);
+
+    // Set predefined column widths
+    $sheet->getColumnDimension('A')->setWidth(5);
+    $sheet->getColumnDimension('B')->setWidth(25);
+    $sheet->getColumnDimension('C')->setWidth(25);
 
     // Nama file
     $filename = 'All_Admin_' . date('Y-m-d_H-i-s') . '.xlsx';
