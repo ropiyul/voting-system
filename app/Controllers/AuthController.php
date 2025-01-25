@@ -13,6 +13,8 @@ class AuthController extends BaseController
 {
     protected $auth;
 
+    protected $helpers = ['config'];
+
     /**
      * @var AuthConfig
      */

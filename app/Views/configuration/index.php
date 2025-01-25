@@ -151,7 +151,7 @@
                 },
                 // Metadata untuk preview
                 metadata: {
-                    poster: `${baseUrl}/img/${existingFile}`
+                    poster: `${baseUrl}/img/config/${existingFile}`
                 }
             }
         }] : [],
@@ -160,7 +160,7 @@
         server: {
             load: (source, load, error, progress, abort, headers) => {
                 // Create URL
-                const url = `${baseUrl}/img/${source}`;
+                const url = `${baseUrl}/img/config/${source}`;
 
                 // Fetch file
                 fetch(url)
