@@ -27,6 +27,13 @@ class Vote extends BaseController
         return view('votes/index', $data);
     }
 
+    public function voting(){
+        $data = [
+            'candidates' => $this->candidateModel->findAll()
+        ];
+        return view('votes/voting', $data);
+    }
+
     public function saveVote()
     {
         $authorize = $auth = service('authorization');

@@ -7,6 +7,7 @@ use \Myth\Auth\Config\Auth as AuthConfig;
  * @var RouteCollection $routes
  */
 $routes->get('/', 'Vote::index', ['filter' => 'role:voter,admin']);
+$routes->get('/voting', 'Vote::voting', ['filter' => 'role:voter,admin']);
 $routes->post('vote/save', 'Vote::saveVote', ['filter' => 'role:admin,voter']);
 
 // Dashboard & Reports
