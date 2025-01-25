@@ -11,6 +11,58 @@ class AllMigration extends Migration
     {
 
         $this->forge->addField([
+            'id' => [
+                'type'           => 'INT',
+                'constraint'     => 11,
+                'unsigned'       => true,
+                'auto_increment' => true,
+            ],
+            'name' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 100,
+                'null'       => false,
+            ],
+            'logo' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 100,
+                'null'       => true,
+                'default'    => 'default-logo.png',
+            ],
+            'address' => [
+                'type'       => 'TEXT',
+                'null'       => true,
+            ],
+            'email' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 100,
+                'null'       => true,
+            ],
+            'phone' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 20,
+                'null'       => true,
+            ],
+            'website' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 100,
+                'null'       => true,
+            ],
+            'created_at' => [
+                'type'    => 'TIMESTAMP',
+                'null'    => false,
+                'default' => new RawSql('CURRENT_TIMESTAMP'),
+            ],
+            'updated_at' => [
+                'type'    => 'TIMESTAMP',
+                'null'    => true,
+            ],
+        ]);
+        $this->forge->addKey('id', true);
+        $this->forge->createTable('configurations');
+
+
+        // kelas
+        $this->forge->addField([
             'id'          => [
                 'type'           => 'INT',
                 'unsigned'       => true,
@@ -219,6 +271,7 @@ class AllMigration extends Migration
 
     public function down()
     {
+        $this->forge->dropTable('configurations', true);
         $this->forge->dropTable('grades', true);
         $this->forge->dropTable('admins', true);
         $this->forge->dropTable('votes', true);

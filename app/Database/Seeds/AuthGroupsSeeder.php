@@ -11,15 +11,15 @@ class AuthGroupsSeeder extends Seeder
         $data = [
             [
                 'name' => 'admin',
-                'description' => 'Group for admin in the voting system',
+                'description' => 'Group for admin',
             ],
             [
                 'name' => 'candidate',
-                'description' => 'Group for candidate in the voting system',
+                'description' => 'Group for candidate',
             ],
             [
                 'name' => 'voter',
-                'description' => 'Group for voter in the voting system',
+                'description' => 'Group for voter',
             ],
         ];
 
