@@ -87,7 +87,12 @@ class Home extends BaseController
             ])->setStatusCode(500);
         }
     }
+    public function update(){
+    
+        return view('profile/index',  ['title' => 'Profil']);
+    }
 }
+
 
 
     // public function getStatisticsByGrade($gradeId = null)

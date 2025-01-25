@@ -8,6 +8,7 @@ use \Myth\Auth\Config\Auth as AuthConfig;
  */
 $routes->get('/', 'Vote::index', ['filter' => 'role:voter,admin']);
 $routes->post('vote/save', 'Vote::saveVote', ['filter' => 'role:admin,voter']);
+$routes->get('profile/update', 'Home::update', ['filter' => 'role:admin,voter']);
 
 // Dashboard & Reports
 $routes->group('', ['filter' => 'role:admin'], function ($routes) {
