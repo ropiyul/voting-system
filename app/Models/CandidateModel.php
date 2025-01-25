@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class CandidateModel extends Model
 {
     protected $table = 'candidates';
-    protected $allowedFields = ['fullname', 'user_id', 'grade_id', 'program_id', 'vision', 'mission', 'image'];
+    protected $allowedFields = ['fullname', 'user_id', 'grade_id','candidate_order', 'program_id', 'vision', 'mission', 'image'];
 
 
     public function getCandidate($id = null)
@@ -40,5 +40,10 @@ class CandidateModel extends Model
         $builder->orderBy('vote_count', 'DESC');
 
         return $builder->findAll();
+    }
+
+    public function getUsedOrderNumbers()
+    {
+        return $this->select('candidate_order')->findAll();
     }
 }

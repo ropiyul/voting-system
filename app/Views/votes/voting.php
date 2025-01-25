@@ -36,7 +36,7 @@
         </div>
         <h1>Voting</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item"><a href="<?= base_url()?>">Home</a></div>
+            <div class="breadcrumb-item"><a href="<?= base_url() ?>">Home</a></div>
             <div class="breadcrumb-item">Voting</div>
         </div>
     </div>
@@ -53,7 +53,7 @@
                         </div>
                         <div class="article-details">
                             <h3 class="text-center font-weight-bold"><?= ucwords(strtolower($candidate["fullname"])) ?></h3>
-                            <p class="text-center text-muted">Kandidat <?= $candidate['id'] ?></p>
+                            <p class="text-center text-muted">Kandidat <?= $candidate['candidate_order'] ?></p>
                             <div class="article-cta">
                                 <button class="btn btn-primary btn-custom vote-button" data-toggle="modal"
                                     data-target="#konfirmasi" data-id="<?= $candidate['id'] ?>"

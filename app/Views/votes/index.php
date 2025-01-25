@@ -53,7 +53,7 @@
                         </div>
                         <div class="article-details">
                             <h3 class="text-center font-weight-bold"><?= ucwords(strtolower($candidate["fullname"])) ?></h3>
-                            <p class="text-center text-muted">Kandidat <?= $candidate['id'] ?></p>
+                            <p class="text-center text-muted">Kandidat <?= $candidate['candidate_order'] ?></p>
                             <div class="article-cta">
                                 <button class="btn btn-primary btn-custom vote-button" data-toggle="modal"
                                     data-target="#candidateModal" data-id="<?= $candidate['id'] ?>"
