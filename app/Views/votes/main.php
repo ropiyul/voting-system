@@ -29,6 +29,16 @@
             width: 8rem;
             height: 8rem;
         }
+
+        .navbar-secondary .nav-item.active .nav-link {
+            position: relative;
+            color: #007bff !important;
+            /* Warna teks untuk menu aktif */
+            font-weight: bold;
+            /* Opsional untuk menonjolkan teks */
+        }
+
+        
     </style>
 
     <!-- Google Analytics -->
@@ -82,11 +92,13 @@
             <nav class="navbar navbar-secondary navbar-expand-lg">
                 <div class="container">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?=base_url()?>"><i class="fas fa-users"></i> <span>Para Kandidat</span></a>
+                        <li class="nav-item <?= url_is('/') ? 'active' : '' ?>">
+                            <a class="nav-link" href="<?= base_url() ?>"><i class="fas fa-users"></i> <span>Para
+                                    Kandidat</span></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?=base_url('voting')?>"><i class="fas fa-poll"></i> <span>Voting</span></a>
+                        <li class="nav-item <?= url_is('voting') ? 'active' : '' ?>">
+                            <a class="nav-link" href="<?= base_url('voting') ?>"><i class="fas fa-poll"></i>
+                                <span>Voting</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-danger" href="#"><i class="fas fa-sign-out-alt"></i>
