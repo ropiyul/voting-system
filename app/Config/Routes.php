@@ -6,7 +6,7 @@ use Config\Auth as AuthConfig;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Vote::index', ['filter' => 'role:voter,admin']);
+$routes->get('/candidates', 'Vote::index', ['filter' => 'role:voter,admin']);
 $routes->get('/voting', 'Vote::voting', ['filter' => 'role:voter,admin']);
 $routes->post('vote/save', 'Vote::saveVote', ['filter' => 'role:admin,voter']);
 
@@ -19,12 +19,17 @@ $routes->post('update-password', 'AuthController::updatePassword');
 
 
 
+// Home
+$routes->group('', ['filter' => 'role:admin,voter, candidate'], function ($routes) {
+    $routes->get('/', 'Home::index');
+});
+
 // Dashboard & Reports
 $routes->group('', ['filter' => 'role:admin'], function ($routes) {
-    $routes->get('dashboard', 'Home::dashboard');
+    $routes->get('dashboard', 'Dashboard::index');
     $routes->get('report', 'Report::index');
-    $routes->get('dashboard/getStatisticsByGrade/(:any)', 'Home::getStatisticsByGrade/$1');
-    $routes->get('dashboard/getDataCandidatesByGrade/(:any)', 'Home::getDataCandidatesByGrade/$1');
+    $routes->get('dashboard/getStatisticsByGrade/(:any)', 'Dashboard::getStatisticsByGrade/$1');
+    $routes->get('dashboard/getDataCandidatesByGrade/(:any)', 'Dashboard::getDataCandidatesByGrade/$1');
 });
 
 // Config/Routes.php
