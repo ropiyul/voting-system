@@ -4,9 +4,6 @@
 <section class="section mt-3">
     <div class="section-header">
         <h1>Sistem Pemilihan</h1>
-        <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active">Beranda</div>
-        </div>
     </div>
 
     <div class="section-body">
@@ -84,7 +81,7 @@
                                 </a>
                             </div>
                             <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                                <a href="<?= base_url('hasil') ?>" class="btn btn-info btn-block">
+                                <a href="<?= base_url('result') ?>" class="btn btn-info btn-block">
                                     <i class="fas fa-chart-bar mr-2"></i>Lihat Hasil
                                 </a>
                             </div>
