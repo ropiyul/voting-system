@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CandidateModel;
 use App\Models\ConfigurationModel;
 
 if (!function_exists('get_config')) {
@@ -17,10 +18,13 @@ if (!function_exists('get_config')) {
     }
 }
 
-if (!function_exists('clear_config_cache')) {
-    function clear_config_cache()
+
+if (!function_exists('get_image')) {
+    function get_image($key = null) 
     {
-        // Fungsi ini tidak diperlukan lagi karena tidak menggunakan cache
-        return true;
+      $candidateModel = new CandidateModel();
+
+      $candidate = $candidateModel->where('user_id',user_id())->first();
+       return $candidate['image'];
     }
 }

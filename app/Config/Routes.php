@@ -9,7 +9,11 @@ use \Myth\Auth\Config\Auth as AuthConfig;
 $routes->get('/', 'Vote::index', ['filter' => 'role:voter,admin']);
 $routes->get('/voting', 'Vote::voting', ['filter' => 'role:voter,admin']);
 $routes->post('vote/save', 'Vote::saveVote', ['filter' => 'role:admin,voter']);
-$routes->get('profile/update', 'Home::update', ['filter' => 'role:admin,voter']);
+
+$routes->get('candidate/profile', 'Candidate::editProfile', ['filter' => 'role:candidate']);
+$routes->post('candidate/profile/update/(:num)', 'Candidate::update/$1');
+
+
 
 // Dashboard & Reports
 $routes->group('', ['filter' => 'role:admin'], function ($routes) {
@@ -17,15 +21,16 @@ $routes->group('', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('report', 'Report::index');
     $routes->get('dashboard/getStatisticsByGrade/(:any)', 'Home::getStatisticsByGrade/$1');
     $routes->get('dashboard/getDataCandidatesByGrade/(:any)', 'Home::getDataCandidatesByGrade/$1');
+
 });
 
 // Config/Routes.php
-$routes->group('configuration', ['filter' => 'role:admin'], function($routes) {
+$routes->group('configuration', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('', 'Configuration::index');
     $routes->post('update', 'Configuration::update');
 });
 
-// kandidat 
+// kelola data kandidat 
 $routes->group('candidate', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('', 'Candidate::index');
     $routes->get('create', 'Candidate::create');
@@ -51,7 +56,6 @@ $routes->group('voter', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('export_excel', 'voter::export_excel');
     $routes->post('import_excel', 'Voter::import_excel');
     $routes->get('template', 'Voter::template');
-
 });
 
 // Admin 

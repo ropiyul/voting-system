@@ -173,12 +173,26 @@ class Candidate extends BaseController
 
         return view('candidates/edit', $data);
     }
+    public function editProfile()
+    {
+
+
+        $candidate = $this->candidateModel->where('user_id',user_id())->first();
+        $gradeModel = new GradeModel();
+        $data = [
+            'title' => 'Add Candidate',
+            'candidate' => $this->candidateModel->getCandidate($candidate['id']),
+            'grades' =>  $gradeModel->findAll(),
+        ];
+
+        return view('candidates/profile', $data);
+    }
 
     public function update($id)
     {
         $validation = \Config\Services::validation();
 
-
+        // return dd([$this->request->getFile('image'), $this->request->getPost()]);
         $data = [
             'fullname' => [
                 'label' => 'fullname',
@@ -235,23 +249,21 @@ class Candidate extends BaseController
 
         $oldImage = $this->request->getPost('oldImage');
         $image = $this->request->getFile('image');
+        // return dd($image); 
         if ($image && $image->isValid()):
             $this->db->transStart();
             if (!$image->hasMoved()) {
                 $filename = $image->getRandomName();
                 $image->move('img/', $filename);
-            }        
+            }       
 
-            if (!empty($oldImage) && file_exists('img/' . $oldImage)) {
+            if (!empty($oldImage) && file_exists('img/' . $oldImage) && $oldImage != 'default.png') {
                 unlink('img/' . $oldImage);
             }
         
-
-            $email = mt_rand(10000, 1000000) . '@gmail.com';
             $this->userModel->save([
                 'id' => $this->request->getPost('user_id'),
                 'username' => $this->request->getPost('username'),
-                'email' => $email,
             ]);
 
             $this->candidateModel->save([
@@ -281,7 +293,10 @@ class Candidate extends BaseController
         endif;
 
         if ($this->db->transStatus() === false) {
-            return redirect()->back()->withInput()->with('errors', 'Data gagal disimpan.');
+            return redirect()->back()->withInput()->with('error', 'Data gagal disimpan.');
+        }
+        if(in_groups('candidate')){
+            return redirect()->back()->with('message', 'Data berhasil disimpan.');
         }
         return redirect()->to('candidate')->with('message', 'Data berhasil disimpan.');
     }
