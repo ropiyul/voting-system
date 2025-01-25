@@ -16,6 +16,7 @@
         <div class="sidebar-brand sidebar-brand-sm">
             <a href="<?= base_url() ?>"><?= substr(get_config('name') ?? 'EV', 0, 2) ?></a>
         </div>
+        <?php if (in_groups('admin')) : ?>
         <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
             <li>
@@ -62,5 +63,26 @@
                 </a>
             </li>
         </ul>
+        <?php elseIf (in_groups('candidate')) : ?>
+        <ul class="sidebar-menu">
+            <li class="menu-header">Pengaturan</li>
+            <li>
+                <a class="nav-link" href="<?= base_url('candidate/profile') ?>">
+                    <i class="fas fa-poll"></i> <span>Profile</span>
+                </a>
+            </li>
+            <li>
+                <a class="nav-link" href="<?= base_url('change-password') ?>">
+                    <i class="fas fa-poll"></i> <span>Password</span>
+                </a>
+            </li>
+            <li class="menu-header">Logout</li>
+            <li>
+                <a class="nav-link" href="<?= base_url('logout') ?>">
+                    <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+        <?php endif; ?>
     </aside>
 </div>

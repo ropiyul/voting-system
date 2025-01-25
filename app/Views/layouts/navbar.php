@@ -9,7 +9,7 @@
     <ul class="navbar-nav navbar-right">
 
         <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                <img alt="image" src="<?= base_url('img/'). get_image() ?? 'default.png' ?>" class="rounded-circle mr-1">
+                <img alt="image" src="<?= base_url('img/'). (get_image() ?? 'default.png') ?>" class="rounded-circle mr-1">
 
                 <div class="d-sm-none d-lg-inline-block"><?= user()->username ?></div>
             </a>
@@ -29,12 +29,9 @@
                 <a href="features-profile.html" class="dropdown-item has-icon">
                     <i class="far fa-user"></i> Profile
                 </a>
-                <a href="features-activities.html" class="dropdown-item has-icon">
-                    <i class="fas fa-bolt"></i> Activities
-                </a>
                 <a href="features-settings.html" class="dropdown-item has-icon">
                     <i class="fas fa-cog"></i> Settings
-                </a>
+                </a>    
                 <div class="dropdown-divider"></div>
                 <a href="<?= base_url('logout') ?>" class="dropdown-item has-icon text-danger">
                     <i class="fas fa-sign-out-alt"></i> Logout

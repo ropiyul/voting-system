@@ -1,7 +1,7 @@
 <?php
 
 use CodeIgniter\Router\RouteCollection;
-use \Myth\Auth\Config\Auth as AuthConfig;
+use Config\Auth as AuthConfig;
 
 /**
  * @var RouteCollection $routes
@@ -13,6 +13,10 @@ $routes->post('vote/save', 'Vote::saveVote', ['filter' => 'role:admin,voter']);
 $routes->get('candidate/profile', 'Candidate::editProfile', ['filter' => 'role:candidate']);
 $routes->post('candidate/profile/update/(:num)', 'Candidate::update/$1');
 
+// Change password
+$routes->get('change-password', 'AuthController::changePassword');
+$routes->post('update-password', 'AuthController::updatePassword');
+
 
 
 // Dashboard & Reports
@@ -21,7 +25,6 @@ $routes->group('', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('report', 'Report::index');
     $routes->get('dashboard/getStatisticsByGrade/(:any)', 'Home::getStatisticsByGrade/$1');
     $routes->get('dashboard/getDataCandidatesByGrade/(:any)', 'Home::getDataCandidatesByGrade/$1');
-
 });
 
 // Config/Routes.php

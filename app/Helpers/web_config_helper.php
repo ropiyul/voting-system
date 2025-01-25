@@ -23,8 +23,10 @@ if (!function_exists('get_image')) {
     function get_image($key = null) 
     {
       $candidateModel = new CandidateModel();
-
-      $candidate = $candidateModel->where('user_id',user_id())->first();
-       return $candidate['image'];
+        if(in_groups('candidate')){
+            $candidate = $candidateModel->where('user_id',user_id())->first();
+             return $candidate['image'];
+        }
+        return null;
     }
 }

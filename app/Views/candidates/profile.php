@@ -99,12 +99,9 @@
                             <!-- Username Field -->
                             <div class="form-group col-md-6 col-12">
                                 <label>Username</label>
-                                <input type="text"
-                                    class="form-control <?= session('errors') && isset(session('errors')['username']) ? 'is-invalid' : ''; ?>"
-                                    name="username" value="<?= old('username', $candidate['username']) ?>" required>
-                                <div class="invalid-feedback">
-                                    <?= (session('errors')['username']) ?? null ?>
-                                </div>
+                                <input type="text" disabled
+                                    class="form-control"
+                                    name="hahdhashd" value="<?= old('username', $candidate['username']) ?>" required>
                             </div>
                         </div>
                         <div class="row">
