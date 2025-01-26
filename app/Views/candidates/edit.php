@@ -101,6 +101,30 @@
 
                         <div class="col-12 col-md-6 col-lg-6">
                             <div class="form-group">
+                                <label>Nomor Urut</label>
+                                <select class="form-control <?= session('errors') && isset(session('errors')['candidate_order']) ? 'is-invalid' : ''; ?>"
+                                    name="candidate_order">
+                                    <?php
+                                    // Loop nomor urut dari 1 sampai 30
+                                    for ($i = 1; $i <= 30; $i++):
+                                        $formatted_order = str_pad($i, 2, '0', STR_PAD_LEFT); // Format nomor urut jadi 2 digit
+                                        $is_selected = ($candidate['candidate_order'] === $formatted_order) ? 'selected' : ''; // Cek jika nomor urut sama dengan yang ada di database
+                                        $is_disabled = (in_array($formatted_order, $used_numbers) && $is_selected === '') ? 'disabled' : ''; // Disabled jika nomor urut sudah terpakai
+                                    ?>
+                                        <option value="<?= $formatted_order ?>" <?= $is_selected ?> <?= $is_disabled ?>>
+                                            <?= $formatted_order ?> <?= ($is_disabled === 'disabled') ? '(Terpakai)' : '' ?>
+                                        </option>
+                                    <?php endfor; ?>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <?= (session('errors')['candidate_order']) ?? null ?>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <div class="form-group">
                                 <label>Kelas</label>
                                 <select
                                     class="form-control <?= session('errors') && isset(session('errors')['grade_id']) ? 'is-invalid' : ''; ?>"

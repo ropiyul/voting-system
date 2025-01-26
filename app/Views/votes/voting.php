@@ -31,10 +31,13 @@
 
 <section class="section mt-3">
     <div class="section-header">
+        <div class="section-header-back">
+            <a href="<?= base_url() ?>" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+        </div>
         <h1>Voting</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item"><a href="#">Para Kandidat</a></div>
-            <div class="breadcrumb-item"><a href="#">Voting</a></div>
+            <div class="breadcrumb-item"><a href="<?= base_url() ?>">Home</a></div>
+            <div class="breadcrumb-item">Voting</div>
         </div>
     </div>
 
@@ -50,7 +53,7 @@
                         </div>
                         <div class="article-details">
                             <h3 class="text-center font-weight-bold"><?= ucwords(strtolower($candidate["fullname"])) ?></h3>
-                            <p class="text-center text-muted">Kandidat <?= $candidate['id'] ?></p>
+                            <p class="text-center text-muted">Kandidat <?= $candidate['candidate_order'] ?></p>
                             <div class="article-cta">
                                 <button class="btn btn-primary btn-custom vote-button" data-toggle="modal"
                                     data-target="#konfirmasi" data-id="<?= $candidate['id'] ?>"
@@ -72,14 +75,14 @@
 
 
 
-<div class="modal fade" id="konfirmasi" tabindex="-1" role="dialog">
+<div class="modal fade" id="confirmVoteModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body text-center p-4">
                 <h5 class="fw-bold mb-3">Apakah yakin dengan pilihan Anda?</h5>
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-danger mr-2" data-dismiss="modal">Tidak</button>
-                    <button class="btn btn-primary" id="confirmVote">Ya</button>
+                    <button class="btn btn-primary" id="confirmVoteButton">Ya</button>
                 </div>
             </div>
         </div>
@@ -91,66 +94,40 @@
 
 <?= $this->section('script') ?>
 <script>
-    // Toastr Configuration
-    const initToastr = () => {
-        toastr.options = {
-            closeButton: true,
-            newestOnTop: false,
-            progressBar: true,
-            positionClass: "toast-top-right",
-            preventDuplicates: true,
-            onclick: null,
-            showDuration: "300",
-            hideDuration: "1000",
-            timeOut: "5000",
-            extendedTimeOut: "1000",
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-        };
-    };
-
-    // Vote Handler Class
-    class VoteHandler {
+    class VotingSystem {
         constructor() {
             this.selectedCandidateId = null;
-            this.initializeEventListeners();
-            initToastr();
+            this.initEventListeners();
+            this.configureToastr();
         }
 
-        initializeEventListeners() {
-            // Vote buttons
+        configureToastr() {
+            toastr.options = {
+                closeButton: true,
+                positionClass: "toast-top-right",
+                preventDuplicates: true,
+                timeOut: "5000",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut"
+            };
+        }
+
+        initEventListeners() {
             document.querySelectorAll('.vote-button').forEach(button => {
                 button.addEventListener('click', (e) => this.handleVoteButtonClick(e));
             });
 
-            // Vote action button
-            document.getElementById('voteButton').addEventListener('click', () => this.handleVoteAction());
-
-            // Confirm vote button
-            document.getElementById('confirmVote').addEventListener('click', () => this.handleConfirmVote());
+            document.getElementById('confirmVoteButton').addEventListener('click', () => this.submitVote());
         }
 
         handleVoteButtonClick(e) {
             const button = e.currentTarget;
-            this.selectedCandidateId = button.dataset.id;
+            this.selectedCandidateId = button.dataset.candidateId;
 
-            // Update modal content
-            document.getElementById('modalImage').src = button.dataset.image;
-            document.getElementById('modalName').textContent = button.dataset.name;
-            document.getElementById('modalVision').innerHTML = button.dataset.vision;
-            document.getElementById('modalMission').innerHTML = button.dataset.mission;
-
-            $('#candidateModal').modal('show');
+            $('#confirmVoteModal').modal('show');
         }
 
-        handleVoteAction() {
-            $('#candidateModal').modal('hide');
-            $('#konfirmasi').modal('show');
-        }
-
-        async handleConfirmVote() {
+        async submitVote() {
             try {
                 const formData = new FormData();
                 formData.append('candidate_id', this.selectedCandidateId);
@@ -161,7 +138,7 @@
                 });
 
                 const result = await response.json();
-                $('#konfirmasi').modal('hide');
+                $('#confirmVoteModal').modal('hide');
 
                 if (result.success) {
                     toastr.success(result.message, 'Sukses');
@@ -183,10 +160,7 @@
         }
     }
 
-    // Initialize voting system when DOM is ready
-    document.addEventListener('DOMContentLoaded', () => {
-        new VoteHandler();
-    });
+    document.addEventListener('DOMContentLoaded', () => new VotingSystem());
 </script>
 <?= $this->endSection() ?>
 <?= $this->section('style') ?>

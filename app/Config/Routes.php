@@ -1,30 +1,45 @@
 <?php
 
 use CodeIgniter\Router\RouteCollection;
-use \Myth\Auth\Config\Auth as AuthConfig;
+use Config\Auth as AuthConfig;
 
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Vote::index', ['filter' => 'role:voter,admin']);
+$routes->get('/candidates', 'Vote::index', ['filter' => 'role:voter,admin']);
 $routes->get('/voting', 'Vote::voting', ['filter' => 'role:voter,admin']);
 $routes->post('vote/save', 'Vote::saveVote', ['filter' => 'role:admin,voter']);
 
+$routes->get('candidate/profile', 'Candidate::editProfile', ['filter' => 'role:candidate']);
+$routes->post('candidate/profile/update/(:num)', 'Candidate::update/$1');
+
+// Change password
+$routes->get('change-password', 'AuthController::changePassword');
+$routes->post('update-password', 'AuthController::updatePassword');
+
+
+
+// Home
+$routes->group('', ['filter' => 'role:admin,voter, candidate'], function ($routes) {
+    $routes->get('/', 'Home::index');
+    $routes->get('/result', 'Home::result');
+});
+
 // Dashboard & Reports
 $routes->group('', ['filter' => 'role:admin'], function ($routes) {
-    $routes->get('dashboard', 'Home::dashboard');
+    $routes->get('dashboard', 'Dashboard::index');
     $routes->get('report', 'Report::index');
-    $routes->get('dashboard/getStatisticsByGrade/(:any)', 'Home::getStatisticsByGrade/$1');
-    $routes->get('dashboard/getDataCandidatesByGrade/(:any)', 'Home::getDataCandidatesByGrade/$1');
+    $routes->get('dashboard/getStatisticsByGrade/(:any)', 'Dashboard::getStatisticsByGrade/$1');
+    $routes->get('dashboard/getDataCandidatesByGrade/(:any)', 'Dashboard::getDataCandidatesByGrade/$1');
 });
 
 // Config/Routes.php
-$routes->group('configuration', ['filter' => 'role:admin'], function($routes) {
+$routes->group('configuration', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('', 'Configuration::index');
     $routes->post('update', 'Configuration::update');
 });
 
-// kandidat 
+// kelola data kandidat 
 $routes->group('candidate', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('', 'Candidate::index');
     $routes->get('create', 'Candidate::create');
@@ -50,7 +65,6 @@ $routes->group('voter', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('export_excel', 'voter::export_excel');
     $routes->post('import_excel', 'Voter::import_excel');
     $routes->get('template', 'Voter::template');
-
 });
 
 // Admin 

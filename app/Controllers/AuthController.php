@@ -8,12 +8,13 @@ use Myth\Auth\Config\Auth as AuthConfig;
 use Myth\Auth\Entities\User;
 use Myth\Auth\Models\UserModel;
 use Myth\Auth\Controllers\AuthController as BaseController;
+use Myth\Auth\Password;
 
 class AuthController extends BaseController
 {
     protected $auth;
 
-    protected $helpers = ['config'];
+    protected $helpers = ['web_config'];
 
     /**
      * @var AuthConfig
@@ -413,5 +414,66 @@ class AuthController extends BaseController
     protected function _render(string $view, array $data = [])
     {
         return view($view, $data);
+    }
+
+
+    public function changePassword()
+    {
+        $data = [
+            'title' => 'Change Password',
+        ];
+
+        return view('auth/change_password', $data);
+    }
+    public function updatePassword()
+    {
+
+        $validation = \Config\Services::validation();
+
+        $validation->setRules([
+            'password' => [
+                'label' => 'Password',
+                'rules' => 'required|min_length[8]',
+                'errors' => [
+                    'required' => 'Password baru harus diisi.',
+                    'min_length' => 'Password minimal 8 karakter.'
+                ]
+            ],
+            'current_password' => [
+                'label' => 'Password',
+                'rules' => 'required|min_length[8]',
+                'errors' => [
+                    'required' => 'Password baru harus diisi.',
+                    'min_length' => 'Password minimal 8 karakter.'
+                ]
+            ],
+            'password_confirm' => [
+                'label' => 'Konfirmasi Password',
+                'rules' => 'required|matches[password]',
+                'errors' => [
+                    'required' => 'Konfirmasi password harus diisi.',
+                    'matches' => 'Konfirmasi password tidak cocok.'
+                ]
+            ],
+        ]);
+
+        if (!$validation->withRequest($this->request)->run()) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
+
+        $userModel = new \App\Models\UserModel();
+        $user = $userModel->find(user_id());
+
+        // dd(Password::verify($this->request->getPost('current_password'), $user->password_hash));
+        if (!Password::verify($this->request->getPost('current_password'), $user->password_hash)) {
+            return redirect()->back()->with('error', 'Password saat ini salah');
+        }
+
+        $userModel->save([
+            'id' => $user->id,
+            'password_hash' => Password::hash($this->request->getPost('password'))
+        ]);
+
+        return redirect()->to('change-password')->with('message', 'Password berhasil diperbarui');
     }
 }

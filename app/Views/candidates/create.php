@@ -59,7 +59,43 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label>Nomer urut</label>
+                                <select
+                                    class="form-control <?= session('errors') && isset(session('errors')['candidate_order']) ? 'is-invalid' : ''; ?>"
+                                    name="candidate_order" value="<?= old('candidate_order') ?>">
+                                    <?php
+                                    // Ambil nomor urut yang sudah terpakai
+                                    for ($i = 1; $i <= 30; $i++):
+                                        // Menyaring nomor urut yang sudah terpakai
+                                        if (in_array($i, $used_numbers)): ?>
+                                            <option value="<?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>" disabled><?= str_pad($i, 2, '0', STR_PAD_LEFT) ?> (Terpakai)</option>
+                                        <?php else: ?>
+                                            <option value="<?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>"><?= str_pad($i, 2, '0', STR_PAD_LEFT) ?></option>
+                                        <?php endif; ?>
+                                    <?php endfor; ?>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <?= (session('errors')['candidate_order']) ?? null ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label>Kelas</label>
+                                <select
+                                    class="form-control <?= session('errors') && isset(session('errors')['grade_id']) ? 'is-invalid' : ''; ?>"
+                                    name="grade_id" value="<?= old('grade_id') ?>">
+                                    <?php foreach ($grades as $grade): ?>
+                                        <option value="<?= $grade['id'] ?>"><?= $grade['name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <?= (session('errors')['grade_id']) ?? null ?>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-12 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Password</label>
@@ -101,22 +137,7 @@
                                     <?= (session('errors')['mission']) ?? null ?>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-6">
-                            <div class="form-group">
-                                <label>Kelas</label>
-                                <select
-                                    class="form-control <?= session('errors') && isset(session('errors')['grade_id']) ? 'is-invalid' : ''; ?>"
-                                    name="grade_id" value="<?= old('grade_id') ?>">
-                                    <?php foreach ($grades as $grade): ?>
-                                        <option value="<?= $grade['id'] ?>"><?= $grade['name'] ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <div class="invalid-feedback">
-                                    <?= (session('errors')['grade_id']) ?? null ?>
-                                </div>
-                            </div>
-                        </div>
+                        </div>  
                         <div class="col-12 col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label>Upload Gambar</label>

@@ -414,7 +414,7 @@ class Voter extends BaseController
         // kelas
         if (!isset($gradeNameToId[$gradeName])) {
             $this->db->transRollback();
-            session()->setFlashdata('error', 'Kelas "' . $row[4] . '" tidak ditemukan pada baris ' . ($i + 1));
+            session()->setFlashdata('error', 'Kelas "' . $row[3] . '" tidak ditemukan pada baris ' . ($i + 1));
             return redirect()->back()->withInput();
         }
 

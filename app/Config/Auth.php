@@ -52,6 +52,8 @@ class Auth extends \Myth\Auth\Config\Auth
         'resend-activate-account' => 'resend-activate-account',
         'forgot'                  => 'forgot',
         'reset-password'          => 'reset-password',
+        'change-password'         => 'change-password',
+        'update-password'         => 'update-password',
     ];
 
     /**
@@ -173,7 +175,7 @@ class Auth extends \Myth\Auth\Config\Auth
      *
      * @var bool
      */
-    public $allowRegistration = true;
+    public $allowRegistration = false;
 
     /**
      * --------------------------------------------------------------------
