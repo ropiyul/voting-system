@@ -31,10 +31,13 @@
 
 <section class="section mt-3">
     <div class="section-header">
+        <div class="section-header-back">
+            <a href="<?= base_url() ?>" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+        </div>
         <h1>Voting</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item"><a href="#">Para Kandidat</a></div>
-            <div class="breadcrumb-item"><a href="#">Voting</a></div>
+            <div class="breadcrumb-item"><a href="<?= base_url() ?>">Home</a></div>
+            <div class="breadcrumb-item">Voting</div>
         </div>
     </div>
 
@@ -50,7 +53,7 @@
                         </div>
                         <div class="article-details">
                             <h3 class="text-center font-weight-bold"><?= ucwords(strtolower($candidate["fullname"])) ?></h3>
-                            <p class="text-center text-muted">Kandidat <?= $candidate['id'] ?></p>
+                            <p class="text-center text-muted">Kandidat <?= $candidate['candidate_order'] ?></p>
                             <div class="article-cta">
                                 <button class="btn btn-primary btn-custom vote-button" data-toggle="modal"
                                     data-target="#konfirmasi" data-id="<?= $candidate['id'] ?>"
@@ -91,73 +94,73 @@
 
 <?= $this->section('script') ?>
 <script>
-class VotingSystem {
-    constructor() {
-        this.selectedCandidateId = null;
-        this.initEventListeners();
-        this.configureToastr();
-    }
+    class VotingSystem {
+        constructor() {
+            this.selectedCandidateId = null;
+            this.initEventListeners();
+            this.configureToastr();
+        }
 
-    configureToastr() {
-        toastr.options = {
-            closeButton: true,
-            positionClass: "toast-top-right",
-            preventDuplicates: true,
-            timeOut: "5000",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-        };
-    }
+        configureToastr() {
+            toastr.options = {
+                closeButton: true,
+                positionClass: "toast-top-right",
+                preventDuplicates: true,
+                timeOut: "5000",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut"
+            };
+        }
 
-    initEventListeners() {
-        document.querySelectorAll('.vote-button').forEach(button => {
-            button.addEventListener('click', (e) => this.handleVoteButtonClick(e));
-        });
-
-        document.getElementById('confirmVoteButton').addEventListener('click', () => this.submitVote());
-    }
-
-    handleVoteButtonClick(e) {
-        const button = e.currentTarget;
-        this.selectedCandidateId = button.dataset.candidateId;
-        
-        $('#confirmVoteModal').modal('show');
-    }
-
-    async submitVote() {
-        try {
-            const formData = new FormData();
-            formData.append('candidate_id', this.selectedCandidateId);
-
-            const response = await fetch('<?= base_url('vote/save') ?>', {
-                method: 'POST',
-                body: formData
+        initEventListeners() {
+            document.querySelectorAll('.vote-button').forEach(button => {
+                button.addEventListener('click', (e) => this.handleVoteButtonClick(e));
             });
 
-            const result = await response.json();
-            $('#confirmVoteModal').modal('hide');
+            document.getElementById('confirmVoteButton').addEventListener('click', () => this.submitVote());
+        }
 
-            if (result.success) {
-                toastr.success(result.message, 'Sukses');
-                this.disableVoteButtons();
-            } else {
-                toastr.error(result.message, 'Error');
+        handleVoteButtonClick(e) {
+            const button = e.currentTarget;
+            this.selectedCandidateId = button.dataset.candidateId;
+
+            $('#confirmVoteModal').modal('show');
+        }
+
+        async submitVote() {
+            try {
+                const formData = new FormData();
+                formData.append('candidate_id', this.selectedCandidateId);
+
+                const response = await fetch('<?= base_url('vote/save') ?>', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                $('#confirmVoteModal').modal('hide');
+
+                if (result.success) {
+                    toastr.success(result.message, 'Sukses');
+                    this.disableVoteButtons();
+                } else {
+                    toastr.error(result.message, 'Error');
+                }
+            } catch (error) {
+                console.error('Vote error:', error);
+                toastr.error('Terjadi kesalahan sistem', 'Error');
             }
-        } catch (error) {
-            console.error('Vote error:', error);
-            toastr.error('Terjadi kesalahan sistem', 'Error');
+        }
+
+        disableVoteButtons() {
+            document.querySelectorAll('.vote-button').forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('disabled');
+            });
         }
     }
 
-    disableVoteButtons() {
-        document.querySelectorAll('.vote-button').forEach(btn => {
-            btn.disabled = true;
-            btn.classList.add('disabled');
-        });
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => new VotingSystem());
+    document.addEventListener('DOMContentLoaded', () => new VotingSystem());
 </script>
 <?= $this->endSection() ?>
 <?= $this->section('style') ?>

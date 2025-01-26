@@ -22,6 +22,7 @@ $routes->post('update-password', 'AuthController::updatePassword');
 // Home
 $routes->group('', ['filter' => 'role:admin,voter, candidate'], function ($routes) {
     $routes->get('/', 'Home::index');
+    $routes->get('/result', 'Home::result');
 });
 
 // Dashboard & Reports

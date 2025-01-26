@@ -25,4 +25,13 @@ class Home extends BaseController
         ];
         return view('home/index', $data);
     }
+    public function result()
+    {
+        $candidateModel = new CandidateModel();
+        $data = [
+            'title' => 'Home',
+            'candidates' => $candidateModel->getCandidate(),
+        ];
+        return view('home/result', $data);
+    }
 }
