@@ -10,9 +10,7 @@
     </div>
 
     <div class="section-body">
-        <?php
-        $voting_status = 'sd';
-        if ($voting_status == 'completed'): ?>
+        <?php if ($voting_status == 'completed'): ?>
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -31,7 +29,7 @@
                                                 <h4>Total Pemilih Terdaftar</h4>
                                             </div>
                                             <div class="card-body">
-                                                <?= $total_registered_voters ?? 10 ?>
+                                                <?= $total_registered_voters ?>
                                             </div>
                                         </div>
                                     </div>
@@ -46,7 +44,7 @@
                                                 <h4>Total Suara Masuk</h4>
                                             </div>
                                             <div class="card-body">
-                                                <?= $total_votes ?? 10 ?>
+                                                <?= $total_votes ?>
                                             </div>
                                         </div>
                                     </div>
@@ -61,7 +59,7 @@
                                                 <h4>Partisipasi</h4>
                                             </div>
                                             <div class="card-body">
-                                                <?= number_format($participation_percentage ?? 10, 2) ?>%
+                                                <?= number_format($participation_percentage, 2) ?>%
                                             </div>
                                         </div>
                                     </div>
@@ -81,22 +79,25 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
+                                            <th  style="width: 30px;">No</th>
                                             <th>Kandidat</th>
                                             <th>Jumlah Suara</th>
                                             <th>Persentase</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php $i = 1; ?>
                                         <?php foreach ($candidates as $candidate): ?>
                                             <tr>
+                                                <td><?= $i++ ?></td>
                                                 <td>
                                                     <div class="d-flex align-items-center">
                                                         <img src="<?= base_url('img/' . $candidate['image']) ?>" class="rounded-circle mr-3" width="50" height="50">
-                                                        <?= $candidate['fullname'] ?>
+                                                        <?= $candidate['name'] ?>
                                                     </div>
                                                 </td>
-                                                <td><?= $candidate['vote_count'] ?? '' ?></td>
-                                                <td><?= number_format($candidate['vote_percentage'] ?? 10, 2) ?>%</td>
+                                                <td><?= $candidate['vote_count'] ?></td>
+                                                <td><?= number_format($candidate['vote_percentage'], 2) ?>%</td>
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -122,6 +123,25 @@
                     </div>
                 </div>
             </div>
+        <?php elseif ($voting_status == 'pending'): ?>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div class="alert alert-info">
+                                <h4>Voting Belum Dimulai</h4>
+                                <p>Proses pemungutan suara akan segera berlangsung.</p>
+                                <p>Silakan tunggu pengumuman resmi dari panitia.</p>
+                            </div>
+                            <div class="mt-3">
+                                <a href="<?= base_url() ?>" class="btn btn-outline-secondary">
+                                    <i class="fas fa-home mr-2"></i>Kembali ke Beranda
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <?php else: ?>
             <div class="row">
                 <div class="col-12">
@@ -131,6 +151,11 @@
                                 <h4>Hasil Voting Belum Tersedia</h4>
                                 <p>Proses pemungutan suara masih berlangsung atau belum selesai.</p>
                                 <p>Hasil resmi akan dipublikasikan setelah proses voting selesai.</p>
+                            </div>
+                            <div class="mt-3">
+                                <a href="<?= base_url() ?>" class="btn btn-outline-warning">
+                                    <i class="fas fa-home mr-2"></i>Kembali ke Beranda
+                                </a>
                             </div>
                         </div>
                     </div>

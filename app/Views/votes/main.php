@@ -37,8 +37,6 @@
             font-weight: bold;
             /* Opsional untuk menonjolkan teks */
         }
-
-        
     </style>
 
     <!-- Google Analytics -->
@@ -62,26 +60,36 @@
             <!-- Main Navbar -->
             <nav class="navbar navbar-expand-lg main-navbar">
                 <a href="index.html" class="navbar-brand sidebar-gone-hide">SMKN 2 Kuningan</a>
-                <a href="#" class="nav-link sidebar-gone-show m-3" data-toggle="sidebar"> <i
-                        class="fas fa-bars large"></i></a>
+                <form class="form-inline mr-auto">
+                    <ul class="navbar-nav mr-3">
+                        <li><a href="#" data-toggle="sidebar" class="nav-link  sidebar-gone-show nav-link-lg"><i class="fas fa-bars"></i></a></li>
 
-                <form class="form-inline ml-auto">
-                    <div class="search-element">
-                        <input class="form-control" type="search" placeholder="Cari Kandidat" aria-label="Search"
-                            data-width="250">
-                        <button class="btn" type="submit"><i class="fas fa-search"></i></button>
-                    </div>
+                    </ul>
                 </form>
 
-                <ul class="navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                            <img alt="image" src="assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
-                            <div class="d-sm-none d-lg-inline-block">ril_pinkman</div>
+
+
+                <ul class="navbar-nav navbar-right ml-auto">
+                    <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                            <img alt="image" src="<?= base_url('img/') . (get_image() ?? 'default.png') ?>" class="rounded-circle mr-1">
+                            <div class="d-sm-none d-lg-inline-block"><?= user()->username ?></div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#" class="dropdown-item has-icon text-primary">
-                                <i class="fas fa-sign-out-alt"></i> Profile
+                            <div class="dropdown-title">
+                                <?= get_role() ?></div>
+                            <a
+                                href="<?= in_groups('admin') ? base_url('admin/profile') : (in_groups('candidate') ? base_url('candidate/profile') : (in_groups('voter') ? base_url('voter/profile') : base_url())) ?>"
+                                class="dropdown-item has-icon">
+                                <i class="far fa-user"></i> Profile
+                            </a>
+                            <?php if (in_groups('admin')) : ?>
+                                <a href="features-settings.html" class="dropdown-item has-icon">
+                                    <i class="fas fa-cog"></i> Settings
+                                </a>
+                            <?php endif; ?>
+                            <div class="dropdown-divider"></div>
+                            <a href="<?= base_url('logout') ?>" class="dropdown-item has-icon text-danger">
+                                <i class="fas fa-sign-out-alt"></i> Logout
                             </a>
                         </div>
                     </li>
@@ -93,7 +101,10 @@
                 <div class="container">
                     <ul class="navbar-nav">
                         <li class="nav-item <?= url_is('/') ? 'active' : '' ?>">
-                            <a class="nav-link" href="<?= base_url() ?>"><i class="fas fa-users"></i> <span>Para
+                            <a class="nav-link" href="<?= base_url() ?>"><i class="fas fa-home"></i> <span>Beranda</span></a>
+                        </li>
+                        <li class="nav-item <?= url_is('/candidates') ? 'active' : '' ?>">
+                            <a class="nav-link" href="<?= base_url('candidates') ?>"><i class="fas fa-users"></i> <span>Para
                                     Kandidat</span></a>
                         </li>
                         <li class="nav-item <?= url_is('voting') ? 'active' : '' ?>">
@@ -101,7 +112,7 @@
                                 <span>Voting</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-danger" href="#"><i class="fas fa-sign-out-alt"></i>
+                            <a class="nav-link text-danger" href="<?= base_url('logout') ?>"><i class="fas fa-sign-out-alt"></i>
                                 <span>Logout</span></a>
                         </li>
                     </ul>

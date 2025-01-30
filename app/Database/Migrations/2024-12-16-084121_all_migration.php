@@ -90,6 +90,12 @@ class AllMigration extends Migration
                 'constraint' => 11,
                 'unsigned'   => true,
             ],
+            'image'       => [
+                'type'       => 'VARCHAR',
+                'constraint' => 100,
+                'null'       => true,
+                'default'    => 'default.png',
+            ],
             'fullname'        => [
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
@@ -127,6 +133,10 @@ class AllMigration extends Migration
                 'constraint' => 11,
                 'unsigned'   => true,
             ],
+            'candidate_order'        => [
+                'type'       => 'VARCHAR',
+                'constraint' => 2,
+            ],
             'fullname'        => [
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
@@ -141,7 +151,9 @@ class AllMigration extends Migration
             ],
             'image'       => [
                 'type'       => 'VARCHAR',
-                'constraint' => 100,
+                'constraint' => 40,
+                'null'       => true,
+                'default'    => 'default.png',
             ],
             'created_at'  => [
                 'type' => 'TIMESTAMP',
@@ -171,6 +183,12 @@ class AllMigration extends Migration
                 'type'       => 'INT',
                 'constraint' => 11,
                 'unsigned'   => true,
+            ],
+            'image'       => [
+                'type'       => 'VARCHAR',
+                'constraint' => 100,
+                'null'       => true,
+                'default'    => 'default.png',
             ],
             'grade_id'      => [
                 'type'       => 'INT',
