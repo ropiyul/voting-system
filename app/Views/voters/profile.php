@@ -30,7 +30,7 @@
         </div>
         <div class="col-12 col-md-12 col-lg-7">
             <div class="card">
-                <form method="POST" action="<?= base_url('voter/profile/update/') . $voter['id'] ?>" class="needs-validation" novalidate="">
+                <form method="POST" action="<?= base_url('profile/voter/update/') . $voter['id'] ?>" class="needs-validation" novalidate="">
                     <?= csrf_field() ?>
                     <input type="hidden" name="grade_id" value="<?= $voter['grade_id'] ?>">
                     <div class="card-header">
@@ -48,12 +48,10 @@
                             <div class="form-group col-12">
                                 <label>Nama Lengkap</label>
                                 <input type="text"
-                                    class="form-control <?= session('errors') && isset(session('errors')['fullname']) ? 'is-invalid' : ''; ?>"
-                                    name="fullname" value="<?= old('fullname', $voter['fullname']) ?>" required>
-                                <div class="invalid-feedback">
-                                    <?= (session('errors')['fullname']) ?? null ?>
-                                </div>
+                                    class="form-control"
+                                    name="assksksks" value="<?=  $voter['fullname'] ?>" required disabled>
                             </div>
+                            <input type="hidden" name="fullname"  value="<?=  $voter['fullname'] ?>">
 
                             <div class="form-group col-12 col-md-6">
                                 <label>Kelas</label>
